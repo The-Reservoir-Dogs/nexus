@@ -55,3 +55,13 @@ def get_open_threads(series_id: str) -> list[dict]:
         """SELECT thread FROM plot_threads WHERE series_id = %s AND status = 'open'""",
         (series_id,),
     )
+
+
+def get_retention(episode_id: str) -> list[dict]:
+    """10s-bucket retention curve for an episode (derived by SQL, not the LLM).
+    Each row: bucket_10s, active_sessions, starters, retention (0-1)."""
+    return fetch_all(
+        """SELECT bucket_10s, active_sessions, starters, retention::float AS retention
+           FROM episode_retention WHERE episode_id = %s ORDER BY bucket_10s""",
+        (episode_id,),
+    )
