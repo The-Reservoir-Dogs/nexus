@@ -36,7 +36,7 @@ A **living story multiverse**: readers rewind any decision point, an AI co-autho
 └──────────────┼──────────────────────────┼─────────────────────┘
      Postgres  │                          │ tools:
      driver    │                          │  getEpisode / getComments
-                │                          │  getCharacter / saveDraft
+                │                          │  getCharacter (read-only)
             ┌───▼──────────────┐   ┌───────▼─────────────────┐
             │ LAKEBASE (OLTP)  │   │ Foundation Model APIs / │
             │ users, series,   │◀──│ Model Serving (LLM gen) │
@@ -64,7 +64,7 @@ A **living story multiverse**: readers rewind any decision point, an AI co-autho
 | App hosting | **Databricks Apps** (serverless) | Host frontend + agent app. Python (Streamlit/Dash/Gradio) or Node.js (React/Angular/Svelte/Express). OAuth built in. |
 | Transactional DB | **Lakebase** (managed serverless Postgres) | Single store: users, series, episodes, timelines, ratings, comments, character_memory. Autoscale, scale-to-zero. |
 | LLM inference | **Foundation Model APIs + Model Serving** | Generate/regenerate episode text. External Models to proxy a frontier LLM (and optional TTS). |
-| Agent | **Mosaic AI Agent Framework** | One tool-calling agent (getEpisode, getComments, getCharacter, saveDraft). Deploy from `agent-openai-agents-sdk` App template. |
+| Agent | **Mosaic AI Agent Framework** | One tool-calling agent, read-only tools (getEpisode, getComments, getCharacter). Persistence is owned by the web backend. Deploy from `agent-openai-agents-sdk` App template. |
 | Eval + tracing | **MLflow 3 GenAI Eval + Tracing** | LLM-judge continuity + character-fidelity + quality score; trace every generation. |
 | *(roadmap)* Vector DB | *AI Search* | Only when lineage/character bible outgrows the prompt window. |
 | *(roadmap)* Pipelines | *Lakeflow / DLT* | Only when analytics rollups need scale. |
@@ -81,7 +81,7 @@ One agent on Mosaic AI Agent Framework. Human-in-the-loop: nothing is saved unti
 - `getEpisode(episode_id)` — the decision-point episode + prior episodes on the timeline.
 - `getComments(episode_id)` — reader comments/ratings that steer the regeneration.
 - `getCharacter(series_id)` — persistent character memory (personality, arcs) as text.
-- `saveDraft(...)` — persist an approved episode version (called only after HITL approval).
+- *(no write tool)* — persistence of an approved episode is done by the web backend, not the agent.
 
 **Context assembled per generation:** prior episode text + character memory + the driving reader comment(s). All fits in the prompt window (one-level forking keeps lineage shallow). LLM call routes through Foundation Model APIs; the run is wrapped in MLflow tracing.
 
@@ -92,7 +92,7 @@ Co-author picks decision point + (optional) driving comment
    → regenerates next episode in the NEW timeline (streamed)
    → split-view: original vs regenerated
    → co-author edits / accepts / rejects
-   → on accept: saveDraft → new timeline episode in Lakebase → (optional) queue TTS
+   → on accept: frontend → web backend → INSERT new timeline episode in Lakebase → (optional) queue TTS
 ```
 
 ---
@@ -157,11 +157,46 @@ Trace every generation in MLflow. Gate: block auto-save if continuity/safety bel
 
 ---
 
+## 10a. App Boundaries & DB Access
+
+Three responsibilities, two Databricks Apps, one shared Lakebase DB.
+
+```
+┌──────────────────────────────┐        ┌───────────────────────────┐
+│ APP 1 — Web app (Node/TS)    │        │ APP 2 — Agent (Python)    │
+│ Next.js: React UI + /api     │        │ Mosaic AI agent           │
+│ • auth (OAuth headers)       │        │ • POST /generate (SSE)    │
+│ • CRUD series/eps/comments   │        │ • tools = READ-ONLY       │
+│ • ranking                    │        │   getEpisode/getComments/ │
+│ • ALL DB WRITES              │        │   getCharacter            │
+└───────┬──────────────────────┘        │ • LLM via Model Serving   │
+        │ pg (node-postgres)             └──────┬────────────────────┘
+        │  read + write                         │ psycopg (READ only)
+        ▼                                        ▼
+              ┌─────────────────────────────────────┐
+              │  LAKEBASE (Postgres) — shared store  │
+              └─────────────────────────────────────┘
+```
+
+**Frontend vs backend:** one Next.js app. React components = frontend; Next.js API routes = backend. No separate server process needed. (If you prefer, React+Vite served by a TypeScript Express server is the same idea with more wiring.)
+
+**How the agent reaches the DB:** the agent runs on Databricks next to Lakebase; its tools query Postgres directly via `psycopg` — the **same** database the web backend uses. Tools are **read-only** (they only gather context).
+
+**Write path (HITL owned by the backend):**
+```
+agent generates draft (SSE) → frontend split-view → co-author approves
+   → frontend → Next.js /api → INSERT episode into Lakebase (pg)
+```
+The agent never writes. All persistence lives in the web backend, so writes have one owner and HITL is enforced there. (Drop the `saveDraft` write-tool from the agent template.)
+
+---
+
 ## 11. Suggested Stack
 
-- **Hosting:** Databricks Apps (serverless) — frontend app + agent app (or a single app).
-- **Frontend:** React/Node on Apps (Monaco editor for VS Code feel) or Streamlit for speed. Split-view is the priority component.
-- **Transactional DB:** Lakebase (managed serverless Postgres) via standard Postgres driver — single store.
+- **Hosting:** Databricks Apps (serverless) — **2 apps**: web app + agent app (within the 3-app Free-Edition limit).
+- **Web app (App 1):** **Next.js (React + TypeScript)** — its API routes are the backend. Monaco editor for the VS Code feel; split-view is the priority component. *(Alt: React (Vite) + TypeScript Express server in one Node app — also fine, more glue.)*
+- **Agent (App 2):** **Python** — Mosaic AI `agent-openai-agents-sdk`; exposes `POST /generate` (SSE).
+- **Transactional DB:** Lakebase (managed serverless Postgres) — single store, shared by both apps.
 - **AI:** Foundation Model APIs / Model Serving + one Mosaic AI tool-calling agent + MLflow 3 evals/tracing.
 - **Audio (optional):** external TTS via External Model endpoint + object storage.
 - **Auth:** Databricks Apps OAuth (hackathon-grade).

@@ -37,8 +37,8 @@ Goal: build the **entire** NEXUS stack on Databricks only — frontend hosting, 
 │  DATABRICKS APPS  (serverless hosting, OAuth)                  │
 │                                                               │
 │  ┌─────────────────────────┐   ┌──────────────────────────┐  │
-│  │ Frontend App (React/     │   │ Agent App (OpenAI SDK)   │  │
-│  │ Node or Streamlit)       │──▶│ single tool-calling loop │  │
+│  │ Web App (Next.js,        │   │ Agent App (Python,       │  │
+│  │ React+TS: UI + /api)     │──▶│ OpenAI SDK) read-only    │  │
 │  │ • Netflix dashboard      │   │ • streaming HITL editor  │  │
 │  │ • reader + split-view    │   │ • built-in chat UI       │  │
 │  │ • timeline tree, ratings │   │ • MLflow tracing         │  │
@@ -62,7 +62,7 @@ Goal: build the **entire** NEXUS stack on Databricks only — frontend hosting, 
                     └────────────────────┘
 ```
 
-Two Databricks Apps (frontend + agent), or a single app if simpler. **Lakebase is the only data store** — no Delta/UC/vector layer in the MVP. The agent reads context directly from Postgres via tools.
+Two Databricks Apps: **Web App (Next.js, React+TS)** where API routes are the backend and own all DB writes, and **Agent App (Python)** whose read-only tools gather context. **Lakebase is the only data store** — no Delta/UC/vector layer in the MVP. Web backend uses `pg` (read+write); agent uses `psycopg` (read-only). Both hit the same Lakebase.
 
 ---
 
@@ -90,7 +90,7 @@ Deploy from the `agent-openai-agents-sdk` App template (includes REST API + chat
 - `getEpisode(episode_id)` — decision-point episode + prior episodes on the timeline.
 - `getComments(episode_id)` — reader comments/ratings driving the regeneration.
 - `getCharacter(series_id)` — persistent character memory as text.
-- `saveDraft(...)` — persist approved episode version (called only after HITL approval).
+- *(no write tool)* — the agent is read-only; the web backend persists an approved episode.
 
 All LLM calls route through Foundation Model APIs / Model Serving. MLflow tracing wraps every run.
 
@@ -101,7 +101,7 @@ Co-author picks decision point (+ driving comment)
   → regenerates next episode in the NEW timeline (streamed)
   → split-view: original vs regenerated
   → co-author edits / accepts / rejects
-  → on accept: saveDraft → new timeline episode in Lakebase → (optional) TTS
+  → on accept: frontend → web backend → INSERT new timeline episode in Lakebase → (optional) TTS
 ```
 
 ---
@@ -143,8 +143,8 @@ Databricks has **no native TTS**.
 
 1. Create Lakebase project; schema for users/series/episodes/timelines/ratings/comments/character_memory.
 2. **Seed a rich living universe** — 1 series, 4+ episodes deep, with timelines, ratings, comments, character memory. (Do this first — empty app = loss.)
-3. Frontend Databricks App (React/Node or Streamlit): auth + roles, dashboard, series/episode reader, ratings/comments → Lakebase.
-4. Agent App from `agent-openai-agents-sdk`: single tool-calling agent (getEpisode/getComments/getCharacter/saveDraft) + FM API calls; streaming HITL editor; MLflow tracing.
+3. Web App (Next.js, React+TS): auth (OAuth headers), dashboard, series/episode reader, ratings/comments, fork, and all writes → Lakebase via `pg`.
+4. Agent App from `agent-openai-agents-sdk`: single tool-calling agent, read-only tools (getEpisode/getComments/getCharacter) + FM API calls; streaming HITL editor; MLflow tracing. Writes are owned by the web backend.
 5. **Fork-a-decision (timeline) UX + split-view** original vs regenerated — the signature moment.
 6. Verify/canonize + rerank; one MLflow eval judge scoring the regenerated episode inline.
 7. (Optional) TTS clip behind a button.
