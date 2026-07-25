@@ -100,7 +100,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
     fork.setContext(ctx);
     fork.setWhatIf("");
     fork.setDrivingReviewId(DRIVING_ID);
-    router.push(`/episodes/${episode.id}/fork`);
+    router.push(`/episodes/${episode.id}/editor`);
   }
 
   return (
