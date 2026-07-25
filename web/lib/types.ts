@@ -12,6 +12,7 @@ export type Series = {
   episodeCount?: number;
   contributorCount?: number;
   avgRating?: number;
+  firstEpisodeId?: string; // convenience: first canonical episode, to link straight to the reader
   createdAt?: string;
 };
 

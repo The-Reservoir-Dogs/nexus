@@ -10,6 +10,14 @@ const isMock = MODE !== "live";
 
 const delay = (ms = 120) => new Promise((r) => setTimeout(r, ms));
 
+// mock helper: first canonical episode id for a series (to link straight to the reader)
+function firstEpisodeId(seriesId: string): string | undefined {
+  return db.episodes
+    .filter((e) => e.seriesId === seriesId && e.isCanonical)
+    .sort((a, b) => a.orderIndex - b.orderIndex)[0]?.id;
+}
+const withFirst = (s: Series): Series => ({ ...s, firstEpisodeId: firstEpisodeId(s.id) });
+
 async function live<T>(path: string, init?: RequestInit): Promise<T> {
   const base = process.env.NEXT_PUBLIC_BASE_URL ?? "";
   const res = await fetch(`${base}/api${path}`, {
@@ -40,13 +48,14 @@ export async function getSeries(params?: { q?: string; genre?: string }): Promis
     );
   }
   if (params?.genre) out = out.filter((s) => s.genre === params.genre);
-  return out;
+  return out.map(withFirst);
 }
 
 export async function getSeriesById(id: string): Promise<Series | undefined> {
   if (!isMock) return live<Series>(`/series/${id}`);
   await delay();
-  return db.series.find((s) => s.id === id);
+  const s = db.series.find((s) => s.id === id);
+  return s ? withFirst(s) : undefined;
 }
 
 export async function getSeriesCharacters(id: string): Promise<Character[]> {

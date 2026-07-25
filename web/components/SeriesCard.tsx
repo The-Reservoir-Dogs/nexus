@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/Badge";
 export function SeriesCard({ series }: { series: Series }) {
   return (
     <Link
-      href={`/series/${series.id}`}
+      href={series.firstEpisodeId ? `/episodes/${series.firstEpisodeId}` : `/series/${series.id}`}
+      prefetch
       className="group block rounded-md border border-line bg-panel p-3 transition-colors hover:border-line-2 hover:bg-panel-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fork/50"
     >
       <div className="flex items-center gap-2">
