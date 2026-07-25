@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 // kodwai-style: rectangular, mono, uppercase, letter-spaced.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 font-mono uppercase tracking-[0.12em] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-canon focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:opacity-50 disabled:pointer-events-none select-none",
+  "inline-flex items-center justify-center gap-2 rounded-[10px] font-mono uppercase tracking-[0.12em] font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-canon focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:opacity-50 disabled:pointer-events-none select-none",
   {
     variants: {
       variant: {
@@ -19,7 +19,9 @@ const buttonVariants = cva(
         danger: "bg-canon text-cream border border-canon hover:-translate-y-0.5",
         outline:
           "bg-transparent text-text border border-line-2 hover:border-canon hover:text-canon",
-        ghost: "bg-transparent text-body hover:bg-panel-2 tracking-normal normal-case",
+        ghost: "bg-transparent text-body hover:bg-panel-2 hover:text-text tracking-normal normal-case",
+        ai: "bg-ai/15 text-ai border border-ai/40 hover:bg-ai/25 hover:-translate-y-0.5",
+        pill: "bg-panel-2 text-body border border-line-2 rounded-full hover:border-canon hover:text-canon tracking-normal normal-case",
       },
       size: {
         sm: "h-9 px-3 text-[11px]",

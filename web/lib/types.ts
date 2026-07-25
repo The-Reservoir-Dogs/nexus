@@ -40,6 +40,8 @@ export type Episode = {
   decisionPoint: string | null;
   isCanonical: boolean;
   verifiedByAuthor: boolean;
+  audioUrl?: string | null;
+  audioDurationMs?: number | null;
   avgRating?: number;
   ratingCount?: number;
   createdAt?: string;

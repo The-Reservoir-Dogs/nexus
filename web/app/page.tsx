@@ -11,7 +11,11 @@ import { Button } from "@/components/ui/Button";
 
 export default function Home() {
   const { data: series, loading } = useAsync(() => getSeries(), []);
-  const [q, setQ] = React.useState("");
+  const [q, setQ] = React.useState(() =>
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("q") ?? ""
+      : ""
+  );
 
   const filtered = React.useMemo(() => {
     if (!series) return [];

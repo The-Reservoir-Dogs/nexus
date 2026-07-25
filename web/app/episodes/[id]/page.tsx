@@ -2,20 +2,25 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Volume2, Rewind, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Rewind, GitBranch, ArrowRight, BarChart3, Pencil } from "lucide-react";
 import {
   getEpisode,
   getEpisodes,
   getReviews,
   getEpisodeTimelines,
+  getSeriesById,
   postRating,
   postReview,
   forkEpisode,
 } from "@/lib/api";
-import type { Episode, Review } from "@/lib/types";
+import type { Episode, Review, Series } from "@/lib/types";
 import { useAsync } from "@/lib/useAsync";
+import { useAuth } from "@/components/AuthProvider";
 import { useFork } from "@/components/ForkProvider";
 import { Shell } from "@/components/layout/Shell";
+import { LeftRail } from "@/components/layout/LeftRail";
+import { SidePanel } from "@/components/layout/SidePanel";
+import { AudioPlayer } from "@/components/player/AudioPlayer";
 import { RatingStars } from "@/components/reader/RatingStars";
 import { CommentThread, CommentComposer } from "@/components/reader/Comments";
 import { Badge } from "@/components/ui/Badge";
@@ -29,23 +34,27 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
   const fork = useFork();
+  const { me } = useAuth();
 
   const { data: episode, loading } = useAsync(() => getEpisode(id), [id]);
   const { data: initialReviews } = useAsync(() => getReviews(id), [id]);
   const { data: timelines } = useAsync(() => getEpisodeTimelines(id), [id]);
 
-  // prev/next along the sacred timeline
   const [siblings, setSiblings] = React.useState<Episode[]>([]);
+  const [series, setSeries] = React.useState<Series | undefined>();
   React.useEffect(() => {
-    if (episode?.isCanonical) getEpisodes(episode.seriesId).then(setSiblings);
-  }, [episode?.seriesId, episode?.isCanonical]);
+    if (!episode) return;
+    getEpisodes(episode.seriesId).then(setSiblings);
+    getSeriesById(episode.seriesId).then(setSeries);
+  }, [episode?.seriesId, episode]);
+
   const idx = siblings.findIndex((e) => e.id === id);
   const prev = idx > 0 ? siblings[idx - 1] : null;
   const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+  const isAuthor = !!me && !!series && (series.authorId === me.id || episode?.coAuthorId === me.id);
 
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [rating, setRating] = React.useState<{ avg: number; count: number } | null>(null);
-  const [tab, setTab] = React.useState<"text" | "audio">("text");
   const [rewinding, setRewinding] = React.useState(false);
 
   React.useEffect(() => {
@@ -56,7 +65,6 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   }, [episode]);
 
   async function handleRate(score: number) {
-    // optimistic
     setRating((r) => (r ? { avg: score, count: r.count + 1 } : r));
     try {
       const res = await postRating(id, score);
@@ -70,8 +78,8 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
     const optimistic: Review = {
       id: `tmp-${Date.now()}`,
       episodeId: id,
-      createdBy: "1",
-      authorName: "sriman",
+      createdBy: me?.id ?? "1",
+      authorName: me?.username ?? "you",
       reviewText: text,
       parentReviewId: null,
       replies: [],
@@ -106,131 +114,118 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
           </div>
         </div>
       )}
-      <div className="mx-auto grid max-w-6xl gap-8 px-6 py-8 lg:grid-cols-[1fr_320px]">
-        <article>
-          {loading || !episode ? (
-            <div className="space-y-4">
-              <Skeleton className="h-9 w-2/3" />
-              {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-4 w-full" />
-              ))}
-            </div>
-          ) : (
-            <>
-              {/* Text | Audio tabs */}
-              <div className="mb-4 inline-flex rounded-lg border border-line bg-panel p-0.5">
-                {(["text", "audio"] as const).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setTab(t)}
-                    className={
-                      "rounded-md px-3 py-1 text-sm capitalize " +
-                      (tab === t ? "bg-panel-2 text-text" : "text-muted")
-                    }
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
 
-              {tab === "audio" && (
-                <div className="mb-4 flex items-center gap-3 rounded-lg border border-line bg-panel p-3 text-sm text-muted">
-                  <Volume2 className="h-4 w-4" />
-                  {episode.decisionPoint ? "Audio drama coming soon." : "No audio for this episode yet."}
-                </div>
-              )}
+      <div className="mx-auto grid h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 gap-5 px-5 py-5 lg:grid-cols-[210px_1fr_340px]">
+        {/* Left rail */}
+        <div className="hidden lg:block">
+          <LeftRail episodes={siblings} currentId={id} seasonTitle={series ? "Season 1" : "Season"} />
+        </div>
 
-              <h1 className="font-display text-4xl">{episode.title}</h1>
-              <div className="mt-4 max-w-[68ch] space-y-4 leading-relaxed text-text/90">
-                {(episode.content ?? "").split("\n\n").map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </div>
-
-              {/* Decision point */}
-              {episode.decisionPoint && (
-                <div className="mt-6 flex flex-wrap items-center gap-3 rounded-xl border border-fork/40 bg-fork/10 p-4">
-                  <Badge variant="fork">DECISION POINT</Badge>
-                  <span className="text-sm text-text/90">{episode.decisionPoint}</span>
-                  <Button variant="fork" size="sm" className="ml-auto" onClick={handleRewind}>
-                    <Rewind className="h-4 w-4" /> Rewind / change this decision
-                  </Button>
-                </div>
-              )}
-
-              {/* Prev / Next episode navigation */}
-              {(prev || next) && (
-                <div className="mt-8 flex items-center justify-between gap-3">
-                  {prev ? (
-                    <Link
-                      href={`/episodes/${prev.id}`}
-                      className="group flex items-center gap-2 rounded-xl border border-line bg-panel px-4 py-3 text-sm transition-colors hover:border-fork/60"
-                    >
-                      <ChevronLeft className="h-4 w-4 text-fork" />
-                      <span className="text-left">
-                        <span className="block font-mono text-[10px] uppercase text-muted">Previous</span>
-                        <span className="text-text">{prev.title}</span>
-                      </span>
-                    </Link>
-                  ) : (
-                    <span />
-                  )}
-                  {next ? (
-                    <Link
-                      href={`/episodes/${next.id}`}
-                      className="group flex items-center gap-2 rounded-xl border border-line bg-panel px-4 py-3 text-right text-sm transition-colors hover:border-fork/60"
-                    >
-                      <span>
-                        <span className="block font-mono text-[10px] uppercase text-muted">Next</span>
-                        <span className="text-text">{next.title}</span>
-                      </span>
-                      <ChevronRight className="h-4 w-4 text-fork" />
-                    </Link>
-                  ) : (
-                    <span />
-                  )}
-                </div>
-              )}
-
-              {/* Rating + comments */}
-              <div className="mt-8 space-y-4 border-t border-line pt-6">
-                {rating && (
-                  <RatingStars avg={rating.avg} count={rating.count} onRate={handleRate} />
-                )}
-                <CommentComposer onPost={handlePost} />
-              </div>
-            </>
-          )}
-        </article>
-
-        {/* Sidebar */}
-        <aside className="space-y-6">
-          <div>
-            <h2 className="mb-3 font-display text-xl">Comments</h2>
-            <CommentThread reviews={reviews} drivingId={DRIVING_ID} />
-          </div>
-          {timelines && timelines.length > 0 && (
-            <div>
-              <h2 className="mb-3 font-display text-xl">Alternate Timelines</h2>
-              <div className="space-y-2">
-                {timelines.map((t: Episode) => (
-                  <Link key={t.id} href={`/episodes/${t.id}`} className="block">
-                    <Card className="hover:shadow-lift">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-base">{t.title}</CardTitle>
-                        <ArrowRight className="h-4 w-4 text-fork" />
-                      </div>
-                      <CardMeta className="mt-1">
-                        by {t.coAuthorName} · {t.avgRating}★
-                        {t.verifiedByAuthor ? " · ✓" : ""}
-                      </CardMeta>
-                    </Card>
+        {/* Center: script + player */}
+        <section className="flex min-h-0 flex-col">
+          {/* action bar */}
+          <div className="mb-3 flex items-center gap-2">
+            {episode?.decisionPoint && (
+              <Button variant="fork" size="sm" onClick={handleRewind}>
+                <GitBranch className="h-4 w-4" /> Create branches
+              </Button>
+            )}
+            {episode?.isCanonical ? (
+              <Badge variant="canon">Canonical</Badge>
+            ) : (
+              <Badge variant="fork">Alternate timeline</Badge>
+            )}
+            {isAuthor && (
+              <div className="ml-auto flex items-center gap-2">
+                <Button asChild variant="pill" size="sm">
+                  <Link href={`/episodes/${id}/analytics`}>
+                    <BarChart3 className="h-3.5 w-3.5" /> analytics
                   </Link>
+                </Button>
+                <Button asChild variant="pill" size="sm">
+                  <Link href={`/episodes/${id}/editor`}>
+                    <Pencil className="h-3.5 w-3.5" /> edit
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* script */}
+          <div className="min-h-0 flex-1 overflow-y-auto scroll-thin rounded-[14px] border border-line bg-panel p-8">
+            {loading || !episode ? (
+              <div className="space-y-4">
+                <Skeleton className="h-9 w-2/3" />
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <Skeleton key={i} className="h-4 w-full" />
                 ))}
               </div>
+            ) : (
+              <article>
+                <h1 className="font-display text-4xl italic text-text">{episode.title}</h1>
+                <div className="mt-6 prose-story">
+                  {(episode.content ?? "").split("\n\n").map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+
+                {episode.decisionPoint && (
+                  <div className="mt-8 flex flex-wrap items-center gap-3 rounded-[14px] border border-fork/40 bg-fork/10 p-4">
+                    <Badge variant="fork">DECISION POINT</Badge>
+                    <span className="text-sm text-body">{episode.decisionPoint}</span>
+                  </div>
+                )}
+
+                <div className="mt-8 border-t border-line pt-6">
+                  {rating && <RatingStars avg={rating.avg} count={rating.count} onRate={handleRate} />}
+                </div>
+              </article>
+            )}
+          </div>
+
+          {/* audio player docked at bottom */}
+          <AudioPlayer
+            className="mt-3"
+            src={episode?.audioUrl}
+            title={episode?.title}
+            onPrev={prev ? () => router.push(`/episodes/${prev.id}`) : undefined}
+            onNext={next ? () => router.push(`/episodes/${next.id}`) : undefined}
+          />
+        </section>
+
+        {/* Right: comments */}
+        <div className="hidden min-h-0 lg:block">
+          <SidePanel
+            title="Comments"
+            footer={<CommentComposer onPost={handlePost} />}
+          >
+            <div className="space-y-5">
+              <CommentThread reviews={reviews} drivingId={DRIVING_ID} />
+              {timelines && timelines.length > 0 && (
+                <div>
+                  <h3 className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                    Alternate timelines
+                  </h3>
+                  <div className="space-y-2">
+                    {timelines.map((t: Episode) => (
+                      <Link key={t.id} href={`/episodes/${t.id}`} className="block">
+                        <Card className="p-3 hover:border-fork/50 hover:shadow-lift">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-sm">{t.title}</CardTitle>
+                            <ArrowRight className="h-4 w-4 text-fork" />
+                          </div>
+                          <CardMeta className="mt-1">
+                            by {t.coAuthorName} · {t.avgRating}★{t.verifiedByAuthor ? " · ✓" : ""}
+                          </CardMeta>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </aside>
+          </SidePanel>
+        </div>
       </div>
     </Shell>
   );

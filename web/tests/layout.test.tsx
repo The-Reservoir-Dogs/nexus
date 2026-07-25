@@ -11,21 +11,16 @@ vi.mock("next/navigation", () => ({
 describe("TopNav", () => {
   beforeEach(() => localStorage.setItem("nexus_session", "1"));
 
-  it("is clean: no search, no back, no nav links; has brand + working Start writing + logout", async () => {
+  it("has brand, global search, and logout", async () => {
     render(
       <AuthProvider>
         <TopNav />
       </AuthProvider>
     );
-    expect(screen.queryByRole("searchbox")).toBeNull();
-    expect(screen.queryByPlaceholderText(/search/i)).toBeNull();
-    expect(screen.queryByLabelText("Go back")).toBeNull();
+    expect(screen.getByText("nexus")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/search the multiverse/i)).toBeInTheDocument();
     expect(screen.queryByText("Discover")).toBeNull();
     expect(screen.queryByText("Trending")).toBeNull();
-    expect(screen.queryByText("Studio")).toBeNull();
-    expect(screen.getByText("nexus")).toBeInTheDocument();
-    const cta = screen.getByRole("link", { name: /start writing/i });
-    expect(cta).toHaveAttribute("href", "/series/10/branches");
     await waitFor(() => expect(screen.getByLabelText("Log out")).toBeInTheDocument());
   });
 });

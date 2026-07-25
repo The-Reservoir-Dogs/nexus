@@ -80,7 +80,7 @@ export function SeriesCard({ series }: { series: Series }) {
           <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <span
               className="inline-flex items-center gap-1 border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em]"
-              style={{ borderColor: g.accent, color: g.accent, background: "rgba(255,253,249,0.9)" }}
+              style={{ borderColor: g.accent, color: g.accent, background: "rgba(11,11,15,0.82)" }}
             >
               Read <ArrowUpRight className="h-3.5 w-3.5" />
             </span>

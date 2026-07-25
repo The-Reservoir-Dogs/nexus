@@ -1,30 +1,31 @@
 import type { Config } from "tailwindcss";
 
-// Warm-paper editorial theme (kodwai-inspired). Light background, terracotta accent,
-// serif headlines, mono labels.
+// NEXUS dark cinematic theme ("The Hollow Crown"). Ink background, antique-gold accent,
+// arcane-violet for AI, serif story body. Token names kept stable across the redesign.
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // surfaces (warm paper)
-        ink: "#faf8f4", // page background
-        panel: "#fffdf9", // cards
-        "panel-2": "#f3efe8", // raised / hover
-        line: "#e4e0d8", // hairline borders
-        "line-2": "#d6cfc1",
+        // surfaces (ink)
+        ink: "#0B0B0F", // page background
+        panel: "#15151C", // cards / panels
+        "panel-2": "#1E1E28", // raised / hover
+        line: "#2A2A36", // hairline borders
+        "line-2": "#343442",
         // text
-        text: "#1a1a1a", // headlines / primary
-        body: "#3a3733", // body copy
-        muted: "#736d63", // secondary / mono labels
+        text: "#ECEAE4", // headlines / primary (warm off-white)
+        body: "#C9C5BC", // body copy
+        muted: "#9A968C", // secondary / mono labels
         // accents
-        canon: "#c23616", // terracotta = canonical / verified / brand
-        fork: "#15803d", // green = alternate timeline
-        accent: "#ff6a45", // bright orange
-        amber: "#f3b03a",
-        success: "#15803d",
-        danger: "#c23616",
-        cream: "#fbf7f0",
+        canon: "#D9A441", // antique gold = canonical / verified / brand
+        fork: "#5B8DEF", // blue = alternate timeline
+        accent: "#D9A441", // primary action = gold
+        amber: "#E4B84E",
+        ai: "#7C5CFF", // arcane violet = agent / AI surfaces
+        success: "#3FB950",
+        danger: "#E5484D",
+        cream: "#1E1E28",
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "serif"],
@@ -42,9 +43,10 @@ const config: Config = {
         "fade-rise": "fade-rise 0.4s cubic-bezier(0.16,1,0.3,1) both",
       },
       boxShadow: {
-        cta: "0 4px 16px -8px rgba(194,54,22,0.4)",
-        card: "0 1px 2px rgba(40,24,12,0.04), 0 12px 30px -20px rgba(40,24,12,0.18)",
-        lift: "0 10px 30px -14px rgba(40,24,12,0.28)",
+        cta: "0 6px 24px -10px rgba(217,164,65,0.45)",
+        card: "0 1px 2px rgba(0,0,0,0.5), 0 18px 40px -24px rgba(0,0,0,0.7)",
+        lift: "0 16px 44px -18px rgba(0,0,0,0.75)",
+        glow: "0 0 0 1px rgba(217,164,65,0.25), 0 0 28px -6px rgba(217,164,65,0.35)",
       },
     },
   },

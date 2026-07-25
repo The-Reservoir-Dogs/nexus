@@ -34,7 +34,7 @@ describe("Co-author editor", () => {
     setup();
     // HITL controls present immediately
     expect(await screen.findByRole("button", { name: /approve/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /reject/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /discard/i })).toBeInTheDocument();
 
     // wait for streaming to fill the manuscript with the alternate text
     await waitFor(
@@ -45,7 +45,7 @@ describe("Co-author editor", () => {
       { timeout: 8000 }
     );
 
-    // chat shows an AI DRAFT bubble
-    expect(screen.getByText("DRAFT")).toBeInTheDocument();
+    // chat shows an AI draft bubble
+    expect(screen.getByText("draft")).toBeInTheDocument();
   }, 10000);
 });

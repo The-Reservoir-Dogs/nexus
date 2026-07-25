@@ -23,7 +23,7 @@ export default function LoginPage() {
       <div className="paper-glow pointer-events-none absolute inset-0" aria-hidden />
       <form
         onSubmit={onSubmit}
-        className="relative z-10 w-full max-w-sm border border-line bg-panel p-8 shadow-card"
+        className="relative z-10 w-full max-w-sm rounded-[14px] border border-line bg-panel p-8 shadow-card"
       >
         <p className="eyebrow mb-4 text-center">
           <span className="eyebrow-mark">// </span>sign in
@@ -42,7 +42,7 @@ export default function LoginPage() {
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mb-4 h-11 w-full border border-line-2 bg-ink px-3 text-sm text-text focus:border-canon focus:outline-none"
+          className="mb-4 h-11 w-full rounded-[10px] border border-line-2 bg-ink px-3 text-sm text-text focus:border-canon focus:outline-none"
         />
 
         <label className="eyebrow mb-1.5 block" htmlFor="password">
@@ -53,7 +53,7 @@ export default function LoginPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-7 h-11 w-full border border-line-2 bg-ink px-3 text-sm text-text focus:border-canon focus:outline-none"
+          className="mb-7 h-11 w-full rounded-[10px] border border-line-2 bg-ink px-3 text-sm text-text focus:border-canon focus:outline-none"
         />
 
         <Button type="submit" variant="primary" size="lg" className="w-full" disabled={busy}>
