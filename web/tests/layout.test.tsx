@@ -18,7 +18,7 @@ describe("TopNav", () => {
       </AuthProvider>
     );
     expect(screen.getByText("nexus")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/search the multiverse/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/search/i)).toBeInTheDocument();
     expect(screen.queryByText("Discover")).toBeNull();
     expect(screen.queryByText("Trending")).toBeNull();
     await waitFor(() => expect(screen.getByLabelText("Log out")).toBeInTheDocument());

@@ -12,6 +12,7 @@ export function SidePanel({
   accent = "canon",
   children,
   footer,
+  bare,
   className,
 }: {
   title: string;
@@ -19,22 +20,24 @@ export function SidePanel({
   accent?: "canon" | "ai" | "fork";
   children: React.ReactNode;
   footer?: React.ReactNode;
+  bare?: boolean;
   className?: string;
 }) {
   const dot = accent === "ai" ? "bg-ai" : accent === "fork" ? "bg-fork" : "bg-canon";
   return (
     <div
       className={cn(
-        "flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-panel",
+        "flex h-full flex-col overflow-hidden",
+        bare ? "" : "rounded-md border border-line bg-panel",
         className
       )}
     >
-      <div className="flex items-center gap-2 border-b border-line px-4 py-3">
+      <div className="flex items-center gap-2 border-b border-line px-3 py-2">
         <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
         {icon}
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-text">{title}</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-wide text-text">{title}</h2>
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto scroll-thin p-4">{children}</div>
+      <div className="min-h-0 flex-1 overflow-y-auto scroll-thin p-3">{children}</div>
       {footer && <div className="border-t border-line p-3">{footer}</div>}
     </div>
   );

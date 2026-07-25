@@ -81,9 +81,9 @@ export default function AnalyticsPage({ params }: { params: { id: string } }) {
           <p className="mt-10 text-center text-muted">Analytics are visible to the series author only.</p>
         ) : (
           <>
-            <div className="mt-4 mb-6">
-              <p className="eyebrow mb-1"><span className="eyebrow-mark">// </span>audience retention</p>
-              <h1 className="font-display text-3xl italic text-text">{episode.title}</h1>
+            <div className="mt-4 mb-5">
+              <p className="eyebrow mb-1">Audience retention</p>
+              <h1 className="text-xl font-semibold text-text">{episode.title}</h1>
             </div>
 
             {/* headline stats */}

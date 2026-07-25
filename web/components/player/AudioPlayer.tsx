@@ -17,6 +17,7 @@ export function AudioPlayer({
   onNext,
   onGenerate,
   generating,
+  bare,
   className,
 }: {
   src?: string | null;
@@ -25,8 +26,12 @@ export function AudioPlayer({
   onNext?: () => void;
   onGenerate?: () => void;
   generating?: boolean;
+  bare?: boolean;
   className?: string;
 }) {
+  const shell = bare
+    ? "flex items-center gap-3 px-1"
+    : "flex items-center gap-3 rounded-md border border-line bg-panel px-3 py-2";
   const ref = React.useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = React.useState(false);
   const [cur, setCur] = React.useState(0);
@@ -52,12 +57,7 @@ export function AudioPlayer({
   // No audio yet — offer to generate narration.
   if (!src) {
     return (
-      <div
-        className={cn(
-          "flex items-center gap-3 rounded-[14px] border border-line bg-panel px-4 py-3",
-          className
-        )}
-      >
+      <div className={cn(shell, className)}>
         <Volume2 className="h-4 w-4 text-muted" />
         <span className="text-sm text-muted">No narration yet.</span>
         <button
@@ -73,12 +73,7 @@ export function AudioPlayer({
   }
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-3 rounded-[14px] border border-line bg-panel px-4 py-2.5 shadow-card",
-        className
-      )}
-    >
+    <div className={cn(shell, className)}>
       <audio
         ref={ref}
         src={src}

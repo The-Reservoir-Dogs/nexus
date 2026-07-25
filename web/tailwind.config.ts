@@ -1,36 +1,37 @@
 import type { Config } from "tailwindcss";
 
-// NEXUS dark cinematic theme ("The Hollow Crown"). Ink background, antique-gold accent,
-// arcane-violet for AI, serif story body. Token names kept stable across the redesign.
+// NEXUS professional theme — GitHub-tool aesthetic. Neutral dark surfaces, functional
+// accents (gold=canonical/stars, blue=branches/links, violet=AI), sans everywhere, dense.
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // surfaces (ink)
-        ink: "#0B0B0F", // page background
-        panel: "#15151C", // cards / panels
-        "panel-2": "#1E1E28", // raised / hover
-        line: "#2A2A36", // hairline borders
-        "line-2": "#343442",
+        // surfaces (GitHub dark)
+        ink: "#0d1117", // page background
+        panel: "#161b22", // cards / panels
+        "panel-2": "#21262d", // raised / hover
+        line: "#30363d", // hairline borders
+        "line-2": "#3d444d",
         // text
-        text: "#ECEAE4", // headlines / primary (warm off-white)
-        body: "#C9C5BC", // body copy
-        muted: "#9A968C", // secondary / mono labels
-        // accents
-        canon: "#D9A441", // antique gold = canonical / verified / brand
-        fork: "#5B8DEF", // blue = alternate timeline
-        accent: "#D9A441", // primary action = gold
-        amber: "#E4B84E",
-        ai: "#7C5CFF", // arcane violet = agent / AI surfaces
-        success: "#3FB950",
-        danger: "#E5484D",
-        cream: "#1E1E28",
+        text: "#e6edf3", // primary
+        body: "#c9d1d9", // body copy
+        muted: "#8b949e", // secondary / labels
+        // accents (functional)
+        canon: "#d29922", // gold = canonical / stars
+        fork: "#2f81f7", // blue = branches / links
+        accent: "#238636", // green = primary action (Git "create/commit")
+        "accent-hover": "#2ea043",
+        amber: "#d29922",
+        ai: "#a371f7", // violet = agent / AI
+        success: "#238636",
+        danger: "#f85149",
+        cream: "#161b22",
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
+        display: ["var(--font-sans)", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       keyframes: {
         "fade-rise": {
@@ -42,11 +43,14 @@ const config: Config = {
       animation: {
         "fade-rise": "fade-rise 0.4s cubic-bezier(0.16,1,0.3,1) both",
       },
+      borderRadius: {
+        DEFAULT: "6px",
+      },
       boxShadow: {
-        cta: "0 6px 24px -10px rgba(217,164,65,0.45)",
-        card: "0 1px 2px rgba(0,0,0,0.5), 0 18px 40px -24px rgba(0,0,0,0.7)",
-        lift: "0 16px 44px -18px rgba(0,0,0,0.75)",
-        glow: "0 0 0 1px rgba(217,164,65,0.25), 0 0 28px -6px rgba(217,164,65,0.35)",
+        cta: "0 1px 0 rgba(0,0,0,0.3)",
+        card: "0 1px 0 rgba(0,0,0,0.2)",
+        lift: "0 8px 24px -12px rgba(0,0,0,0.6)",
+        glow: "0 0 0 1px rgba(47,129,247,0.3)",
       },
     },
   },
