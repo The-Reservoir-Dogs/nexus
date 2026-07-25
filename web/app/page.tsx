@@ -1,34 +1,100 @@
-export const dynamic = "force-dynamic";
-// Minimal dashboard — smoke test that /api + Lakebase are wired.
-// Sriman replaces this with the real Netflix-style UI (dummy JSON first).
-async function getSeries() {
-  const base = process.env.NEXT_PUBLIC_BASE_URL ?? "";
-  const res = await fetch(`${base}/api/series`, { cache: "no-store" });
-  if (!res.ok) return [];
-  const { data } = await res.json();
-  return data as any[];
+"use client";
+import * as React from "react";
+import Link from "next/link";
+import { getSeries } from "@/lib/api";
+import { useAsync } from "@/lib/useAsync";
+import { Shell } from "@/components/layout/Shell";
+import { SeriesCard } from "@/components/SeriesCard";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+
+function Row({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="space-y-3">
+      <h2 className="font-display text-2xl">{title}</h2>
+      <div className="flex gap-4 overflow-x-auto pb-2 [scrollbar-width:thin]">{children}</div>
+    </section>
+  );
 }
 
-export default async function Home() {
-  const series = await getSeries().catch(() => []);
-  return (
-    <main style={{ padding: 32, maxWidth: 960, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 40, marginBottom: 4 }}>NEXUS</h1>
-      <p style={{ opacity: 0.7, marginTop: 0 }}>A living story multiverse.</p>
+export default function Home() {
+  const { data: series, loading } = useAsync(() => getSeries(), []);
+  const [q, setQ] = React.useState("");
 
-      <h2 style={{ marginTop: 32 }}>Series</h2>
-      {series.length === 0 && <p style={{ opacity: 0.6 }}>No series (or API not reachable yet).</p>}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: 16 }}>
-        {series.map((s) => (
-          <div key={s.id} style={{ background: "#15151f", borderRadius: 12, padding: 16 }}>
-            <div style={{ fontWeight: 600, fontSize: 18 }}>{s.title}</div>
-            <div style={{ opacity: 0.7, fontSize: 13, margin: "6px 0" }}>{s.summary}</div>
-            <div style={{ fontSize: 12, opacity: 0.6 }}>
-              {s.episodeCount} eps · {s.contributorCount} contributors · ★ {s.avgRating}
+  const filtered = React.useMemo(() => {
+    if (!series) return [];
+    const needle = q.toLowerCase().trim();
+    if (!needle) return series;
+    return series.filter(
+      (s) =>
+        s.title.toLowerCase().includes(needle) ||
+        (s.genre ?? "").toLowerCase().includes(needle)
+    );
+  }, [series, q]);
+
+  const featured = series?.[0];
+
+  return (
+    <Shell>
+      <div className="mx-auto max-w-6xl space-y-10 px-6 py-8">
+        {/* Hero */}
+        {loading || !featured ? (
+          <Skeleton className="h-56 w-full rounded-2xl" />
+        ) : (
+          <div className="radial-glow relative overflow-hidden rounded-2xl border border-line p-8">
+            <Badge variant="fork" className="mb-3">
+              Featured Multiverse
+            </Badge>
+            <h1 className="max-w-xl font-display text-5xl leading-tight">{featured.title}</h1>
+            <p className="mt-2 max-w-lg text-muted">{featured.description}</p>
+            <div className="mt-5 flex items-center gap-3">
+              <Button asChild variant="primary" size="lg">
+                <Link href={`/series/${featured.id}`}>Enter the Multiverse</Link>
+              </Button>
+              <span className="font-mono text-xs text-muted">
+                {featured.episodeCount} episodes · {featured.contributorCount} contributors ·{" "}
+                {featured.avgRating}★
+              </span>
             </div>
           </div>
-        ))}
+        )}
+
+        {/* Search */}
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Filter series by title or genre…"
+          aria-label="Filter series"
+          className="h-10 w-full max-w-md rounded-lg border border-line bg-panel px-3 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-fork"
+        />
+
+        {loading ? (
+          <Row title="Continue">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="w-56 shrink-0 space-y-2">
+                <Skeleton className="aspect-[3/4] w-full rounded-xl" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ))}
+          </Row>
+        ) : filtered.length === 0 ? (
+          <p className="text-muted">No series match “{q}”.</p>
+        ) : (
+          <>
+            <Row title="Continue">
+              {filtered.map((s) => (
+                <SeriesCard key={s.id} series={s} />
+              ))}
+            </Row>
+            <Row title="Trending Multiverses">
+              {[...filtered].reverse().map((s) => (
+                <SeriesCard key={s.id} series={s} />
+              ))}
+            </Row>
+          </>
+        )}
       </div>
-    </main>
+    </Shell>
   );
 }

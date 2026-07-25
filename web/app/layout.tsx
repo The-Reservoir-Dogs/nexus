@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { AuthProvider } from "@/components/AuthProvider";
 import "./globals.css";
 
 const display = Fraunces({
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="en"
       className={`${display.variable} ${sans.variable} ${mono.variable}`}
     >
-      <body className="grain min-h-screen">{children}</body>
+      <body className="grain min-h-screen">
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
