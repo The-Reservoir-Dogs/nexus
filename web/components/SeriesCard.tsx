@@ -14,16 +14,17 @@ export function SeriesCard({ series }: { series: Series }) {
     >
       <Link
         href={`/series/${series.id}`}
-        className="group block rounded-xl border border-line bg-panel focus:outline-none focus-visible:ring-2 focus-visible:ring-fork"
+        className="group block overflow-hidden rounded-2xl border border-line bg-panel shadow-card transition-colors hover:border-fork/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-fork"
       >
-        <div className="relative aspect-[3/4] overflow-hidden rounded-t-xl bg-gradient-to-br from-panel-2 to-ink">
+        <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-panel-2 via-panel to-ink">
+          <div className="absolute inset-0 bg-aurora-soft opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="radial-glow absolute inset-0 opacity-70" />
-          <div className="absolute inset-0 grid place-items-center p-4 text-center">
-            <span className="font-display text-2xl leading-tight text-text/90">
+          <div className="absolute inset-0 grid place-items-center p-5 text-center">
+            <span className="font-display text-3xl italic leading-tight text-text/95">
               {series.title}
             </span>
           </div>
-          <div className="absolute left-2 top-2">
+          <div className="absolute left-3 top-3">
             <Badge variant="canon">Canon</Badge>
           </div>
         </div>

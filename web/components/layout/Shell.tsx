@@ -4,6 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthProvider";
 import { TopNav } from "./TopNav";
+import { Footer } from "./Footer";
 
 /** Authenticated app shell: guards session, renders nav + animated page. */
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -24,16 +25,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <TopNav />
       <motion.main
         key={pathname}
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="flex-1"
       >
         {children}
       </motion.main>
+      <Footer />
     </div>
   );
 }

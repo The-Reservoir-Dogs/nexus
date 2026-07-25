@@ -1,20 +1,25 @@
 import type { ReactNode } from "react";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Instrument_Serif, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ForkProvider } from "@/components/ForkProvider";
 import "./globals.css";
 
-const display = Fraunces({
+const display = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400",
+  style: ["normal", "italic"],
   variable: "--font-display",
 });
-const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const sans = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+});
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata = {
   title: "NEXUS — A Living Story Multiverse",
-  description: "Rewrite fate. An AI keeps the whole universe consistent.",
+  description: "Where storytellers rewrite fate, and an AI keeps every timeline true.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

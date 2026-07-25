@@ -9,31 +9,50 @@
 @layer base {
   body {
     @apply bg-ink text-text font-sans antialiased;
+    background-image:
+      radial-gradient(60rem 40rem at 8% -10%, rgba(124, 92, 255, 0.12), transparent 60%),
+      radial-gradient(50rem 40rem at 100% 0%, rgba(255, 77, 141, 0.08), transparent 55%);
+    background-attachment: fixed;
   }
   * {
     @apply border-line;
   }
   ::selection {
-    @apply bg-fork/40;
+    @apply bg-accent/40 text-text;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
   }
 }
 
 @layer utilities {
-  /* subtle film grain overlay */
+  /* aurora gradient text for headlines */
+  .text-aurora {
+    @apply bg-aurora bg-clip-text text-transparent;
+    background-size: 200% 200%;
+    animation: aurora-pan 8s ease infinite;
+  }
+  /* film grain overlay */
   .grain::before {
     content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 50;
-    opacity: 0.035;
+    z-index: 60;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  /* cinematic radial glow behind hero sections */
   .radial-glow {
     background:
-      radial-gradient(60% 60% at 20% 0%, rgba(139, 92, 246, 0.18), transparent 60%),
-      radial-gradient(50% 50% at 90% 10%, rgba(245, 197, 24, 0.1), transparent 55%);
+      radial-gradient(60% 60% at 15% 0%, rgba(124, 92, 255, 0.22), transparent 60%),
+      radial-gradient(50% 50% at 95% 10%, rgba(255, 179, 71, 0.12), transparent 55%);
+  }
+  /* thin gradient hairline used to frame hero/footer */
+  .rule-aurora {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(154, 107, 255, 0.6), rgba(255, 77, 141, 0.6), transparent);
   }
   .skeleton {
     @apply relative overflow-hidden bg-panel-2 rounded;
@@ -45,5 +64,13 @@
     transform: translateX(-100%);
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
     animation: shimmer 1.5s infinite;
+  }
+  /* custom thin scrollbars */
+  .scroll-thin::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-line;
   }
 }

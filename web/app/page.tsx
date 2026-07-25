@@ -42,14 +42,17 @@ export default function Home() {
         {loading || !featured ? (
           <Skeleton className="h-56 w-full rounded-2xl" />
         ) : (
-          <div className="radial-glow relative overflow-hidden rounded-2xl border border-line p-8">
-            <Badge variant="fork" className="mb-3">
-              Featured Multiverse
+          <div className="radial-glow relative overflow-hidden rounded-3xl border border-line p-10 shadow-card">
+            <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-aurora-soft blur-3xl" />
+            <Badge variant="fork" className="mb-4">
+              ✦ Featured Multiverse
             </Badge>
-            <h1 className="max-w-xl font-display text-5xl leading-tight">{featured.title}</h1>
-            <p className="mt-2 max-w-lg text-muted">{featured.description}</p>
-            <div className="mt-5 flex items-center gap-3">
-              <Button asChild variant="primary" size="lg">
+            <h1 className="max-w-2xl font-display text-6xl leading-[1.02]">
+              {featured.title}
+            </h1>
+            <p className="mt-3 max-w-lg text-lg text-muted">{featured.description}</p>
+            <div className="mt-6 flex items-center gap-3">
+              <Button asChild variant="aurora" size="lg">
                 <Link href={`/series/${featured.id}`}>Enter the Multiverse</Link>
               </Button>
               <span className="font-mono text-xs text-muted">

@@ -2,9 +2,10 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Volume2, Rewind, ArrowRight } from "lucide-react";
+import { Volume2, Rewind, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   getEpisode,
+  getEpisodes,
   getReviews,
   getEpisodeTimelines,
   postRating,
@@ -32,6 +33,15 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   const { data: episode, loading } = useAsync(() => getEpisode(id), [id]);
   const { data: initialReviews } = useAsync(() => getReviews(id), [id]);
   const { data: timelines } = useAsync(() => getEpisodeTimelines(id), [id]);
+
+  // prev/next along the sacred timeline
+  const [siblings, setSiblings] = React.useState<Episode[]>([]);
+  React.useEffect(() => {
+    if (episode?.isCanonical) getEpisodes(episode.seriesId).then(setSiblings);
+  }, [episode?.seriesId, episode?.isCanonical]);
+  const idx = siblings.findIndex((e) => e.id === id);
+  const prev = idx > 0 ? siblings[idx - 1] : null;
+  const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [rating, setRating] = React.useState<{ avg: number; count: number } | null>(null);
@@ -145,6 +155,40 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
                   <Button variant="fork" size="sm" className="ml-auto" onClick={handleRewind}>
                     <Rewind className="h-4 w-4" /> Rewind / change this decision
                   </Button>
+                </div>
+              )}
+
+              {/* Prev / Next episode navigation */}
+              {(prev || next) && (
+                <div className="mt-8 flex items-center justify-between gap-3">
+                  {prev ? (
+                    <Link
+                      href={`/episodes/${prev.id}`}
+                      className="group flex items-center gap-2 rounded-xl border border-line bg-panel px-4 py-3 text-sm transition-colors hover:border-fork/60"
+                    >
+                      <ChevronLeft className="h-4 w-4 text-fork" />
+                      <span className="text-left">
+                        <span className="block font-mono text-[10px] uppercase text-muted">Previous</span>
+                        <span className="text-text">{prev.title}</span>
+                      </span>
+                    </Link>
+                  ) : (
+                    <span />
+                  )}
+                  {next ? (
+                    <Link
+                      href={`/episodes/${next.id}`}
+                      className="group flex items-center gap-2 rounded-xl border border-line bg-panel px-4 py-3 text-right text-sm transition-colors hover:border-fork/60"
+                    >
+                      <span>
+                        <span className="block font-mono text-[10px] uppercase text-muted">Next</span>
+                        <span className="text-text">{next.title}</span>
+                      </span>
+                      <ChevronRight className="h-4 w-4 text-fork" />
+                    </Link>
+                  ) : (
+                    <span />
+                  )}
                 </div>
               )}
 

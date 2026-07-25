@@ -45,6 +45,7 @@ export default function StyleGuide() {
       <section className="space-y-3">
         <h2 className="font-display text-2xl">Buttons</h2>
         <div className="flex flex-wrap gap-3">
+          <Button variant="aurora">Enter the Multiverse</Button>
           <Button variant="primary">Canonize</Button>
           <Button variant="fork">Fork timeline</Button>
           <Button variant="success">Approve</Button>
