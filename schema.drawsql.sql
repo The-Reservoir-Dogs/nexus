@@ -47,11 +47,29 @@ CREATE TABLE "episodes"(
     "decision_point" TEXT NULL,
     "is_canonical" BOOLEAN NOT NULL,
     "verified_by_author" BOOLEAN NOT NULL,
+    "audio_url" TEXT NULL,
+    "audio_duration_ms" INTEGER NULL,
     "created_at" TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP NOT NULL
 );
 ALTER TABLE
     "episodes" ADD PRIMARY KEY("id");
+CREATE TABLE "playback_events"(
+    "id" BIGINT NOT NULL,
+    "episode_id" BIGINT NOT NULL,
+    "user_id" BIGINT NULL,
+    "session_id" UUID NOT NULL,
+    "event_type" VARCHAR(20) NOT NULL,
+    "position_ms" INTEGER NOT NULL,
+    "seek_to_ms" INTEGER NULL,
+    "duration_ms" INTEGER NULL,
+    "speed" DECIMAL(3, 2) NULL,
+    "device" VARCHAR(30) NULL,
+    "autoplay" BOOLEAN NOT NULL,
+    "created_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "playback_events" ADD PRIMARY KEY("id");
 CREATE TABLE "ratings"(
     "id" BIGINT NOT NULL,
     "episode_id" BIGINT NOT NULL,
@@ -179,3 +197,7 @@ ALTER TABLE
     "plot_threads" ADD CONSTRAINT "plot_threads_opened_episode_id_foreign" FOREIGN KEY("opened_episode_id") REFERENCES "episodes"("id");
 ALTER TABLE
     "plot_threads" ADD CONSTRAINT "plot_threads_resolved_episode_id_foreign" FOREIGN KEY("resolved_episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "playback_events" ADD CONSTRAINT "playback_events_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "playback_events" ADD CONSTRAINT "playback_events_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id");

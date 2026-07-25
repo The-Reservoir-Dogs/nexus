@@ -61,6 +61,8 @@ CREATE TABLE episodes (
     decision_point        TEXT,                              -- the "what if" premise of the fork
     is_canonical          BOOLEAN NOT NULL DEFAULT false,    -- sacred timeline?
     verified_by_author    BOOLEAN NOT NULL DEFAULT false,    -- author's tick
+    audio_url             TEXT,                              -- TTS render of this episode
+    audio_duration_ms     INT,                               -- length of the audio (for retention buckets)
     created_at            TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at            TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -85,6 +87,29 @@ CREATE TABLE reviews (
     parent_review_id BIGINT REFERENCES reviews(id),          -- self-ref = threads
     created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- ============================================================
+-- AUDIO PLAYBACK ANALYTICS (retention)
+-- ============================================================
+
+-- ---------- Playback events (raw event log) ----------
+-- One row per player event (Spotify/YT-style). Source of truth for all
+-- retention metrics; curves/completion/drop-off are DERIVED by aggregation,
+-- not stored. Retention math is deterministic SQL, not the LLM.
+CREATE TABLE playback_events (
+    id           BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    episode_id   BIGINT NOT NULL REFERENCES episodes(id),
+    user_id      BIGINT REFERENCES users(id),           -- nullable: anonymous listens
+    session_id   UUID   NOT NULL,                        -- one listening session
+    event_type   VARCHAR(20) NOT NULL,                   -- play_start|heartbeat|pause|resume|seek|skip|complete
+    position_ms  INT    NOT NULL,                         -- playhead at event time
+    seek_to_ms   INT,                                     -- only for seek events
+    duration_ms  INT,                                     -- episode audio length at play time
+    speed        NUMERIC(3,2),                            -- playback rate (1.0, 1.5, ...)
+    device       VARCHAR(30),                             -- web|ios|android
+    autoplay     BOOLEAN NOT NULL DEFAULT false,
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- ============================================================
@@ -164,3 +189,28 @@ CREATE INDEX idx_ratings_episode      ON ratings(episode_id);
 CREATE INDEX idx_reviews_episode      ON reviews(episode_id);
 CREATE INDEX idx_characters_series    ON characters(series_id);
 CREATE INDEX idx_charstate_character  ON character_state(character_id);
+CREATE INDEX idx_playback_episode     ON playback_events(episode_id);
+CREATE INDEX idx_playback_session     ON playback_events(session_id);
+CREATE INDEX idx_playback_ep_pos      ON playback_events(episode_id, position_ms);
+
+-- ---------- Retention helper view (derived metrics; example) ----------
+-- 10-second-bucket retention curve per episode: fraction of starters still
+-- active in each bucket. Drop-offs = buckets where this falls sharply.
+CREATE VIEW episode_retention AS
+WITH starts AS (
+  SELECT episode_id, count(DISTINCT session_id) AS starters
+  FROM playback_events WHERE event_type = 'play_start' GROUP BY episode_id
+),
+buckets AS (
+  SELECT episode_id, (position_ms / 10000) AS bucket_10s,
+         count(DISTINCT session_id) AS active_sessions
+  FROM playback_events
+  WHERE event_type IN ('heartbeat','complete')
+  GROUP BY episode_id, (position_ms / 10000)
+)
+SELECT b.episode_id, b.bucket_10s,
+       b.active_sessions,
+       s.starters,
+       round(b.active_sessions::numeric / NULLIF(s.starters,0), 3) AS retention
+FROM buckets b JOIN starts s ON s.episode_id = b.episode_id
+ORDER BY b.episode_id, b.bucket_10s;
