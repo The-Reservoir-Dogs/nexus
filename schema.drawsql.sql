@@ -2,7 +2,6 @@ CREATE TABLE "users"(
     "id" BIGINT NOT NULL,
     "username" VARCHAR(255) NOT NULL,
     "password_hash" VARCHAR(255) NOT NULL,
-    "role" VARCHAR(20) NOT NULL,
     "created_at" TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP NOT NULL
 );
@@ -67,8 +66,6 @@ CREATE TABLE "reviews"(
     "episode_id" BIGINT NOT NULL,
     "created_by" BIGINT NOT NULL,
     "review_text" TEXT NOT NULL,
-    "sentiment" VARCHAR(20) NULL,
-    "is_driving" BOOLEAN NOT NULL,
     "parent_review_id" BIGINT NULL,
     "created_at" TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP NOT NULL
@@ -138,28 +135,6 @@ CREATE TABLE "plot_threads"(
 );
 ALTER TABLE
     "plot_threads" ADD PRIMARY KEY("id");
-CREATE TABLE "generations"(
-    "id" BIGINT NOT NULL,
-    "episode_id" BIGINT NULL,
-    "model" TEXT NOT NULL,
-    "prompt" TEXT NOT NULL,
-    "context_snapshot" JSON NOT NULL,
-    "approved" BOOLEAN NOT NULL,
-    "created_at" TIMESTAMP NOT NULL
-);
-ALTER TABLE
-    "generations" ADD PRIMARY KEY("id");
-CREATE TABLE "eval_scores"(
-    "id" BIGINT NOT NULL,
-    "generation_id" BIGINT NOT NULL,
-    "continuity" DECIMAL(3, 2) NOT NULL,
-    "character_fidelity" DECIMAL(3, 2) NOT NULL,
-    "quality" DECIMAL(3, 2) NOT NULL,
-    "safety" DECIMAL(3, 2) NOT NULL,
-    "created_at" TIMESTAMP NOT NULL
-);
-ALTER TABLE
-    "eval_scores" ADD PRIMARY KEY("id");
 ALTER TABLE
     "series" ADD CONSTRAINT "series_author_id_foreign" FOREIGN KEY("author_id") REFERENCES "users"("id");
 ALTER TABLE
@@ -204,7 +179,3 @@ ALTER TABLE
     "plot_threads" ADD CONSTRAINT "plot_threads_opened_episode_id_foreign" FOREIGN KEY("opened_episode_id") REFERENCES "episodes"("id");
 ALTER TABLE
     "plot_threads" ADD CONSTRAINT "plot_threads_resolved_episode_id_foreign" FOREIGN KEY("resolved_episode_id") REFERENCES "episodes"("id");
-ALTER TABLE
-    "generations" ADD CONSTRAINT "generations_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
-ALTER TABLE
-    "eval_scores" ADD CONSTRAINT "eval_scores_generation_id_foreign" FOREIGN KEY("generation_id") REFERENCES "generations"("id");
