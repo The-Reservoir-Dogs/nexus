@@ -1,0 +1,286 @@
+// Dummy data for the frontend — matches docs/API_CONTRACT.md shapes.
+// The demo universe: "The Hollow Crown" (series 10), season 100, episodes 1001-1004,
+// two forks off the decision-point episode 1003, reviews, and characters.
+import type { Series, Season, Episode, Review, Character } from "@/lib/types";
+
+export type User = { id: string; username: string; createdAt?: string };
+
+export const me: User = { id: "1", username: "sriman", createdAt: "2025-07-25T10:00:00Z" };
+
+export const users: User[] = [
+  me,
+  { id: "2", username: "reader_amy" },
+  { id: "3", username: "coauthor_rex" },
+  { id: "4", username: "reader_neo" },
+];
+
+export const series: Series[] = [
+  {
+    id: "10",
+    title: "The Hollow Crown",
+    description: "A kingdom fractured by a single choice.",
+    summary: "Political fantasy across warring houses.",
+    genre: "Fantasy",
+    tag: "political,drama",
+    authorId: "1",
+    authorName: "sriman",
+    episodeCount: 4,
+    contributorCount: 3,
+    avgRating: 4.3,
+    createdAt: "2025-07-20T10:00:00Z",
+  },
+  {
+    id: "11",
+    title: "Neon Requiem",
+    description: "A detective chases a ghost through a rain-soaked megacity.",
+    summary: "Cyberpunk noir mystery.",
+    genre: "Sci-Fi",
+    tag: "cyberpunk,noir",
+    authorId: "3",
+    authorName: "coauthor_rex",
+    episodeCount: 3,
+    contributorCount: 5,
+    avgRating: 4.6,
+    createdAt: "2025-07-18T10:00:00Z",
+  },
+  {
+    id: "12",
+    title: "The Salt Pilgrims",
+    description: "Refugees cross a dying sea guided by a child who dreams the tide.",
+    summary: "Epic survival drama.",
+    genre: "Drama",
+    tag: "epic,survival",
+    authorId: "4",
+    authorName: "reader_neo",
+    episodeCount: 5,
+    contributorCount: 2,
+    avgRating: 4.1,
+    createdAt: "2025-07-15T10:00:00Z",
+  },
+];
+
+export const seasons: Season[] = [
+  { id: "100", seriesId: "10", title: "Season 1", summary: "The fall begins.", orderIndex: 1 } as Season,
+];
+
+const CANON = {
+  authorId: "1",
+  authorName: "sriman",
+  coAuthorId: null,
+  coAuthorName: null,
+  forkedFromEpisodeId: null,
+  isCanonical: true,
+  verifiedByAuthor: false,
+  seriesId: "10",
+  seasonId: "100",
+};
+
+export const episodes: Episode[] = [
+  {
+    ...CANON,
+    id: "1001",
+    title: "The Gathering Storm",
+    orderIndex: 1,
+    summary: "Houses converge on the capital as the old king weakens.",
+    prevEpisodeSummary: null,
+    decisionPoint: null,
+    content:
+      "The banners of five houses snapped in the cold wind above the capital. Lady Corvin watched from the eastern gate, her breath clouding, as the old king's litter passed beneath the portcullis for what many suspected would be the last time.\n\nRumor moved faster than any horse. By nightfall every lord knew the crown would soon be empty, and every lord had already begun to count swords.",
+    avgRating: 4.2,
+    ratingCount: 18,
+    createdAt: "2025-07-20T10:00:00Z",
+  },
+  {
+    ...CANON,
+    id: "1002",
+    title: "A Debt of Ash",
+    orderIndex: 2,
+    summary: "An old alliance is called in; a betrayal is seeded.",
+    prevEpisodeSummary: "Houses converge as the king weakens.",
+    decisionPoint: null,
+    content:
+      "Ser Aldric found the letter sewn into the lining of his saddle — his grandfather's seal, a debt fifty years unpaid. Lady Corvin had kept it all this time, waiting for the hour it would matter most.\n\n\"You owe my house a life,\" she said simply. \"Tonight I intend to collect.\"",
+    avgRating: 4.4,
+    ratingCount: 15,
+    createdAt: "2025-07-21T10:00:00Z",
+  },
+  {
+    ...CANON,
+    id: "1003",
+    title: "The Spared Blade",
+    orderIndex: 3,
+    summary: "The hero spares the villain.",
+    prevEpisodeSummary: "An old debt is called in; betrayal is seeded.",
+    decisionPoint: "The hero spares the villain",
+    content:
+      "The blade hovered at Lady Corvin's throat. Ser Aldric had every right — she had burned his village, turned his own men against him, left him for dead in the salt marsh.\n\nAnd yet. He saw the tremor in her hand, the old grief behind her pride. He lowered the sword.\n\n\"Not like this,\" he said. \"I will not become the thing you made me chase.\"\n\nLady Corvin exhaled, something unreadable crossing her face. Mercy, she had not planned for. Mercy changed everything.",
+    avgRating: 4.5,
+    ratingCount: 22,
+    createdAt: "2025-07-22T10:00:00Z",
+  },
+  {
+    ...CANON,
+    id: "1004",
+    title: "The Weight of Mercy",
+    orderIndex: 4,
+    summary: "The spared villain becomes an uneasy ally.",
+    prevEpisodeSummary: "The hero spares the villain.",
+    decisionPoint: null,
+    content:
+      "Word of the sparing spread, and with it a strange new order. Lady Corvin, alive and unbroken, became the one voice the warring houses would all, grudgingly, hear.\n\nSer Aldric trusted none of it. But he had made his choice at the marsh's edge, and a choice, once made, has a way of demanding every choice that follows.",
+    avgRating: 4.3,
+    ratingCount: 12,
+    createdAt: "2025-07-23T10:00:00Z",
+  },
+  // --- Alternate timelines forked from 1003 ---
+  {
+    seriesId: "10",
+    seasonId: "100",
+    id: "2001",
+    title: "The Fallen Blade",
+    orderIndex: 4,
+    summary: "The hero kills the villain — and inherits her war.",
+    prevEpisodeSummary: "The hero spares the villain.",
+    decisionPoint: "What if she killed him instead?",
+    content:
+      "The blade fell without hesitation. Lady Corvin crumpled against the cold stone, and for one heartbeat Ser Aldric felt only relief.\n\nThen the relief curdled. Her banners did not scatter — they turned to him, their sworn enemy, now the only man who knew where her armies were hidden. He had not ended the war. He had become its next chapter.\n\n\"You clipped, clipped words,\" a captain hissed, echoing the dead woman's own formal cadence. Even in death, Corvin's house spoke in her voice.",
+    authorId: "1",
+    authorName: "sriman",
+    coAuthorId: "3",
+    coAuthorName: "coauthor_rex",
+    forkedFromEpisodeId: "1003",
+    isCanonical: false,
+    verifiedByAuthor: true,
+    avgRating: 4.7,
+    ratingCount: 31,
+    createdAt: "2025-07-24T09:00:00Z",
+  },
+  {
+    seriesId: "10",
+    seasonId: "100",
+    id: "2002",
+    title: "The Marsh Bargain",
+    orderIndex: 4,
+    summary: "Neither kills; they strike a secret pact in the dark.",
+    prevEpisodeSummary: "The hero spares the villain.",
+    decisionPoint: "What if they made a secret deal?",
+    content:
+      "Blade still raised, Ser Aldric leaned close. \"There is a third road,\" he murmured. Lady Corvin's clipped reply came like a proverb: \"The salt remembers every ship it drowns.\"\n\nBy dawn they had an accord no house could know of — and a lie large enough to reshape a kingdom.",
+    authorId: "1",
+    authorName: "sriman",
+    coAuthorId: "2",
+    coAuthorName: "reader_amy",
+    forkedFromEpisodeId: "1003",
+    isCanonical: false,
+    verifiedByAuthor: false,
+    avgRating: 4.1,
+    ratingCount: 14,
+    createdAt: "2025-07-24T12:00:00Z",
+  },
+];
+
+export const reviews: Review[] = [
+  {
+    id: "5001",
+    episodeId: "1003",
+    createdBy: "2",
+    authorName: "reader_amy",
+    reviewText: "What if she killed him instead? That mercy felt too easy.",
+    parentReviewId: null,
+    createdAt: "2025-07-23T09:00:00Z",
+  },
+  {
+    id: "5002",
+    episodeId: "1003",
+    createdBy: "4",
+    authorName: "reader_neo",
+    reviewText: "The lowered sword gave me chills. Best beat in the series.",
+    parentReviewId: null,
+    createdAt: "2025-07-23T10:30:00Z",
+  },
+  {
+    id: "5003",
+    episodeId: "1003",
+    createdBy: "3",
+    authorName: "coauthor_rex",
+    reviewText: "Agreed — but I want to explore the darker path.",
+    parentReviewId: "5001",
+    createdAt: "2025-07-23T11:00:00Z",
+  },
+  {
+    id: "5004",
+    episodeId: "1003",
+    createdBy: "1",
+    authorName: "sriman",
+    reviewText: "Corvin's grief is the real hook here.",
+    parentReviewId: null,
+    createdAt: "2025-07-23T12:00:00Z",
+  },
+  {
+    id: "5005",
+    episodeId: "1003",
+    createdBy: "4",
+    authorName: "reader_neo",
+    reviewText: "Would love an audio version of this chapter.",
+    parentReviewId: null,
+    createdAt: "2025-07-23T13:00:00Z",
+  },
+];
+
+export const characters: Character[] = [
+  {
+    id: "700",
+    seriesId: "10",
+    name: "Lady Corvin",
+    description: "The spared villain; matriarch of a fallen house.",
+    role: "antagonist",
+    personality: "Calculating, proud, secretly loyal.",
+    backstory: "Lost her house to a rival's treachery; has plotted return for decades.",
+    goals: "Reclaim her house and its lands.",
+    speechStyle: "Formal, clipped, uses old proverbs.",
+    status: "alive",
+  },
+  {
+    id: "701",
+    seriesId: "10",
+    name: "Ser Aldric",
+    description: "The reluctant hero bound by an old debt.",
+    role: "protagonist",
+    personality: "Principled, weary, stubbornly merciful.",
+    backstory: "A hedge knight raised on his grandfather's code of honor.",
+    goals: "End the war without becoming a monster.",
+    speechStyle: "Plain, measured, speaks in short declaratives.",
+    status: "alive",
+  },
+  {
+    id: "702",
+    seriesId: "10",
+    name: "The Old King",
+    description: "The dying monarch whose empty throne starts it all.",
+    role: "side",
+    personality: "Shrewd, fading, cryptic.",
+    backstory: "Ruled fifty years by playing houses against each other.",
+    goals: "Choose a successor who will not burn the realm.",
+    speechStyle: "Slow, riddling, fond of long pauses.",
+    status: "alive",
+  },
+  {
+    id: "703",
+    seriesId: "10",
+    name: "Captain Verr",
+    description: "Corvin's fiercely loyal battle captain.",
+    role: "side",
+    personality: "Blunt, devoted, unforgiving.",
+    backstory: "Rose from the salt marshes to command Corvin's guard.",
+    goals: "Protect his lady at any cost.",
+    speechStyle: "Terse, soldierly, mirrors Corvin's clipped cadence.",
+    status: "alive",
+  },
+];
+
+// The hard-coded alternate episode the mock generate() streams.
+export const generatedDraft = {
+  title: "The Fallen Blade",
+  summary: "The hero kills the villain — and inherits her war.",
+  content: episodes.find((e) => e.id === "2001")!.content!,
+};
