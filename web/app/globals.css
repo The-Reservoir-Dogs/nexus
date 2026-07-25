@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+@layer base {
+  body {
+    @apply bg-ink text-body font-sans antialiased;
+  }
+  * {
+    @apply border-line;
+  }
+  ::selection {
+    @apply bg-canon/15 text-text;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply text-text;
+    letter-spacing: -0.018em;
+  }
+}
+
+@layer components {
+  /* editorial section label:  // 01  the premise  */
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.16em] text-muted;
+  }
+  .eyebrow-mark {
+    @apply text-canon;
+  }
+}
+
+@layer utilities {
+  /* italic serif accent word (terracotta) used inside headlines */
+  .accent-word {
+    @apply italic text-canon;
+  }
+  .accent-word-green {
+    @apply italic text-fork;
+  }
+  /* hand-drawn underline under an accent word */
+  .underline-sketch {
+    position: relative;
+  }
+  .underline-sketch::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.14em;
+    height: 0.28em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 7 Q 12 1, 22 7 T 42 7 T 62 7 T 82 7 T 102 7 T 118 7' fill='none' stroke='%23c23616' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E")
+      no-repeat center / 100% 100%;
+  }
+  /* soft warm paper vignette for hero blocks */
+  .paper-glow {
+    background:
+      radial-gradient(60% 60% at 12% 0%, rgba(194, 54, 22, 0.05), transparent 60%),
+      radial-gradient(50% 50% at 96% 8%, rgba(243, 176, 58, 0.06), transparent 55%);
+  }
+  /* very subtle paper grain */
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .rule-warm {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #d6cfc1 20%, #d6cfc1 80%, transparent);
+  }
+  .skeleton {
+    @apply relative overflow-hidden bg-panel-2 rounded;
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.04), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+  .scroll-thin::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-line-2;
+  }
+}

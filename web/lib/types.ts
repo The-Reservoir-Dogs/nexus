@@ -15,6 +15,14 @@ export type Series = {
   createdAt?: string;
 };
 
+export type Season = {
+  id: string;
+  seriesId: string;
+  title: string;
+  summary: string | null;
+  orderIndex: number;
+};
+
 export type Episode = {
   id: string;
   seriesId: string;
@@ -25,7 +33,9 @@ export type Episode = {
   prevEpisodeSummary: string | null;
   orderIndex: number;
   authorId: string;
+  authorName?: string;
   coAuthorId: string | null;
+  coAuthorName?: string | null;
   forkedFromEpisodeId: string | null;
   decisionPoint: string | null;
   isCanonical: boolean;

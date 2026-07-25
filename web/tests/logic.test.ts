@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { nestReviews, rankTimelines, canEditEpisode, canVerify } from "./logic";
-import type { Review, Episode } from "./types";
+import { nestReviews, rankTimelines, canEditEpisode, canVerify } from "@/lib/logic";
+import type { Review, Episode } from "@/lib/types";
 
 const rev = (id: string, parentReviewId: string | null = null): Review => ({
   id,
