@@ -51,8 +51,9 @@ jobs:
 
       - name: Ensure apps exist
         run: |
-          databricks apps get nexus-web   >/dev/null 2>&1 || databricks apps create nexus-web
-          databricks apps get nexus-agent >/dev/null 2>&1 || databricks apps create nexus-agent
+          # --no-wait: don't block up to 20m waiting for ACTIVE; deploy step handles readiness.
+          databricks apps get nexus-web   >/dev/null 2>&1 || databricks apps create nexus-web   --no-wait
+          databricks apps get nexus-agent >/dev/null 2>&1 || databricks apps create nexus-agent --no-wait
 
       - name: Sync + deploy web
         run: |
