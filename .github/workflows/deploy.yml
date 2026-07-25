@@ -42,11 +42,15 @@ jobs:
             - name: "AGENT_URL"
               value: "${{ vars.AGENT_URL }}"
           EOF
-          cat > agent/app.yaml <<'EOF'
-          command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$DATABRICKS_APP_PORT"]
+          # No secrets in app.yaml. The Gemini key is read at runtime from the
+          # Databricks secret scope (nexus/gemini_api_key) by the app's service principal.
+          cat > agent/app.yaml <<EOF
+          command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "\$DATABRICKS_APP_PORT"]
           env:
             - name: "LLM_ENDPOINT"
-              value: "databricks-claude-sonnet-5"
+              value: "${{ vars.LLM_ENDPOINT || 'gemini-2.5-flash' }}"
+            - name: "SECRET_SCOPE"
+              value: "nexus"
           EOF
 
       - name: Ensure apps exist
