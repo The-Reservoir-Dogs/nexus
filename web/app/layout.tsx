@@ -1,23 +1,27 @@
 import type { ReactNode } from "react";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+
+const display = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+});
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata = {
-  title: "NEXUS",
-  description: "A living story multiverse.",
+  title: "NEXUS — A Living Story Multiverse",
+  description: "Rewrite fate. An AI keeps the whole universe consistent.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body
-        style={{
-          margin: 0,
-          fontFamily: "system-ui, sans-serif",
-          background: "#0b0b10",
-          color: "#e8e8ef",
-        }}
-      >
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+    >
+      <body className="grain min-h-screen">{children}</body>
     </html>
   );
 }
