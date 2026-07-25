@@ -1,0 +1,68 @@
+name: Deploy to Databricks Apps
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Required repo secrets:
+#   DATABRICKS_HOST   e.g. https://dbc-60b5b94b-8e3e.cloud.databricks.com
+#   DATABRICKS_TOKEN  service-principal token (or PAT)
+# Optional repo variables:
+#   WORKSPACE_BASE    e.g. /Workspace/Users/<sp-or-user>/nexus  (default below)
+
+env:
+  DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+  DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+  WORKSPACE_BASE: ${{ vars.WORKSPACE_BASE || '/Workspace/Shared/nexus' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh
+
+      - name: Build web (Next.js)
+        working-directory: web
+        run: |
+          npm ci || npm install
+          npm run build
+
+      # app.yaml is generated at deploy time (kept out of source; local uses start.sh).
+      - name: Write app.yaml files
+        run: |
+          cat > web/app.yaml <<'EOF'
+          command: ["npm", "run", "start"]
+          env:
+            - name: "DATABRICKS_SERVING_ENDPOINT"
+              value: "databricks-claude-sonnet-5"
+            - name: "AGENT_URL"
+              value: "${{ vars.AGENT_URL }}"
+          EOF
+          cat > agent/app.yaml <<'EOF'
+          command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$DATABRICKS_APP_PORT"]
+          env:
+            - name: "LLM_ENDPOINT"
+              value: "databricks-claude-sonnet-5"
+          EOF
+
+      - name: Ensure apps exist
+        run: |
+          databricks apps get nexus-web   >/dev/null 2>&1 || databricks apps create nexus-web
+          databricks apps get nexus-agent >/dev/null 2>&1 || databricks apps create nexus-agent
+
+      - name: Sync + deploy web
+        run: |
+          databricks sync web "${WORKSPACE_BASE}/web" --full
+          databricks apps deploy nexus-web --source-code-path "${WORKSPACE_BASE}/web"
+
+      - name: Sync + deploy agent
+        run: |
+          databricks sync agent "${WORKSPACE_BASE}/agent" --full
+          databricks apps deploy nexus-agent --source-code-path "${WORKSPACE_BASE}/agent"
+
+      # NOTE: bind resources once (UI or bundle): Lakebase DB -> both apps,
+      # Model serving endpoint -> agent (and web if it proxies LLM).
