@@ -8,6 +8,7 @@ Two entry points, same loop:
   - generate_stream(): regenerate the next episode of an alternate timeline
   - analyze_stream():  narrate exact retention numbers into author insight
 """
+import base64
 import json
 import os
 from typing import Iterator
@@ -19,13 +20,34 @@ import tools
 LLM_ENDPOINT = os.environ.get("LLM_ENDPOINT", "databricks-claude-sonnet-5")
 MAX_TOOL_ITERS = 8
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
+SECRET_SCOPE = os.environ.get("SECRET_SCOPE", "nexus")
+
+_gemini_cache: str | None = None
+
+
+def _gemini_key() -> str:
+    """Resolve the paid Gemini key WITHOUT ever putting it in git/CI/app config.
+    Local dev: GEMINI_API_KEY env (from .env, gitignored).
+    Deployed: fetched at runtime from the Databricks secret scope via the app's
+    service principal (requires READ acl on the scope)."""
+    global _gemini_cache
+    key = os.environ.get("GEMINI_API_KEY")
+    if key:
+        return key
+    if _gemini_cache:
+        return _gemini_cache
+    from databricks.sdk import WorkspaceClient
+
+    raw = WorkspaceClient().secrets.get_secret(scope=SECRET_SCOPE, key="gemini_api_key").value
+    _gemini_cache = base64.b64decode(raw).decode()
+    return _gemini_cache
 
 
 def _client() -> OpenAI:
     """Provider-aware client. Uses Gemini's OpenAI-compatible API when LLM_ENDPOINT is a
-    gemini-* model (and GEMINI_API_KEY is set); otherwise the Databricks serving endpoint."""
-    if LLM_ENDPOINT.startswith("gemini") and os.environ.get("GEMINI_API_KEY"):
-        return OpenAI(base_url=GEMINI_BASE, api_key=os.environ["GEMINI_API_KEY"])
+    gemini-* model; otherwise the Databricks serving endpoint."""
+    if LLM_ENDPOINT.startswith("gemini"):
+        return OpenAI(base_url=GEMINI_BASE, api_key=_gemini_key())
     host = os.environ["DATABRICKS_HOST"].rstrip("/")
     token = os.environ["DATABRICKS_TOKEN"]
     return OpenAI(base_url=f"{host}/serving-endpoints", api_key=token)
