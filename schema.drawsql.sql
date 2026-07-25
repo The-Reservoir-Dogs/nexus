@@ -1,0 +1,210 @@
+CREATE TABLE "users"(
+    "id" BIGINT NOT NULL,
+    "username" VARCHAR(255) NOT NULL,
+    "password_hash" VARCHAR(255) NOT NULL,
+    "role" VARCHAR(20) NOT NULL,
+    "created_at" TIMESTAMP NOT NULL,
+    "updated_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "users" ADD PRIMARY KEY("id");
+CREATE TABLE "series"(
+    "id" BIGINT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "summary" TEXT NOT NULL,
+    "genre" TEXT NOT NULL,
+    "tag" TEXT NOT NULL,
+    "author_id" BIGINT NOT NULL,
+    "created_at" TIMESTAMP NOT NULL,
+    "updated_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "series" ADD PRIMARY KEY("id");
+CREATE TABLE "seasons"(
+    "id" BIGINT NOT NULL,
+    "series_id" BIGINT NOT NULL,
+    "title" TEXT NOT NULL,
+    "summary" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "order_index" INTEGER NOT NULL,
+    "created_at" TIMESTAMP NOT NULL,
+    "updated_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "seasons" ADD PRIMARY KEY("id");
+CREATE TABLE "episodes"(
+    "id" BIGINT NOT NULL,
+    "series_id" BIGINT NOT NULL,
+    "season_id" BIGINT NOT NULL,
+    "title" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "summary" TEXT NOT NULL,
+    "prev_episode_summary" TEXT NOT NULL,
+    "order_index" INTEGER NOT NULL,
+    "author_id" BIGINT NOT NULL,
+    "co_author_id" BIGINT NULL,
+    "forked_from_episode_id" BIGINT NULL,
+    "decision_point" TEXT NULL,
+    "is_canonical" BOOLEAN NOT NULL,
+    "verified_by_author" BOOLEAN NOT NULL,
+    "created_at" TIMESTAMP NOT NULL,
+    "updated_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "episodes" ADD PRIMARY KEY("id");
+CREATE TABLE "ratings"(
+    "id" BIGINT NOT NULL,
+    "episode_id" BIGINT NOT NULL,
+    "user_id" BIGINT NOT NULL,
+    "score" SMALLINT NOT NULL,
+    "created_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "ratings" ADD PRIMARY KEY("id");
+CREATE TABLE "reviews"(
+    "id" BIGINT NOT NULL,
+    "episode_id" BIGINT NOT NULL,
+    "created_by" BIGINT NOT NULL,
+    "review_text" TEXT NOT NULL,
+    "sentiment" VARCHAR(20) NULL,
+    "is_driving" BOOLEAN NOT NULL,
+    "parent_review_id" BIGINT NULL,
+    "created_at" TIMESTAMP NOT NULL,
+    "updated_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "reviews" ADD PRIMARY KEY("id");
+CREATE TABLE "characters"(
+    "id" BIGINT NOT NULL,
+    "series_id" BIGINT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "role" VARCHAR(30) NOT NULL,
+    "personality" TEXT NOT NULL,
+    "backstory" TEXT NOT NULL,
+    "goals" TEXT NOT NULL,
+    "speech_style" TEXT NOT NULL,
+    "status" VARCHAR(20) NOT NULL
+);
+ALTER TABLE
+    "characters" ADD PRIMARY KEY("id");
+CREATE TABLE "character_state"(
+    "id" BIGINT NOT NULL,
+    "character_id" BIGINT NOT NULL,
+    "episode_id" BIGINT NULL,
+    "memory_snapshot" TEXT NOT NULL,
+    "char_summary" TEXT NOT NULL
+);
+ALTER TABLE
+    "character_state" ADD PRIMARY KEY("id");
+CREATE TABLE "char_relationship"(
+    "id" BIGINT NOT NULL,
+    "char_id" BIGINT NOT NULL,
+    "relation_char_id" BIGINT NOT NULL,
+    "relationship_summary" TEXT NOT NULL
+);
+ALTER TABLE
+    "char_relationship" ADD PRIMARY KEY("id");
+CREATE TABLE "world"(
+    "id" BIGINT NOT NULL,
+    "series_id" BIGINT NOT NULL,
+    "entry_type" VARCHAR(30) NOT NULL,
+    "name" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
+    "description" TEXT NOT NULL
+);
+ALTER TABLE
+    "world" ADD PRIMARY KEY("id");
+CREATE TABLE "style_guide"(
+    "id" BIGINT NOT NULL,
+    "series_id" BIGINT NOT NULL,
+    "pov" VARCHAR(30) NOT NULL,
+    "tense" VARCHAR(20) NOT NULL,
+    "tone" TEXT NOT NULL,
+    "pacing" TEXT NOT NULL,
+    "content_rating" VARCHAR(10) NOT NULL,
+    "narrative_voice" TEXT NOT NULL
+);
+ALTER TABLE
+    "style_guide" ADD PRIMARY KEY("id");
+CREATE TABLE "plot_threads"(
+    "id" BIGINT NOT NULL,
+    "series_id" BIGINT NOT NULL,
+    "thread" TEXT NOT NULL,
+    "status" VARCHAR(20) NOT NULL,
+    "opened_episode_id" BIGINT NULL,
+    "resolved_episode_id" BIGINT NULL
+);
+ALTER TABLE
+    "plot_threads" ADD PRIMARY KEY("id");
+CREATE TABLE "generations"(
+    "id" BIGINT NOT NULL,
+    "episode_id" BIGINT NULL,
+    "model" TEXT NOT NULL,
+    "prompt" TEXT NOT NULL,
+    "context_snapshot" JSON NOT NULL,
+    "approved" BOOLEAN NOT NULL,
+    "created_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "generations" ADD PRIMARY KEY("id");
+CREATE TABLE "eval_scores"(
+    "id" BIGINT NOT NULL,
+    "generation_id" BIGINT NOT NULL,
+    "continuity" DECIMAL(3, 2) NOT NULL,
+    "character_fidelity" DECIMAL(3, 2) NOT NULL,
+    "quality" DECIMAL(3, 2) NOT NULL,
+    "safety" DECIMAL(3, 2) NOT NULL,
+    "created_at" TIMESTAMP NOT NULL
+);
+ALTER TABLE
+    "eval_scores" ADD PRIMARY KEY("id");
+ALTER TABLE
+    "series" ADD CONSTRAINT "series_author_id_foreign" FOREIGN KEY("author_id") REFERENCES "users"("id");
+ALTER TABLE
+    "seasons" ADD CONSTRAINT "seasons_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
+ALTER TABLE
+    "episodes" ADD CONSTRAINT "episodes_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
+ALTER TABLE
+    "episodes" ADD CONSTRAINT "episodes_season_id_foreign" FOREIGN KEY("season_id") REFERENCES "seasons"("id");
+ALTER TABLE
+    "episodes" ADD CONSTRAINT "episodes_author_id_foreign" FOREIGN KEY("author_id") REFERENCES "users"("id");
+ALTER TABLE
+    "episodes" ADD CONSTRAINT "episodes_co_author_id_foreign" FOREIGN KEY("co_author_id") REFERENCES "users"("id");
+ALTER TABLE
+    "episodes" ADD CONSTRAINT "episodes_forked_from_episode_id_foreign" FOREIGN KEY("forked_from_episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "ratings" ADD CONSTRAINT "ratings_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "ratings" ADD CONSTRAINT "ratings_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id");
+ALTER TABLE
+    "reviews" ADD CONSTRAINT "reviews_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "reviews" ADD CONSTRAINT "reviews_created_by_foreign" FOREIGN KEY("created_by") REFERENCES "users"("id");
+ALTER TABLE
+    "reviews" ADD CONSTRAINT "reviews_parent_review_id_foreign" FOREIGN KEY("parent_review_id") REFERENCES "reviews"("id");
+ALTER TABLE
+    "characters" ADD CONSTRAINT "characters_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
+ALTER TABLE
+    "character_state" ADD CONSTRAINT "character_state_character_id_foreign" FOREIGN KEY("character_id") REFERENCES "characters"("id");
+ALTER TABLE
+    "character_state" ADD CONSTRAINT "character_state_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "char_relationship" ADD CONSTRAINT "char_relationship_char_id_foreign" FOREIGN KEY("char_id") REFERENCES "characters"("id");
+ALTER TABLE
+    "char_relationship" ADD CONSTRAINT "char_relationship_relation_char_id_foreign" FOREIGN KEY("relation_char_id") REFERENCES "characters"("id");
+ALTER TABLE
+    "world" ADD CONSTRAINT "world_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
+ALTER TABLE
+    "style_guide" ADD CONSTRAINT "style_guide_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
+ALTER TABLE
+    "plot_threads" ADD CONSTRAINT "plot_threads_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
+ALTER TABLE
+    "plot_threads" ADD CONSTRAINT "plot_threads_opened_episode_id_foreign" FOREIGN KEY("opened_episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "plot_threads" ADD CONSTRAINT "plot_threads_resolved_episode_id_foreign" FOREIGN KEY("resolved_episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "generations" ADD CONSTRAINT "generations_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "eval_scores" ADD CONSTRAINT "eval_scores_generation_id_foreign" FOREIGN KEY("generation_id") REFERENCES "generations"("id");
