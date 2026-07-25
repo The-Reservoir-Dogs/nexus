@@ -42,11 +42,13 @@ jobs:
             - name: "AGENT_URL"
               value: "${{ vars.AGENT_URL }}"
           EOF
-          cat > agent/app.yaml <<'EOF'
-          command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$DATABRICKS_APP_PORT"]
+          cat > agent/app.yaml <<EOF
+          command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "\$DATABRICKS_APP_PORT"]
           env:
             - name: "LLM_ENDPOINT"
-              value: "databricks-claude-sonnet-5"
+              value: "${{ vars.LLM_ENDPOINT || 'gemini-2.5-flash' }}"
+            - name: "GEMINI_API_KEY"
+              value: "${{ secrets.GEMINI_API_KEY }}"
           EOF
 
       - name: Ensure apps exist
