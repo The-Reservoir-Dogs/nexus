@@ -4,7 +4,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthProvider";
 import { TopNav } from "./TopNav";
-import { Footer } from "./Footer";
 
 /** Authenticated app shell: guards session, renders nav + animated page. */
 export function Shell({ children }: { children: React.ReactNode }) {
@@ -36,7 +35,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
       >
         {children}
       </motion.main>
-      <Footer />
     </div>
   );
 }

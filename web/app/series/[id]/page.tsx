@@ -20,6 +20,7 @@ export default function SeriesPage({ params }: { params: { id: string } }) {
   const { data: series, loading: sLoading } = useAsync(() => getSeriesById(id), [id]);
   const { data: episodes, loading: eLoading } = useAsync(() => getEpisodes(id), [id]);
   const [forksByEpisode, setForks] = React.useState<Record<string, Episode[]>>({});
+  const [following, setFollowing] = React.useState(false);
 
   React.useEffect(() => {
     if (!episodes) return;
@@ -63,7 +64,12 @@ export default function SeriesPage({ params }: { params: { id: string } }) {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline">Follow</Button>
+                <Button
+                  variant={following ? "primary" : "outline"}
+                  onClick={() => setFollowing((f) => !f)}
+                >
+                  {following ? "Following ✓" : "Follow"}
+                </Button>
                 {/* Owner-only: Edit / Create (wireframe note) */}
                 {isOwner(series) && (
                   <Button asChild variant="primary">

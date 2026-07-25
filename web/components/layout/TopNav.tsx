@@ -19,23 +19,6 @@ export function TopNav() {
           <span className="h-1.5 w-1.5 rounded-full bg-canon" />
         </Link>
 
-        {/* Nav links */}
-        <nav className="ml-2 hidden items-center gap-7 md:flex">
-          {[
-            ["Discover", "/"],
-            ["Trending", "/#trending"],
-            ["Studio", "/styleguide"],
-          ].map(([label, href]) => (
-            <Link
-              key={label}
-              href={href}
-              className="font-mono text-[12px] uppercase tracking-[0.12em] text-muted transition-colors hover:text-text"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
-
         {/* Account + CTA */}
         <div className="ml-auto flex items-center gap-4">
           {me && (
@@ -55,7 +38,7 @@ export function TopNav() {
             </>
           )}
           <Button asChild variant="primary" size="sm" className="hidden sm:inline-flex">
-            <Link href="/">Start writing →</Link>
+            <Link href="/series/10/branches">Start writing →</Link>
           </Button>
         </div>
       </div>
