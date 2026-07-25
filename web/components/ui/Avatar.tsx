@@ -10,7 +10,7 @@ export function Avatar({ name, className }: { name: string; className?: string }
   return (
     <div
       className={cn(
-        "flex h-9 w-9 items-center justify-center rounded-full bg-fork/20 text-sm font-medium text-fork",
+        "flex h-9 w-9 items-center justify-center rounded-full bg-canon/12 text-sm font-semibold text-canon border border-canon/20",
         className
       )}
       aria-label={name}

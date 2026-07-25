@@ -42,21 +42,23 @@ export default function Home() {
         {loading || !featured ? (
           <Skeleton className="h-56 w-full rounded-2xl" />
         ) : (
-          <div className="radial-glow relative overflow-hidden rounded-3xl border border-line p-10 shadow-card">
-            <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-aurora-soft blur-3xl" />
-            <Badge variant="fork" className="mb-4">
-              ✦ Featured Multiverse
-            </Badge>
-            <h1 className="max-w-2xl font-display text-6xl leading-[1.02]">
-              {featured.title}
+          <div className="paper-glow relative overflow-hidden border border-line bg-panel p-10 shadow-card">
+            <p className="eyebrow mb-5">
+              <span className="eyebrow-mark">// 01 </span>featured multiverse
+            </p>
+            <h1 className="max-w-3xl font-display text-6xl font-medium leading-[1.04]">
+              {featured.title.split(" ").slice(0, -1).join(" ")}{" "}
+              <span className="accent-word underline-sketch">
+                {featured.title.split(" ").slice(-1)}
+              </span>
             </h1>
-            <p className="mt-3 max-w-lg text-lg text-muted">{featured.description}</p>
-            <div className="mt-6 flex items-center gap-3">
-              <Button asChild variant="aurora" size="lg">
-                <Link href={`/series/${featured.id}`}>Enter the Multiverse</Link>
+            <p className="mt-4 max-w-xl text-lg text-body">{featured.description}</p>
+            <div className="mt-7 flex flex-wrap items-center gap-4">
+              <Button asChild variant="primary" size="lg">
+                <Link href={`/series/${featured.id}`}>Enter the multiverse →</Link>
               </Button>
-              <span className="font-mono text-xs text-muted">
-                {featured.episodeCount} episodes · {featured.contributorCount} contributors ·{" "}
+              <span className="font-mono text-[11px] uppercase tracking-wider text-muted">
+                {featured.episodeCount} episodes / {featured.contributorCount} contributors /{" "}
                 {featured.avgRating}★
               </span>
             </div>

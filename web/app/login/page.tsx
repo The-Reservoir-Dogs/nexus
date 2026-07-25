@@ -20,29 +20,32 @@ export default function LoginPage() {
 
   return (
     <div className="grid min-h-screen place-items-center px-4">
-      <div className="radial-glow pointer-events-none absolute inset-0" aria-hidden />
+      <div className="paper-glow pointer-events-none absolute inset-0" aria-hidden />
       <form
         onSubmit={onSubmit}
-        className="relative z-10 w-full max-w-sm rounded-2xl border border-line bg-panel/80 p-8 backdrop-blur"
+        className="relative z-10 w-full max-w-sm border border-line bg-panel p-8 shadow-card"
       >
-        <h1 className="text-center font-display text-5xl">
-          NE<span className="text-aurora">X</span>US
+        <p className="eyebrow mb-4 text-center">
+          <span className="eyebrow-mark">// </span>sign in
+        </p>
+        <h1 className="text-center font-display text-5xl font-medium">
+          nexus<span className="text-canon">.</span>
         </h1>
-        <p className="mb-6 mt-1 text-center text-sm italic text-muted">
+        <p className="mb-7 mt-2 text-center text-sm italic text-muted">
           Rewrite fate. Enter the multiverse.
         </p>
 
-        <label className="mb-1 block text-xs text-muted" htmlFor="username">
+        <label className="eyebrow mb-1.5 block" htmlFor="username">
           Username
         </label>
         <input
           id="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mb-4 h-10 w-full rounded-lg border border-line bg-ink px-3 text-sm focus:outline-none focus:ring-2 focus:ring-fork"
+          className="mb-4 h-11 w-full border border-line-2 bg-ink px-3 text-sm text-text focus:border-canon focus:outline-none"
         />
 
-        <label className="mb-1 block text-xs text-muted" htmlFor="password">
+        <label className="eyebrow mb-1.5 block" htmlFor="password">
           Password
         </label>
         <input
@@ -50,14 +53,14 @@ export default function LoginPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-6 h-10 w-full rounded-lg border border-line bg-ink px-3 text-sm focus:outline-none focus:ring-2 focus:ring-fork"
+          className="mb-7 h-11 w-full border border-line-2 bg-ink px-3 text-sm text-text focus:border-canon focus:outline-none"
         />
 
-        <Button type="submit" variant="aurora" size="lg" className="w-full" disabled={busy}>
-          {busy ? "Signing in…" : "Log in"}
+        <Button type="submit" variant="primary" size="lg" className="w-full" disabled={busy}>
+          {busy ? "Signing in…" : "Log in →"}
         </Button>
-        <p className="mt-4 text-center text-xs text-muted">
-          New here? <span className="text-fork">Create an account</span>
+        <p className="mt-5 text-center font-mono text-[11px] uppercase tracking-wider text-muted">
+          new here? <span className="text-canon">create an account</span>
         </p>
       </form>
     </div>

@@ -3,27 +3,29 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+// kodwai-style: rectangular, mono, uppercase, letter-spaced.
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:opacity-50 disabled:pointer-events-none select-none active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 font-mono uppercase tracking-[0.12em] font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-canon focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:opacity-50 disabled:pointer-events-none select-none",
   {
     variants: {
       variant: {
+        // primary = solid terracotta (kodwai CTA)
         aurora:
-          "bg-aurora bg-[length:200%_200%] text-ink hover:animate-aurora-pan focus-visible:ring-accent shadow-glow-accent",
+          "bg-canon text-cream border border-canon shadow-cta hover:-translate-y-0.5 hover:shadow-lift",
         primary:
-          "bg-canon text-ink hover:brightness-110 focus-visible:ring-canon shadow-glow-canon",
-        fork: "bg-fork text-white hover:brightness-110 focus-visible:ring-fork shadow-glow-fork",
-        success: "bg-success text-ink hover:brightness-110 focus-visible:ring-success",
-        danger: "bg-danger text-ink hover:brightness-110 focus-visible:ring-danger",
-        ghost: "bg-transparent text-text hover:bg-panel-2 focus-visible:ring-line",
+          "bg-canon text-cream border border-canon shadow-cta hover:-translate-y-0.5 hover:shadow-lift",
+        fork: "bg-fork text-cream border border-fork hover:-translate-y-0.5 hover:shadow-lift",
+        success: "bg-fork text-cream border border-fork hover:-translate-y-0.5",
+        danger: "bg-canon text-cream border border-canon hover:-translate-y-0.5",
         outline:
-          "border border-line bg-transparent text-text hover:bg-panel-2 focus-visible:ring-line",
+          "bg-transparent text-text border border-line-2 hover:border-canon hover:text-canon",
+        ghost: "bg-transparent text-body hover:bg-panel-2 tracking-normal normal-case",
       },
       size: {
-        sm: "h-8 px-3",
-        md: "h-10 px-4",
-        lg: "h-12 px-6 text-base",
-        icon: "h-10 w-10",
+        sm: "h-9 px-3 text-[11px]",
+        md: "h-11 px-5 text-[12px]",
+        lg: "h-12 px-7 text-[13px]",
+        icon: "h-10 w-10 tracking-normal",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },

@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
-import { Instrument_Serif, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ForkProvider } from "@/components/ForkProvider";
 import "./globals.css";
 
-const display = Instrument_Serif({
+const display = Fraunces({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-display",
 });

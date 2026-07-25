@@ -8,19 +8,18 @@ import { Badge } from "@/components/ui/Badge";
 export function SeriesCard({ series }: { series: Series }) {
   return (
     <motion.div
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      className="w-56 shrink-0"
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+      className="w-60 shrink-0"
     >
       <Link
         href={`/series/${series.id}`}
-        className="group block overflow-hidden rounded-2xl border border-line bg-panel shadow-card transition-colors hover:border-fork/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-fork"
+        className="group block overflow-hidden border border-line bg-panel shadow-card transition-colors hover:border-canon/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-canon"
       >
-        <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-panel-2 via-panel to-ink">
-          <div className="absolute inset-0 bg-aurora-soft opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div className="radial-glow absolute inset-0 opacity-70" />
-          <div className="absolute inset-0 grid place-items-center p-5 text-center">
-            <span className="font-display text-3xl italic leading-tight text-text/95">
+        <div className="relative aspect-[3/4] overflow-hidden border-b border-line bg-panel-2">
+          <div className="paper-glow absolute inset-0" />
+          <div className="absolute inset-0 grid place-items-center p-6 text-center">
+            <span className="font-display text-3xl italic leading-tight text-text">
               {series.title}
             </span>
           </div>
@@ -28,12 +27,12 @@ export function SeriesCard({ series }: { series: Series }) {
             <Badge variant="canon">Canon</Badge>
           </div>
         </div>
-        <div className="space-y-1.5 p-3">
-          <div className="flex items-center justify-between">
+        <div className="space-y-2 p-4">
+          <div className="flex items-center justify-between gap-2">
             <span className="truncate font-medium text-text">{series.title}</span>
             <Badge variant="neutral">{series.genre}</Badge>
           </div>
-          <p className="flex items-center gap-3 font-mono text-xs text-muted">
+          <p className="flex items-center gap-3 font-mono text-[11px] text-muted">
             <span className="inline-flex items-center gap-1">
               <GitBranch className="h-3 w-3" /> {series.episodeCount} eps
             </span>

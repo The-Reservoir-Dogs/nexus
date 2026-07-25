@@ -41,7 +41,7 @@ export default function SeriesPage({ params }: { params: { id: string } }) {
         {sLoading || !series ? (
           <Skeleton className="h-40 w-full rounded-2xl" />
         ) : (
-          <div className="radial-glow relative overflow-hidden rounded-2xl border border-line p-8">
+          <div className="paper-glow relative overflow-hidden border border-line bg-panel p-8">
             <div className="flex flex-wrap items-start gap-3">
               <div className="flex-1">
                 <div className="mb-2 flex items-center gap-2">
@@ -106,7 +106,7 @@ export default function SeriesPage({ params }: { params: { id: string } }) {
             ) : (
               topBranches.slice(0, 5).map((b) => (
                 <Link key={b.id} href={`/episodes/${b.id}`} className="block">
-                  <Card className="hover:shadow-glow-fork">
+                  <Card className="hover:shadow-lift">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-base">{b.title}</CardTitle>
                       <Badge variant="fork">{b.avgRating}★</Badge>

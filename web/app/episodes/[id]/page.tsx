@@ -99,7 +99,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   return (
     <Shell>
       {rewinding && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-ink/80 backdrop-blur">
+        <div className="fixed inset-0 z-50 grid place-items-center bg-ink/85 backdrop-blur-sm">
           <div className="text-center">
             <Rewind className="mx-auto h-10 w-10 animate-pulse text-fork" />
             <p className="mt-3 font-display text-2xl">Rewinding to the decision point…</p>
@@ -215,7 +215,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
               <div className="space-y-2">
                 {timelines.map((t: Episode) => (
                   <Link key={t.id} href={`/episodes/${t.id}`} className="block">
-                    <Card className="hover:shadow-glow-fork">
+                    <Card className="hover:shadow-lift">
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-base">{t.title}</CardTitle>
                         <ArrowRight className="h-4 w-4 text-fork" />

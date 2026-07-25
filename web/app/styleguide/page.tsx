@@ -8,18 +8,21 @@ const swatches: [string, string][] = [
   ["ink", "bg-ink"],
   ["panel", "bg-panel"],
   ["panel-2", "bg-panel-2"],
-  ["line", "bg-line"],
+  ["line-2", "bg-line-2"],
   ["canon", "bg-canon"],
   ["fork", "bg-fork"],
-  ["success", "bg-success"],
-  ["danger", "bg-danger"],
+  ["accent", "bg-accent"],
+  ["amber", "bg-amber"],
 ];
 
 export default function StyleGuide() {
   return (
     <main className="mx-auto max-w-4xl space-y-12 p-10">
-      <header className="radial-glow -m-10 mb-0 rounded-b-2xl p-10">
-        <h1 className="font-display text-5xl">Midnight Multiverse</h1>
+      <header className="paper-glow -m-10 mb-0 border-b border-line p-10">
+        <p className="eyebrow mb-3"><span className="eyebrow-mark">// </span>design system</p>
+        <h1 className="font-display text-5xl font-medium">
+          Warm <span className="accent-word">Editorial</span>
+        </h1>
         <p className="mt-2 text-muted">NEXUS design system — dev styleguide.</p>
       </header>
 
@@ -68,7 +71,7 @@ export default function StyleGuide() {
       <section className="space-y-3">
         <h2 className="font-display text-2xl">Card + Skeleton + Avatar</h2>
         <div className="grid grid-cols-3 gap-4">
-          <Card className="hover:shadow-glow-fork">
+          <Card className="hover:shadow-lift">
             <CardTitle>The Hollow Crown</CardTitle>
             <CardMeta className="mt-1">4 episodes · 3 contributors · 4.3★</CardMeta>
           </Card>
