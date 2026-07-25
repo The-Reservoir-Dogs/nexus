@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { SplitView } from "./SplitView";
+import { SplitView } from "@/components/SplitView";
 import { characters } from "@/mocks/data";
 
 describe("SplitView", () => {

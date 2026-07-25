@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ForkProvider } from "@/components/ForkProvider";
-import EditorPage from "./page";
+import EditorPage from "@/app/episodes/[id]/editor/page";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),

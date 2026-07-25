@@ -8,7 +8,7 @@ import {
   generate,
   approveEpisode,
   verifyEpisode,
-} from "./api";
+} from "@/lib/api";
 
 describe("api client (mock mode)", () => {
   it("getSeries returns the seeded universe and filters by query", async () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { SeriesCard } from "./SeriesCard";
+import { SeriesCard } from "@/components/SeriesCard";
 import { series } from "@/mocks/data";
 
 describe("SeriesCard", () => {

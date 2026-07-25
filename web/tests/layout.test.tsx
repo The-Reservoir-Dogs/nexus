@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { TopNav } from "./TopNav";
+import { TopNav } from "@/components/layout/TopNav";
 import { AuthProvider } from "@/components/AuthProvider";
 
 vi.mock("next/navigation", () => ({

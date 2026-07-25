@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { TimelineTree } from "./TimelineTree";
+import { TimelineTree } from "@/components/TimelineTree";
 import { episodes } from "@/mocks/data";
 import { rankTimelines } from "@/lib/logic";
 

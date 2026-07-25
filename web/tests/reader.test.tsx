@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { RatingStars } from "./RatingStars";
-import { CommentThread, CommentComposer } from "./Comments";
+import { RatingStars } from "@/components/reader/RatingStars";
+import { CommentThread, CommentComposer } from "@/components/reader/Comments";
 import { nestReviews } from "@/lib/logic";
 import { reviews } from "@/mocks/data";
 

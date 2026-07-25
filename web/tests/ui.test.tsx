@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { Button } from "./Button";
-import { Badge } from "./Badge";
-import { Card, CardTitle } from "./Card";
+import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Card, CardTitle } from "@/components/ui/Card";
 
 describe("UI kit", () => {
   it("Button renders text and the fork variant color class", () => {
