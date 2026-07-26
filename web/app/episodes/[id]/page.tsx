@@ -121,13 +121,13 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
     setNarrateError("");
     try {
       const { audioUrl } = await narrateEpisode(id);
-      if (audioUrl) {
-        // cache-bust so the <audio> reloads a freshly rendered file
-        const src = `${audioUrl}?t=${Date.now()}`;
-        setEpisode((e) => (e ? { ...e, audioUrl: src } : e));
-        const c = episodeCache.get(id);
-        if (c) episodeCache.set(id, { ...c, audioUrl: src });
-      }
+      if (!audioUrl) throw new Error("Narration returned no audio URL");
+      // cache-bust server URLs so the <audio> reloads freshly rendered files;
+      // do not append query params to data: URLs.
+      const src = audioUrl.startsWith("data:") ? audioUrl : `${audioUrl}?t=${Date.now()}`;
+      setEpisode((e) => (e ? { ...e, audioUrl: src } : e));
+      const c = episodeCache.get(id);
+      if (c) episodeCache.set(id, { ...c, audioUrl: src });
     } catch (e: any) {
       setNarrateError(e?.message ?? "Narration failed");
     } finally {

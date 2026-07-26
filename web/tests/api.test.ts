@@ -9,6 +9,7 @@ import {
   approveEpisode,
   verifyEpisode,
   chat,
+  narrateEpisode,
 } from "@/lib/api";
 
 describe("api client (mock mode)", () => {
@@ -73,6 +74,12 @@ describe("api client (mock mode)", () => {
     expect(streamed).not.toMatch(/\*\*/);
     expect(events).toContain("tool_call");
     expect(events).toContain("tool_result");
+  });
+
+  it("mock narration returns a playable audio URL", async () => {
+    const out = await narrateEpisode("1003");
+    expect(out.audioUrl).toMatch(/^(data:audio\/wav|\/narration|\/api\/episodes)/);
+    expect(out.durationMs).toBeGreaterThan(0);
   });
 
   it("approve adds a fork and verify flips the flag", async () => {
