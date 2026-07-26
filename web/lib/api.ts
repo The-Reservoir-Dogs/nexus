@@ -442,8 +442,9 @@ export async function* chat(
         if (!data) continue;
         let parsed: any;
         try { parsed = JSON.parse(data); } catch { continue; }
-        if (event === "token" && parsed.text) { acc += parsed.text; yield parsed.text as string; }
-        else if (event === "reasoning") onEvent?.({ type: "reasoning", text: parsed.text ?? "" });
+        const tokenText = parsed.text ?? parsed.delta;
+        if (event === "token" && tokenText) { acc += tokenText; yield tokenText as string; }
+        else if (event === "reasoning") onEvent?.({ type: "reasoning", text: parsed.text ?? parsed.delta ?? "" });
         else if (event === "tool_call") onEvent?.({ type: "tool_call", name: parsed.name ?? "tool", args: parsed.args });
         else if (event === "tool_result") onEvent?.({ type: "tool_result", name: parsed.name ?? "tool", summary: parsed.summary });
         else if (event === "done" && typeof parsed.message === "string" && parsed.message) acc = parsed.message;
@@ -456,14 +457,47 @@ export async function* chat(
     }
     return acc;
   }
-  // mock: echo a canned grounded answer
-  const steps: AgentEvent[] = [
-    { type: "tool_call", name: "get_comments", args: { episode_id: body.episodeId } },
-    { type: "tool_result", name: "get_comments", summary: "2 rows" },
-  ];
-  if (onEvent) for (const s of steps) { await delay(150); onEvent(s); }
-  const text = "Readers loved the tension but wanted the decision to land sooner.";
-  for (const w of text.split(/(\s+)/)) { await delay(15); yield w; }
+  // mock/dev: grounded, command-aware answers from seeded data. Plain text only.
+  const ep = db.episodes.find((e) => e.id === body.episodeId);
+  const series = ep ? db.series.find((s) => s.id === ep.seriesId) : undefined;
+  const chars = ep ? db.characters.filter((c) => c.seriesId === ep.seriesId) : [];
+  const comments = db.reviews.filter((r) => r.episodeId === body.episodeId && !r.parentReviewId);
+  const msg = body.message.trim().toLowerCase();
+  const emitTool = async (name: string, summary: string, args: unknown = { episode_id: body.episodeId }) => {
+    if (!onEvent) return;
+    await delay(120); onEvent({ type: "tool_call", name, args });
+    await delay(120); onEvent({ type: "tool_result", name, summary });
+  };
+
+  let text: string;
+  if (msg.startsWith("/characters")) {
+    await emitTool("get_characters", `${chars.length} rows`, { series_id: ep?.seriesId });
+    text = chars.length
+      ? `Characters in ${series?.title ?? "this series"}:\n` +
+        chars.map((c) => `${c.name} — ${c.role}. Status: ${c.status}. Voice/personality: ${c.personality}`).join("\n")
+      : "No characters found for this episode's series.";
+  } else if (msg.startsWith("/episode")) {
+    await emitTool("get_episode", ep?.title ?? "empty");
+    text = ep
+      ? `Episode: ${ep.title}\nSummary: ${ep.summary || "No summary."}\nDecision point: ${ep.decisionPoint || "None."}\nCurrent manuscript should stay aligned to this episode's content, characters, and timeline.`
+      : "Episode not found.";
+  } else if (msg.startsWith("/style")) {
+    await emitTool("get_style_guide", "1 record", { series_id: ep?.seriesId });
+    text = "Style guide for this series: cinematic serialized fiction, close character stakes, tense pacing, clean prose, no generic AI phrasing. Match the open episode's voice and keep every suggestion usable inside the current manuscript.";
+  } else if (msg.startsWith("/comments") || msg.includes("comment") || msg.includes("feedback")) {
+    await emitTool("get_comments", `${comments.length} rows`);
+    text = comments.length
+      ? "Reader pain points to write from:\n" +
+        comments.map((r) => `@${r.authorName}: ${r.reviewText}\nSuggestion: turn this into a concrete branch choice, show consequence earlier, and make the emotional cost visible in-scene.`).join("\n")
+      : "No reader comments yet. Use the episode decision point and retention signals instead.";
+  } else {
+    await emitTool("get_episode", ep?.title ?? "empty");
+    await emitTool("get_comments", `${comments.length} rows`);
+    text = ep
+      ? `For ${ep.title}, stay anchored to this open episode. Strong branch direction: use the reader comments as pain points, make the changed decision land in the first scene, then show one irreversible consequence through character action. If you want me to rewrite the manuscript, use /rewrite followed by the exact change.`
+      : "I couldn't find this episode in mock data.";
+  }
+  for (const w of text.split(/(\s+)/)) { await delay(8); yield w; }
   return text;
 }
 

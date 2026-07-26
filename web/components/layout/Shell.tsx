@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { TopNav } from "./TopNav";
 
@@ -9,7 +8,6 @@ import { TopNav } from "./TopNav";
 export function Shell({ children }: { children: React.ReactNode }) {
   const { me, loading } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
 
   React.useEffect(() => {
     if (!loading && !me) router.replace("/login");
@@ -26,15 +24,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
       <TopNav />
-      <motion.main
-        key={pathname}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="flex-1"
-      >
-        {children}
-      </motion.main>
+      <main className="flex-1">{children}</main>
     </div>
   );
 }

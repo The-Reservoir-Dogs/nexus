@@ -8,6 +8,7 @@ import {
   generate,
   approveEpisode,
   verifyEpisode,
+  chat,
 } from "@/lib/api";
 
 describe("api client (mock mode)", () => {
@@ -55,6 +56,23 @@ describe("api client (mock mode)", () => {
     expect(streamed.length).toBeGreaterThan(20);
     expect(res.value.title).toBe("The Fallen Blade");
     expect(streamed).toContain("The blade fell");
+  });
+
+  it("mock chat answers slash commands with episode-grounded plain text", async () => {
+    const events: string[] = [];
+    const gen = chat({ episodeId: "1003", message: "/characters" }, (e) => events.push(e.type));
+    let streamed = "";
+    let res = await gen.next();
+    while (!res.done) {
+      streamed += res.value;
+      res = await gen.next();
+    }
+    expect(streamed).toContain("Characters in The Hollow Crown");
+    expect(streamed).toContain("Lady Corvin");
+    expect(streamed).not.toContain("Readers loved the tension but wanted the decision to land sooner");
+    expect(streamed).not.toMatch(/\*\*/);
+    expect(events).toContain("tool_call");
+    expect(events).toContain("tool_result");
   });
 
   it("approve adds a fork and verify flips the flag", async () => {
