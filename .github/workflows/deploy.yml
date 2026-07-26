@@ -30,6 +30,12 @@ jobs:
 
       - name: Build web (Next.js)
         working-directory: web
+        # NEXT_PUBLIC_* are baked at BUILD time. Without this the build defaults to
+        # NEXT_PUBLIC_API_MODE=mock and the deployed app serves canned/mock data
+        # (e.g. chat returns a static reply) instead of hitting the live DB/agent.
+        env:
+          NEXT_PUBLIC_API_MODE: live
+          NEXT_PUBLIC_BASE_URL: ""
         run: |
           npm ci || npm install
           npm run build
