@@ -573,10 +573,54 @@ export async function* editStream(
 }
 
 // ---------- Narration (TTS render) ----------
+function demoNarrationDataUrl(seconds = 2): string {
+  const rate = 24000;
+  const samples = rate * seconds;
+  const dataSize = samples * 2;
+  const out = new Uint8Array(44 + dataSize);
+  const view = new DataView(out.buffer);
+  const write = (offset: number, text: string) => {
+    for (let i = 0; i < text.length; i++) out[offset + i] = text.charCodeAt(i);
+  };
+  write(0, "RIFF");
+  view.setUint32(4, 36 + dataSize, true);
+  write(8, "WAVE");
+  write(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, rate, true);
+  view.setUint32(28, rate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  write(36, "data");
+  view.setUint32(40, dataSize, true);
+  for (let i = 0; i < samples; i++) {
+    const tone = Math.sin((i / rate) * Math.PI * 2 * 220) * 900;
+    view.setInt16(44 + i * 2, Math.round(tone), true);
+  }
+  let binary = "";
+  for (let i = 0; i < out.length; i += 0x8000) {
+    binary += String.fromCharCode(...out.slice(i, i + 0x8000));
+  }
+  return `data:audio/wav;base64,${btoa(binary)}`;
+}
+
 export async function narrateEpisode(id: string): Promise<{ audioUrl: string; durationMs: number }> {
   if (!isMock) return live(`/episodes/${id}/narrate`, { method: "POST" });
-  await delay(400);
-  return { audioUrl: "", durationMs: 0 };
+
+  // Mock/dev UI still needs the full button -> audio-player loop. Try the real
+  // server route first (uses GEMINI_API_KEY when configured). If local DB/env is
+  // not ready, fall back to a small playable WAV data URL instead of returning
+  // an empty audioUrl that makes the button appear broken.
+  try {
+    const rendered = await live<{ audioUrl: string; durationMs: number }>(`/episodes/${id}/narrate`, { method: "POST" });
+    if (rendered?.audioUrl) return rendered;
+  } catch {
+    /* fall through to demo audio */
+  }
+  await delay(250);
+  return { audioUrl: demoNarrationDataUrl(), durationMs: 2000 };
 }
 
 // ---------- Authoring (create series / canonical episode / character) ----------
