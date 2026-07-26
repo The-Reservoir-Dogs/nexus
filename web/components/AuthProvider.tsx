@@ -32,14 +32,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = React.useCallback(async (_username: string) => {
+  const login = React.useCallback(async (username: string) => {
     localStorage.setItem(SESSION_KEY, "1");
+    // Off-platform (e.g. Render) there's no Databricks OAuth, so the chosen
+    // username is carried as a cookie and resolved server-side in getIdentity().
+    const clean = username.trim().replace(/[^a-zA-Z0-9_.-]/g, "_").slice(0, 40);
+    if (clean) {
+      document.cookie = `nexus_user=${encodeURIComponent(clean)}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax`;
+    }
     const user = await getMe();
     setMe(user);
   }, []);
 
   const logout = React.useCallback(() => {
     localStorage.removeItem(SESSION_KEY);
+    document.cookie = "nexus_user=; path=/; max-age=0; samesite=lax";
     setMe(null);
   }, []);
 

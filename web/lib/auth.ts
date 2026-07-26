@@ -1,4 +1,4 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { query } from "./db";
 
 // Databricks Apps injects the authenticated user's identity as request headers.
@@ -7,12 +7,17 @@ export type CurrentUser = { id: string; username: string; email: string | null }
 
 export async function getIdentity(): Promise<{ email: string | null; username: string }> {
   const h = headers();
-  // Local dev / e2e: impersonate a seeded user via header or DEV_USER env
-  // (no Databricks OAuth headers present locally).
-  const devUser = h.get("x-nexus-dev-user") ?? process.env.DEV_USER ?? null;
+  // Identity precedence:
+  //  1) Databricks Apps OAuth headers (on-platform),
+  //  2) `nexus_user` cookie set by the login screen (off-platform, e.g. Render),
+  //  3) x-nexus-dev-user header / DEV_USER env (dev + e2e),
+  //  4) "dev_user" fallback.
   const email =
     h.get("x-forwarded-email") ?? h.get("x-forwarded-user") ?? null;
-  const username = devUser ?? (email ? email.split("@")[0] : null) ?? "dev_user";
+  const cookieUser = cookies().get("nexus_user")?.value ?? null;
+  const devUser = h.get("x-nexus-dev-user") ?? process.env.DEV_USER ?? null;
+  const username =
+    (email ? email.split("@")[0] : null) ?? cookieUser ?? devUser ?? "dev_user";
   return { email, username };
 }
 
