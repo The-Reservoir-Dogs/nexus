@@ -265,11 +265,9 @@ export default function EditorPage({ params }: { params: { id: string } }) {
     [generating, manuscript, runGenerate, runEdit, sendChat]
   );
 
-  const started = React.useRef(false);
-  React.useEffect(() => {
-    // fork/continue auto-generate on entry; edit mode does NOT (loads existing text)
-    if (!isEdit && !started.current && fork.context) { started.current = true; runGenerate(); }
-  }, [fork.context, runGenerate, isEdit]);
+  // NOTE: no auto-generate on entry. User must trigger generation explicitly
+  // (e.g. /rewrite or the generate action). Prevents the agent writing
+  // automatically the moment the branch editor opens.
 
   async function handleApprove() {
     const src = fork.context?.sourceEpisode;
