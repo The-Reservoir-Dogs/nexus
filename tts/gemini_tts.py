@@ -48,10 +48,13 @@ def scriptify(text: str, names: list[str]) -> str:
     """Prose episode -> lines tagged [NARRATOR] / [CHARACTER]. Text kept verbatim."""
     names_s = ", ".join(names) if names else "(none)"
     prompt = (
-        "Convert this episode into a TTS script. Tag EVERY line with a speaker in square "
+        "Convert this episode into a cinematic TTS script. Tag EVERY line with a speaker in square "
         "brackets at the start of the line. Narration and description -> [NARRATOR]. Spoken "
-        f"dialogue -> [CHARACTER_NAME] using ONLY these known names: {names_s}. Keep the text "
-        "verbatim; do NOT rewrite, summarize, or add anything. Output only the tagged script.\n\n"
+        f"dialogue -> [CHARACTER_NAME] using ONLY these known names: {names_s}. Keep the story text "
+        "verbatim; do NOT rewrite, summarize, or add plot. You may split long paragraphs into shorter "
+        "speaker turns at natural sentence boundaries so the voice can breathe. Preserve punctuation "
+        "because commas, em dashes, ellipses, and paragraph breaks create emotional pauses. Output only "
+        "the tagged script.\n\n"
         f"EPISODE:\n{text}"
     )
     d = _post(TEXT_MODEL, {"contents": [{"parts": [{"text": prompt}]}]})
@@ -60,7 +63,12 @@ def scriptify(text: str, names: list[str]) -> str:
 
 def synth(text: str, voice: str = "Charon", style: str | None = None) -> bytes:
     """One turn -> raw PCM bytes (L16 mono 24kHz). `style` steers delivery in plain English."""
-    prompt = f"Say {style}: {text}" if style else text
+    delivery = (
+        "Perform with natural emotion, cinematic pacing, and human pauses. "
+        "Slow slightly for suspense, soften for grief, sharpen for danger, and leave tiny silences "
+        "around commas, em dashes, ellipses, and scene turns."
+    )
+    prompt = f"Say {style}. {delivery}: {text}" if style else f"{delivery}: {text}"
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {

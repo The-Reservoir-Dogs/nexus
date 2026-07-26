@@ -137,7 +137,29 @@ export default function EditorPage({ params }: { params: { id: string } }) {
   const [saving, setSaving] = React.useState(false);
   const [saveError, setSaveError] = React.useState("");
   const chatEnd = React.useRef<HTMLDivElement>(null);
+  const seededCommentBrief = React.useRef<string | null>(null);
   React.useEffect(() => { chatEnd.current?.scrollIntoView?.({ behavior: "smooth" }); }, [chat]);
+
+  React.useEffect(() => {
+    const dc = fork.context?.drivingComment;
+    if (!dc || isEdit || seededCommentBrief.current === dc.id) return;
+    seededCommentBrief.current = dc.id;
+    setChat((c) => [
+      ...c,
+      {
+        role: "ai",
+        at: Date.now(),
+        kind: "chat",
+        steps: [],
+        status: "done",
+        words: 0,
+        reply:
+          `Contributor brief: @${dc.authorName ?? "reader"} said “${dc.reviewText}”. ` +
+          "Use this as the pain point: identify what disappointed them, keep the original continuity, " +
+          "then edit or /rewrite the manuscript so this branch directly fixes that weakness.",
+      },
+    ]);
+  }, [fork.context?.drivingComment, isEdit]);
 
   // update the last (AI) chat message immutably
   const patchAi = React.useCallback((fn: (m: Extract<ChatMsg, { role: "ai" }>) => Extract<ChatMsg, { role: "ai" }>) => {

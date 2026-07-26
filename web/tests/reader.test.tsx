@@ -15,15 +15,24 @@ describe("RatingStars", () => {
     await userEvent.click(screen.getByRole("radio", { name: "5 stars" }));
     expect(onRate).toHaveBeenCalledWith(5);
   });
+
+  it("keeps the checked star on the user's exact rating, not the average", () => {
+    render(<RatingStars avg={4.5} count={22} value={2} />);
+    expect(screen.getByRole("radio", { name: "2 stars" })).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("radio", { name: "5 stars" })).toHaveAttribute("aria-checked", "false");
+  });
 });
 
 describe("Comments", () => {
-  it("marks the driving comment and nests replies", () => {
+  it("marks the driving comment, nests replies, and can start a branch from a comment", async () => {
+    const onBranch = vi.fn();
     const nested = nestReviews(reviews.filter((r) => r.episodeId === "1003").map((r) => ({ ...r })));
-    render(<CommentThread reviews={nested} drivingId="5001" />);
+    render(<CommentThread reviews={nested} drivingId="5001" onBranch={onBranch} />);
     expect(screen.getByText(/driving comment/i)).toBeInTheDocument();
     // reply text is rendered under its parent
     expect(screen.getByText(/explore the darker path/)).toBeInTheDocument();
+    await userEvent.click(screen.getAllByRole("button", { name: /create branch/i })[0]);
+    expect(onBranch).toHaveBeenCalledWith(expect.objectContaining({ id: "5001" }));
   });
 
   it("composer posts trimmed text and clears", async () => {

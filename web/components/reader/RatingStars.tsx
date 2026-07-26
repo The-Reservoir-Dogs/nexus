@@ -6,14 +6,16 @@ import { cn } from "@/lib/utils";
 export function RatingStars({
   avg,
   count,
+  value,
   onRate,
 }: {
   avg: number;
   count: number;
+  value?: number;
   onRate?: (score: number) => void;
 }) {
   const [hover, setHover] = React.useState(0);
-  const shown = hover || Math.round(avg);
+  const shown = hover || value || Math.round(avg);
   return (
     <div className="flex items-center gap-2">
       <span className="font-mono text-[10px] uppercase tracking-wide text-muted">Rate</span>
@@ -22,7 +24,7 @@ export function RatingStars({
           <button
             key={n}
             role="radio"
-            aria-checked={n === Math.round(avg)}
+            aria-checked={n === (value || Math.round(avg))}
             aria-label={`${n} star${n > 1 ? "s" : ""}`}
             onMouseEnter={() => setHover(n)}
             onMouseLeave={() => setHover(0)}
