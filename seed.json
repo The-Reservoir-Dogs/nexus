@@ -1,0 +1,226 @@
+{
+  "_meta": {
+    "source": "sample_script.pdf",
+    "series_title": "The Ledger of Mira Kapoor",
+    "format": "Single-narrator performance (one voice artist performs narration + all character dialogue with tonal shifts; no spoken speaker tags)",
+    "note": "[DECISION POINT] blocks in the script are structural/schema metadata only and are NOT narrated in audio. They are mapped to episodes.decision_point, never into episodes.content. Branch options (a/b/c) are not persisted as fork episodes because the script supplies no written content for them; only the canon path is seeded."
+  },
+  "users": [
+    { "id": 1, "username": "author_ledger", "password_hash": "x" }
+  ],
+  "series": [
+    {
+      "id": 10,
+      "title": "The Ledger of Mira Kapoor",
+      "description": "A forensic accountant discovers a secret ledger bearing her own forged signature, and must untangle her dead father's hidden war against a trusted embezzler before it is turned against her.",
+      "summary": "Thriller / family drama about inherited secrets, forged trust, and a daughter who realizes the evidence pointed at her is actually the trap her father never lived to spring.",
+      "genre": "Thriller / Family Drama",
+      "tag": "thriller,family-drama,fraud,slow-burn,mystery",
+      "author_id": 1
+    }
+  ],
+  "seasons": [
+    {
+      "id": 100,
+      "series_id": 10,
+      "title": "Season 1",
+      "summary": "Mira inherits a hidden ledger and unravels the truth over a single night.",
+      "description": "The opening arc: from the reading of the will to the setting of a trap against Suresh Oberoi.",
+      "order_index": 1
+    }
+  ],
+  "episodes": [
+    {
+      "id": 1001,
+      "series_id": 10,
+      "season_id": 100,
+      "title": "The Envelope",
+      "content": "Mira Kapoor had spent eleven years turning other people's numbers into evidence. Fraud left fingerprints, if you knew where to look — a transfer dated a day too early, a signature slightly too clean, a decimal point moved just enough to matter. She had built a career on the quiet certainty that numbers, unlike people, did not know how to lie convincingly for long. She had never once expected to point that certainty at her own father.\n\nThe lawyer's office occupied the third floor of a building that still smelled faintly of the carpet glue from whatever renovation had happened a decade too late. Mira sat across from Devika Rao in the kind of silence reserved for rooms where bad news had already happened and only needed to be spoken aloud. Devika had known the Kapoor family for eighteen years. She had also, Mira suspected, known things about Rakesh Kapoor that even his own children hadn't been told.\n\n\"There's the will,\" Devika said, sliding a folder across the desk. \"That part is simple. The house goes to Arjun. The company accounts, and the responsibility that comes with them, go to you. Your father was very specific about the order he wanted things read in.\"\n\n\"And the part that isn't simple?\"\n\nDevika didn't answer right away, which was itself an answer. She reached into a drawer and produced a second envelope, sealed, unlabeled, the paper slightly yellowed at the corners as though it had sat somewhere for longer than the will itself.\n\n\"Read it twice,\" Devika said. \"I did. The first time, I thought I'd misunderstood it. I hadn't.\"\n\nMira opened it in the car, because some things could not be read in front of a witness, even a trusted one. Inside was not a legal document. It was a ledger — her father's private one, kept entirely separate from the company books she had personally audited more times than she could count. Eighteen months of transfers. Amounts that added up to more money than she'd known her father had ever moved in a single year, let alone quietly, outside every system she thought she understood.\n\nEvery page carried a digital signature authorizing the transfers.\n\nHer own.\n\nShe had never signed a single one of them.\n\nShe thought, briefly and uselessly, of the last real conversation she'd had with her father, six weeks before he died — a Sunday lunch neither of them had known would be one of the last, spent mostly discussing an audit client of hers who'd tried to disguise a cash-flow gap using round numbers, of all things, as though thousands of dollars naturally arrived in tidy, suspiciously whole figures. Her father had laughed at that, the specific laugh he reserved for people who underestimated how carefully his daughter read a spreadsheet. She had not, at the time, considered that he might have been laughing at someone closer to home.\n\nThe parking garage was nearly empty by the time she stopped reading, the ledger closed in her lap, her hands unusually still for someone whose entire professional identity was built on staying calm in front of other people's financial disasters. This was supposed to be different. This was supposed to be simple grief — a father gone too suddenly, a company to steady, a brother to manage the way she'd always managed him, at a careful distance. Instead there was a signature that wasn't hers, on transactions she'd never seen, hidden somewhere her father clearly hadn't wanted found by accident.\n\nHer phone rang before she'd made it out of the garage. Arjun's name lit up the screen, and for a moment she considered letting it go to voicemail simply to have another minute of not having to perform composure for someone else.\n\nShe answered anyway.\n\n\"Mira.\" His voice had the particular warmth it always carried right before he needed something — not fake, exactly, just well-worn, a groove he'd walked so many times it no longer required effort. \"Before you say anything. I know what's in the envelope. I need you to let me explain the account before you decide what it means.\"\n\n\"You knew about this?\"\n\n\"I knew it existed. I didn't know everything in it until recently. Mira, listen to me — if you take that ledger to Devika before I've had a chance to show you the rest of what's actually going on, you are going to set fire to something you don't understand yet, and it's not going to just burn Dad's memory. It's going to burn you too. Your signature is on every page.\"\n\nThat last sentence landed exactly where he meant it to. Mira sat with the phone against her ear, watching a parking garage light flicker two rows away, and understood — with the same cold clarity she brought to every fraudulent balance sheet she'd ever dismantled — that her brother was frightened in a way she hadn't heard from him in years. Whatever this was, it was bigger than an old family habit of Arjun needing rescuing.\n\n\"Where,\" she said finally, \"and when.\"\n\n\"Tonight. The old warehouse. Just us. I'll show you everything — I promise you, once you see the rest of it, you'll understand why Dad did this and why I haven't gone to Devika myself.\"\n\nShe should have said no. She should have driven straight to Devika's office and let the lawyer make the decision the way lawyers were supposed to. But there was a version of her father in that ledger she hadn't met yet, and some instinct older than her professional judgment told her she needed to meet him before anyone else got to decide what his story meant.\n\n\"Tonight,\" she agreed. \"But Arjun — if this is another version of you needing me to clean something up quietly, I will walk straight out that door and call Devika from the parking lot.\"\n\n\"It's not that,\" he said, and for once, she almost believed him completely.\n\nShe drove home the long way, past the old office building their father had sold years before the company moved to its current headquarters, its windows dark, its ground floor now occupied by a mobile phone repair shop that had no idea what the building used to hold. She thought about the version of Rakesh Kapoor she'd spent her whole career believing she understood completely — meticulous to the point of exhaustion, incapable of leaving a decimal point unaccounted for, the man who had taught her to read a balance sheet before she'd learned to properly ride a bicycle. That man did not build secret ledgers. That man reported discrepancies the same day he found them, filed the paperwork, and slept easily.\n\nExcept, apparently, when the discrepancy involved someone he'd trusted for twenty years, and a threat neither of his children had been told existed. Mira sat in her parked car outside her apartment for nearly ten minutes before going inside, turning the envelope over in her hands, aware that whatever she decided to do next would not simply settle a legal matter. It would decide what kind of man she allowed her father to have been, in the last version of the story anyone would ever get to tell about him.",
+      "summary": "At the reading of her father's will, Mira receives a sealed private ledger showing eighteen months of hidden transfers — all authorized with her own forged signature. Arjun calls, admits he knew the account existed, and warns her not to take it to the lawyer, luring her to meet him at the old warehouse.",
+      "prev_episode_summary": null,
+      "order_index": 1,
+      "author_id": 1,
+      "co_author_id": null,
+      "forked_from_episode_id": null,
+      "decision_point": "End of Episode 1 — Mira's response to Arjun's warning. Reader branch options: (a) Mira takes the ledger to Devika immediately, escalating formally; (b) Mira agrees to meet Arjun privately first, delaying disclosure; (c) Mira confronts Arjun's warmth directly, demanding he explain 'the rest of it' on the spot, refusing to wait until tonight. Canon continuation: (b).",
+      "is_canonical": true,
+      "verified_by_author": true
+    },
+    {
+      "id": 1002,
+      "series_id": 10,
+      "season_id": 100,
+      "title": "The Rest of It",
+      "content": "The warehouse had belonged to Kapoor & Sons before the company outgrew it, back when their father still answered his own phone and still knew the names of every driver on his payroll. It had sat empty for six years, rented out occasionally for storage, otherwise forgotten. Tonight it was not empty. A single work light hung from an extension cord, throwing a small circle of brightness across a folding table stacked with file boxes, the rest of the vast room swallowed in shadow.\n\nArjun stood beside the boxes looking like a man who hadn't slept through a full night in longer than he wanted to admit. Gone was the practiced warmth from the phone call. What remained was something closer to fear, worn thin at the edges.\n\n\"Dad knew about the account,\" he said, before Mira had even set down her bag. \"He set it up himself, eighteen months ago. It was never hidden from the company, not really. It was hidden from one specific person.\"\n\nMira felt the careful architecture of her certainty shift, just slightly, the way it did whenever a fraud case revealed a second layer she hadn't accounted for. \"Hidden from who?\"\n\n\"Suresh Oberoi.\" Arjun said the name like it cost him something. \"He ran logistics for Dad for almost twenty years. Practically family, growing up — you probably don't remember him well, you were still in university when he was around most. About two years ago, Dad found out Oberoi had been skimming shipments. Not huge amounts individually. Small percentages, spread across hundreds of deliveries, invisible unless you knew exactly what to compare against what. Over time, it added up to almost as much as the company's entire annual profit margin.\"\n\nMira remembered Oberoi now, faintly — a heavyset man with an easy laugh who used to bring sweets to the office on festival days, back when she was still young enough to be more interested in the sweets than in the man handing them out. It unsettled her more than she expected, matching that memory against the shape of a two-year embezzlement scheme.\n\n\"Why didn't Dad report him?\"\n\nArjun exhaled, and for a moment the shadows in the warehouse seemed to lean in closer around the single light. \"Because Oberoi had leverage. Something from years back — I still don't have all of it, Mira, I want to be honest with you about that. Whatever it was, Dad decided the safest move wasn't confrontation. It was quiet redirection. He built a private ledger, moved a portion of the company's real profits somewhere Oberoi couldn't reach or account for, and used your signature on the paperwork.\"\n\n\"Why mine?\"\n\n\"Because he trusted you'd understand the numbers, if it ever came to this. And because he didn't trust anyone still working in that building not to mention it to Oberoi eventually, even by accident. You were the one person outside the company entirely. The safest signature he had.\"\n\nMira stared at the stacked boxes, each one presumably containing another six months of a story her father had chosen to tell no one while he was alive to defend it. \"Why not just tell me? While he could still explain it himself?\"\n\nFor the first time, Arjun's voice cracked, the last of the performance falling away entirely. \"Because I think some part of him didn't want you to see him as someone who let it go on for two years before he did anything. He wanted to fix it quietly and hand you a clean company, not a confession. He ran out of time to do it the way he planned.\"\n\nMira sat down on an overturned crate, the ledger heavy in her bag though she hadn't opened it since the parking garage. Her whole career had been built on the confidence that she could tell a true account from a constructed one — that numbers, unlike people, didn't know how to perform sincerity. She was no longer certain that skill extended to her own family. Arjun's fear looked real. His story was, at minimum, consistent with everything she'd read. That didn't mean it was complete.\n\n\"Show me the shipment records,\" she said. \"All of them. Every route Oberoi touched, going back as far as you have documentation. Tonight.\"\n\nArjun hesitated exactly long enough for Mira to notice it, then nodded and began pulling folders from the nearest box.\n\nWhat the records showed, over the next two hours, was a pattern almost elegant in its restraint — Oberoi had never taken enough in any single shipment to trigger an internal audit flag, which meant someone had either trained him carefully or he'd simply had two decades to learn precisely where the thresholds sat. Mira recognized the shape of it immediately; it was the kind of fraud she'd built her entire career detecting; the kind that depended on nobody looking at the full eighteen months at once.\n\nBut near the final folder, something shifted. In the six months before her father's death, the direction of the smaller transfers had reversed. Money was no longer quietly leaving the company through Oberoi's shipments. It was moving out of the private ledger her father had built — the one meant to be untouchable, the one with her signature on it.\n\n\"Arjun.\" Mira held the page up to the single hanging light. \"Someone found this account while Dad was still alive. And they've already started moving money out of it.\"\n\nHer brother went very still, staring at the page like it had just confirmed something he'd been hoping, against the evidence, wasn't true.\n\n\"How much,\" Mira asked, \"has moved out since Dad died?\"\n\nArjun didn't answer immediately. He pulled the next folder, then the one after it, cross-referencing dates against a small notebook of his own that Mira hadn't noticed him carrying until now — which told her, more clearly than anything he'd said all night, that he had already done this exact calculation alone, probably more than once, in the weeks since the funeral.\n\n\"About sixty percent of what's left in the account,\" he said finally. \"Moving in increments small enough that if you weren't looking specifically for a pattern, you'd assume it was normal operational transfer. Whoever's doing it either learned that trick from watching Dad do the same thing to hide it from Oberoi in the first place, or —\"\n\n\"Or Oberoi taught him the trick twenty years ago, and Dad simply used the same method against him,\" Mira finished. \"Which means whoever's pulling money out now knows exactly how this account was built, down to the transfer size that stays under the radar. That's not a lucky guess. That's someone who understands this ledger the way Dad did.\"\n\nThe work light flickered again, longer this time, and for a moment the warehouse fell into near-total darkness before it steadied. Neither of them moved.",
+      "summary": "At the warehouse, Arjun reveals the ledger was their father's defense: Suresh Oberoi, a twenty-year trusted logistics head, had been skimming shipments, and Rakesh quietly redirected profits using Mira's signature rather than confront a man who held leverage over him. Reviewing the records, Mira finds the transfers reversed in his final months — someone has been draining the hidden account since before his death.",
+      "prev_episode_summary": "Mira received a private ledger forged with her signature and agreed to meet Arjun at the old warehouse instead of going to the lawyer.",
+      "order_index": 2,
+      "author_id": 1,
+      "co_author_id": null,
+      "forked_from_episode_id": null,
+      "decision_point": "Mid-to-late Episode 2 — discovery of reversed transfers out of the private ledger. Reader branch options: (a) Mira insists on bringing Devika in immediately, refusing to be isolated with Arjun any further; (b) Mira continues reviewing the shipment records alone with Arjun through the night, as written; (c) Mira secretly photographs the ledger pages before continuing, preparing evidence in case Arjun's account turns out to be incomplete or false. Canon continuation: (b).",
+      "is_canonical": true,
+      "verified_by_author": true
+    },
+    {
+      "id": 1003,
+      "series_id": 10,
+      "season_id": 100,
+      "title": "Oberoi",
+      "content": "By the time the warehouse's single light started to flicker, somewhere near two in the morning, Mira had stopped thinking of the shipment records as evidence in the abstract and started thinking of them as a map of exactly how long her father had known he was in danger, and said nothing.\n\n\"He knows the ledger exists,\" she said again, mostly to hear it out loud. \"Whoever moved this money out — it has to be Oberoi. He found the one place Dad thought was safe.\"\n\nArjun's face, already pale under the work light, went a shade paler. \"If he knows the ledger exists, he knows your signature is on every transfer in it. On paper, it doesn't look like Dad was protecting company profits from a man skimming shipments. It looks like you were the one quietly diverting money for eighteen months, and Dad just happened to die before anyone noticed.\"\n\nMira had spent her entire career learning to see exactly this kind of engineered appearance — a true story rearranged just enough to implicate the wrong person, built from real documents and real signatures, technically accurate and completely false in what it implied. She had simply never expected to be the one standing inside it.\n\nDevika's words from the lawyer's office replayed with new weight. Read it twice. I did. The lawyer hadn't been warning her about grief. She'd been warning her, as gently as the law allowed, that the envelope was a loaded thing pointed directly at her, built by a man who had two decades of intimate knowledge of exactly how the company's books worked.\n\nHer phone lit up on the folding table, a message from a number she didn't recognize.\n\nMs. Kapoor — I believe we should discuss your father's arrangement before your lawyer is forced to discover it without the proper context. I imagine you'd prefer to control how this looks.\n\nMira read it twice, the way Devika had read the ledger. Arjun leaned over to look at the screen, and whatever color remained in his face finished draining out of it.\n\n\"That's him,\" he said. \"That's exactly how he used to talk. Like he's doing you a favor.\"\n\n\"You've spoken to him. Recently.\" It wasn't a question, and Mira watched her brother's face confirm it before he said a single word.\n\n\"Once. About three weeks ago. He called asking about Dad's estate, very polite, very concerned about 'the family during such a difficult time.' I didn't think anything of it then. I do now.\" Arjun rubbed a hand over his face, the exhaustion in it no longer something he was bothering to hide. \"I should have told you immediately. I didn't, because I thought I could handle it myself before you ever had to know any of this existed.\"\n\n\"That's exactly what Dad thought too,\" Mira said, quieter than she meant to. \"Handling it quietly. Alone. Look where it got him.\"\n\nArjun didn't argue with that. He looked, instead, like a man finally hearing an old family pattern named out loud for the first time, and not particularly liking how precisely it fit him.\n\nMira set the phone down carefully, as though it might go off if handled roughly. Oberoi wasn't threatening her outright — he was worse than that. He was offering her a choice dressed up as courtesy, the same shape her father had apparently used on him years earlier when he'd chosen quiet redirection over confrontation. It was, she realized, a family habit that had clearly spread further than the family.\n\n\"He's not going to wait for us to decide what to do next,\" she said. \"He's already decided. He's just telling us what order he'd prefer it happen in.\"\n\nArjun sat down heavily across from her, the folders forgotten. \"So what do we do? Devika can't protect you from a signature that's already on eighteen months of paperwork. Going to the police puts your name in the file before anyone's established what actually happened. And doing nothing means he controls the timeline completely.\"\n\nMira looked at the boxes lining the wall — her father's real account of the last two years of his life, told entirely through numbers he'd trusted her, specifically, to eventually understand. She thought about every fraud case she'd ever built from the opposite side of a table like this one, every time she'd waited for the person she was investigating to believe they still had the advantage, right up until the moment the pattern she'd been quietly assembling closed around them completely.\n\n\"He thinks the ledger is a weapon aimed at me,\" she said slowly. \"He's wrong. It's a complete record of every transfer he ever tried to hide, dated, signed, and cross-referenced against shipment records he doesn't know we have. Right now he thinks we're afraid of what it says about me. What he doesn't know is that we can prove, page by page, exactly what he did and precisely when. The ledger was never the threat. It's the trap. Dad just ran out of time to spring it himself.\"\n\nArjun looked at her for a long moment, something between hope and disbelief crossing his face — the specific expression of a man watching his sister become, in real time, exactly the person their father had apparently always believed she could be.\n\n\"So we don't run to Devika,\" he said slowly. \"And we don't wait for him to make the next move.\"\n\n\"No,\" Mira said, already reaching for her phone to type a reply to Oberoi, each word chosen with the same precision she brought to closing out a fraud case in front of a room of executives who thought they'd covered every angle. \"We let him think he's still in control of the timeline. And then we hand Devika the entire case at the exact moment he thinks he's already won.\"\n\nArjun exhaled something that was almost a laugh, exhausted and disbelieving in equal measure. \"Dad would have liked this version of you handling it. The quiet-redirection version. Not that he'd ever have said so out loud.\"\n\n\"Dad's version of quiet redirection took two years and still ended with someone circling both his children the week after his funeral,\" Mira said, typing steadily, not looking up. \"Mine's going to take considerably less time than that.\"\n\nShe read her reply back once before sending it — three lines, courteous on the surface, deliberately vague about how much she already knew, engineered the same way she'd once explained a trap to a room full of nervous executives: give the other side just enough rope to believe they were still holding it. Outside, the first grey edge of morning had started to show along the warehouse's high windows, and for the first time since the lawyer's office, Mira felt something steadier than grief settle into place beside it — not comfort exactly, but purpose, which under the circumstances was close enough.",
+      "summary": "Oberoi makes contact, framing the forged ledger as leverage that makes Mira look like the embezzler. Mira realizes he has been draining the account and that Arjun already spoke to him weeks ago. Rather than run to the lawyer or the police, she reframes the ledger as her father's unfinished trap and resolves to let Oberoi believe he is winning while she builds the case to hand Devika.",
+      "prev_episode_summary": "Reviewing records at the warehouse, Mira and Arjun discovered someone had been draining the hidden ledger since before Rakesh's death, using his own concealment method.",
+      "order_index": 3,
+      "author_id": 1,
+      "co_author_id": null,
+      "forked_from_episode_id": null,
+      "decision_point": "End of Episode 3 — Mira's decision on how to respond to Oberoi. Reader branch options: (a) Mira replies and agrees to meet Oberoi directly, taking the risk of confronting him in person; (b) Mira forwards the message immediately to Devika, formalizing the conflict legally instead of engineering a trap; (c) Mira and Arjun set a trap using the private ledger and shipment records as leverage against Oberoi, as written. Canon continuation: (c).",
+      "is_canonical": true,
+      "verified_by_author": true
+    }
+  ],
+  "characters": [
+    {
+      "id": 700,
+      "series_id": 10,
+      "name": "Mira Kapoor",
+      "description": "29, forensic accountant; precise, guarded, still grieving her father.",
+      "role": "protagonist",
+      "personality": "Analytical, controlled, quietly relentless. Reads people the way she reads spreadsheets and distrusts anything too clean.",
+      "backstory": "Taught to read a balance sheet before she could ride a bicycle. Built an eleven-year career detecting fraud, at a careful distance from her own family.",
+      "goals": "Understand the true story behind her father's hidden ledger, clear her forged signature, and turn Oberoi's own scheme into the trap her father never lived to spring.",
+      "speech_style": "Spare, precise, cross-examining. States conclusions flatly; asks short, exact questions.",
+      "status": "alive"
+    },
+    {
+      "id": 701,
+      "series_id": 10,
+      "name": "Arjun Kapoor",
+      "description": "Mira's estranged older brother; charming, financially reckless.",
+      "role": "side",
+      "personality": "Warm and persuasive on the surface, frightened and exhausted underneath. Habitually tries to handle things alone before asking for help.",
+      "backstory": "The sibling who has long needed rescuing. Inherited the house; spoke to Oberoi weeks before the story and hid it from Mira while trying to fix things himself.",
+      "goals": "Protect Mira and the family name while managing the crisis quietly, without fully confronting his own role in letting it fester.",
+      "speech_style": "Warm, coaxing, well-worn charm that cracks into raw fear under pressure.",
+      "status": "alive"
+    },
+    {
+      "id": 702,
+      "series_id": 10,
+      "name": "Devika Rao",
+      "description": "The family lawyer; calm, quietly protective of Mira.",
+      "role": "side",
+      "personality": "Measured, discreet, deliberate. Warns by implication rather than statement.",
+      "backstory": "Has known the Kapoor family for eighteen years and suspected things about Rakesh even his children weren't told. Entrusted with delivering the sealed ledger.",
+      "goals": "Protect Mira within the limits of the law and see her father's affairs settled without harm to his daughter.",
+      "speech_style": "Calm, careful, economical; leaves meaningful silences and understatement.",
+      "status": "alive"
+    },
+    {
+      "id": 703,
+      "series_id": 10,
+      "name": "Rakesh Kapoor",
+      "description": "Mira's father; deceased before the story begins, present through documents and memory.",
+      "role": "side",
+      "personality": "Meticulous, secretive, protective to a fault. Chose quiet redirection over open confrontation.",
+      "backstory": "Founder-figure of Kapoor & Sons. Discovered Oberoi's skimming, but because Oberoi held old leverage over him, he built a private ledger under Mira's forged signature to redirect profits instead of exposing him. Died before he could finish or confess it.",
+      "goals": "To hand his daughter a clean company and a sprung trap rather than a confession — a plan cut short by his death.",
+      "speech_style": "Wry, exacting; the specific laugh reserved for anyone who underestimated how carefully his daughter read a spreadsheet.",
+      "status": "dead"
+    },
+    {
+      "id": 704,
+      "series_id": 10,
+      "name": "Suresh Oberoi",
+      "description": "Former logistics head at Kapoor & Sons; introduced through documents in Episode 2, appears directly by Episode 3.",
+      "role": "antagonist",
+      "personality": "Genial and patient on the surface, coercive underneath. Frames threats as favors and courtesy.",
+      "backstory": "Ran logistics for Rakesh for nearly twenty years, practically family, while skimming small percentages across hundreds of shipments. Held leverage over Rakesh, later found the private ledger and began draining it.",
+      "goals": "Control the narrative and the timeline, use Mira's forged signature to shift blame onto her, and quietly extract the remaining money.",
+      "speech_style": "Polished, courteous, insinuating; speaks as though doing you a favor.",
+      "status": "alive"
+    }
+  ],
+  "char_relationship": [
+    { "id": 900, "char_id": 700, "relation_char_id": 701, "relationship_summary": "Estranged siblings forced into an uneasy alliance; Mira has long managed Arjun at a careful distance." },
+    { "id": 901, "char_id": 700, "relation_char_id": 703, "relationship_summary": "Daughter and father; he taught her accounting and secretly staked his plan on her ability to understand it." },
+    { "id": 902, "char_id": 700, "relation_char_id": 702, "relationship_summary": "Client and family lawyer; Devika quietly protects Mira and warns her by implication." },
+    { "id": 903, "char_id": 703, "relation_char_id": 704, "relationship_summary": "Twenty-year trusted logistics head who betrayed Rakesh by skimming; held leverage that made Rakesh choose concealment over confrontation." },
+    { "id": 904, "char_id": 701, "relation_char_id": 704, "relationship_summary": "Oberoi contacted Arjun weeks earlier under the guise of concern; Arjun concealed the contact from Mira." },
+    { "id": 905, "char_id": 704, "relation_char_id": 700, "relationship_summary": "Antagonist framing Mira: uses her forged signature on the ledger to make her look like the embezzler." }
+  ],
+  "character_state": [
+    {
+      "id": 800,
+      "character_id": 700,
+      "episode_id": 1001,
+      "memory_snapshot": "Just read the private ledger and found her own forged signature on eighteen months of hidden transfers. Grieving, shaken, but agreeing to meet Arjun before deciding anything.",
+      "char_summary": "Mira, blindsided by evidence that implicates her, choosing to understand her father before exposing him."
+    },
+    {
+      "id": 801,
+      "character_id": 701,
+      "episode_id": 1001,
+      "memory_snapshot": "Knows the account exists and is frightened. Trying to intercept Mira before she goes to the lawyer.",
+      "char_summary": "Arjun, afraid and evasive, steering Mira toward a private meeting."
+    },
+    {
+      "id": 802,
+      "character_id": 700,
+      "episode_id": 1002,
+      "memory_snapshot": "Learned the ledger was Rakesh's defense against Oberoi's skimming, using her signature. Discovered transfers reversed in his final months — someone is draining the account.",
+      "char_summary": "Mira, recalibrating: the fraud she found points outward at Oberoi, not just at her."
+    },
+    {
+      "id": 803,
+      "character_id": 701,
+      "episode_id": 1002,
+      "memory_snapshot": "Confessed most of what he knows; revealed he'd already been calculating the drained amounts alone since the funeral.",
+      "char_summary": "Arjun, unburdening himself, still holding back the full extent of his contact with Oberoi."
+    },
+    {
+      "id": 804,
+      "character_id": 700,
+      "episode_id": 1003,
+      "memory_snapshot": "Received Oberoi's veiled message and understood the frame against her. Reframed the ledger as her father's unfinished trap and resolved to let Oberoi believe he is winning.",
+      "char_summary": "Mira, moving from victim to strategist, preparing to hand Devika the full case at the decisive moment."
+    },
+    {
+      "id": 805,
+      "character_id": 704,
+      "episode_id": 1003,
+      "memory_snapshot": "Believes he controls the timeline; contacts Mira offering to 'discuss the arrangement' as a courtesy, confident the forged signature protects him.",
+      "char_summary": "Oberoi, overconfident, mistaking the ledger for leverage rather than evidence against him."
+    }
+  ],
+  "world": [
+    { "id": 600, "series_id": 10, "entry_type": "faction", "name": "Kapoor & Sons", "location": null, "description": "The Kapoor family company. Rakesh's logistics-and-accounts business, now inherited: the house to Arjun, the accounts and their responsibility to Mira." },
+    { "id": 601, "series_id": 10, "entry_type": "location", "name": "The Old Warehouse", "location": "Former Kapoor & Sons premises", "description": "Empty for six years, rented occasionally for storage. Site of the night-long meeting; a single work light over a folding table stacked with file boxes." },
+    { "id": 602, "series_id": 10, "entry_type": "location", "name": "Devika Rao's Office", "location": "Third floor, an aging renovated building", "description": "Where the will is read and the sealed ledger is handed over." },
+    { "id": 603, "series_id": 10, "entry_type": "location", "name": "The Old Office Building", "location": "Sold years before the company relocated", "description": "The company's former headquarters, ground floor now a mobile phone repair shop; a marker of how much of Rakesh's world has quietly disappeared." },
+    { "id": 604, "series_id": 10, "entry_type": "rule", "name": "The Private Ledger", "location": null, "description": "Rakesh's secret account, kept separate from the company books, recording eighteen months of transfers authorized with Mira's forged digital signature. Meant to be untouchable; later drained by Oberoi. It is both the apparent weapon against Mira and the actual trap against Oberoi." },
+    { "id": 605, "series_id": 10, "entry_type": "rule", "name": "Quiet Redirection", "location": null, "description": "The Kapoor family habit of handling threats by discreet maneuver rather than open confrontation. Rakesh used it against Oberoi; Oberoi mirrors it back; Mira ultimately weaponizes it." },
+    { "id": 606, "series_id": 10, "entry_type": "rule", "name": "Under-the-Radar Transfers", "location": null, "description": "Skimming or moving money in increments small enough to avoid triggering an internal audit flag — the technique Oberoi used for two decades and that Rakesh turned against him." }
+  ],
+  "style_guide": [
+    {
+      "id": 500,
+      "series_id": 10,
+      "pov": "third-limited",
+      "tense": "past",
+      "tone": "Dark, tense, morally grey; cerebral and forensic, restrained emotion beneath a cold analytical surface.",
+      "pacing": "Slow-burn and methodical, building through revelation and reversal rather than action; tension from information, not incident.",
+      "content_rating": "16+",
+      "narrative_voice": "Literary and precise, in the register of a forensic accountant: long controlled sentences, financial metaphor, and dialogue-heavy scenes. Single-narrator audio performance — one voice artist delivers narration plus all character dialogue through tonal shifts, with no spoken speaker tags. [DECISION POINT] blocks are never narrated."
+    }
+  ],
+  "plot_threads": [
+    { "id": 400, "series_id": 10, "thread": "Mira's forged signature on the private ledger and whether she can be cleared.", "status": "open", "opened_episode_id": 1001, "resolved_episode_id": null },
+    { "id": 401, "series_id": 10, "thread": "Who is draining the hidden account, and since when.", "status": "resolved", "opened_episode_id": 1002, "resolved_episode_id": 1003 },
+    { "id": 402, "series_id": 10, "thread": "The nature of Oberoi's old leverage over Rakesh.", "status": "open", "opened_episode_id": 1002, "resolved_episode_id": null },
+    { "id": 403, "series_id": 10, "thread": "The trap Mira sets to turn the ledger into evidence against Oberoi.", "status": "open", "opened_episode_id": 1003, "resolved_episode_id": null },
+    { "id": 404, "series_id": 10, "thread": "Arjun's concealed contact with Oberoi and how far his involvement goes.", "status": "open", "opened_episode_id": 1003, "resolved_episode_id": null }
+  ],
+  "reviews": [],
+  "ratings": []
+}
