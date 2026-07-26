@@ -73,12 +73,13 @@ TOOL_DEFS = [
         "type": "function",
         "function": {
             "name": "get_prior_episodes",
-            "description": "Canonical episodes up to and including the fork point, for continuity.",
+            "description": "Prior episodes for continuity. Pass episode_id to walk THIS timeline's lineage (includes prior branch episodes for N+2); otherwise pass series_id+before_order for the canonical spine.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "series_id": {"type": "string"},
                     "before_order": {"type": "integer"},
+                    "episode_id": {"type": "string", "description": "the current episode; walk its timeline lineage"},
                 },
                 "required": ["series_id", "before_order"],
             },
@@ -88,10 +89,13 @@ TOOL_DEFS = [
         "type": "function",
         "function": {
             "name": "get_characters",
-            "description": "All characters of a series with personality, voice, goals, status.",
+            "description": "Characters of a series with personality, voice, goals, status. Pass as_of_episode_id to get each character's LIVE state for this timeline (nearest-ancestor memory/status): keeps a killed character dead on a branch and carries evolving memory into N+2.",
             "parameters": {
                 "type": "object",
-                "properties": {"series_id": {"type": "string"}},
+                "properties": {
+                    "series_id": {"type": "string"},
+                    "as_of_episode_id": {"type": "string", "description": "overlay timeline-specific state as of this episode"},
+                },
                 "required": ["series_id"],
             },
         },
@@ -112,10 +116,13 @@ TOOL_DEFS = [
         "type": "function",
         "function": {
             "name": "get_open_threads",
-            "description": "Open plot threads to honor or advance.",
+            "description": "Open plot threads to honor or advance. Pass as_of_episode_id so thread status reflects THIS timeline (a thread resolved on a branch may stay open on canon).",
             "parameters": {
                 "type": "object",
-                "properties": {"series_id": {"type": "string"}},
+                "properties": {
+                    "series_id": {"type": "string"},
+                    "as_of_episode_id": {"type": "string"},
+                },
                 "required": ["series_id"],
             },
         },
@@ -193,6 +200,10 @@ REGEN_SYSTEM = (
     "First GATHER CONTEXT by calling the available tools. ALWAYS call get_episode with "
     "the given source episode id FIRST to obtain the real series_id and order_index, then "
     "use those EXACT ids for the other tools. Never invent or guess ids.\n\n"
+    "CONTINUITY IS TIMELINE-SPECIFIC: pass the source episode id as as_of_episode_id to "
+    "get_characters and get_open_threads, and pass episode_id to get_prior_episodes, so "
+    "you see the state of THIS branch (e.g. a character killed earlier stays dead, evolved "
+    "memory carries into N+2) rather than the sacred timeline's defaults.\n\n"
     "Non-negotiable rules:\n"
     "1. CHARACTER CONSISTENCY — match each character's personality, voice, goals, "
     "status; they cannot know things impossible in this timeline.\n"
@@ -224,12 +235,28 @@ ANALYZE_SYSTEM = (
     "Output: a 3-5 sentence summary, then a bullet list of suggestions. No fabricated stats."
 )
 
+CHAT_SYSTEM = (
+    "You are the AI co-author of a serialized story, chatting with the author in a side "
+    "panel. Answer the author's questions about the story, its characters, reader reception, "
+    "open plot threads, retention, and craft. Decide for yourself which tools to call to "
+    "ground every answer in real data — never invent facts, ids, quotes, or numbers.\n\n"
+    "You are given the CURRENT EPISODE id in context. Call get_episode on it FIRST when you "
+    "need its series_id/order_index, then use those EXACT ids for the other tools. Pick only "
+    "the tools relevant to the question: e.g. reader reactions -> get_comments; who's in the "
+    "story -> get_characters; unresolved arcs -> get_open_threads; audience drop-off -> "
+    "get_retention; prior events -> get_prior_episodes; style -> get_style_guide. If a "
+    "question needs no data, just answer.\n\n"
+    "Be concise and specific. Quote real reader comments and cite real numbers when you have "
+    "them. You are chatting, NOT writing an episode — do not output episode prose or a "
+    "'TITLE:' line unless the author explicitly asks you to draft/rewrite the episode."
+)
+
 
 # ---------------------------------------------------------------------------
 # Core loop — yields event dicts: {"type": "reasoning"|"tool_call"|"tool_result"|
 #            "token"|"done"|"error", ...}
 # ---------------------------------------------------------------------------
-def _run(system: str, user: str) -> Iterator[dict]:
+def _run(system: str, user: str, force_first_tool: bool = True) -> Iterator[dict]:
     client = _client()
     messages = [
         {"role": "system", "content": system},
@@ -238,9 +265,10 @@ def _run(system: str, user: str) -> Iterator[dict]:
 
     # Tool-gathering phase (non-streamed turns; tool calls are the visible reasoning).
     for i in range(MAX_TOOL_ITERS):
-        # Force a tool call on the first turn so the agent always grounds itself in
-        # real data before writing; let it decide (auto) afterwards.
-        tool_choice = "required" if i == 0 else "auto"
+        # Optionally force a tool call on the first turn so the agent grounds itself in
+        # real data before writing; let it decide (auto) afterwards. Chat lets the agent
+        # choose freely from the start (some questions need no data).
+        tool_choice = "required" if (i == 0 and force_first_tool) else "auto"
         resp = client.chat.completions.create(
             model=LLM_ENDPOINT, messages=messages, tools=TOOL_DEFS, tool_choice=tool_choice
         )
@@ -319,3 +347,26 @@ def analyze_stream(episode_id: str) -> Iterator[dict]:
         "Fetch the retention curve and the episode text, then explain and advise."
     )
     yield from _run(ANALYZE_SYSTEM, user)
+
+
+def chat_stream(
+    episode_id: str,
+    message: str,
+    history: list[dict] | None = None,
+) -> Iterator[dict]:
+    """Conversational co-author. The agent freely picks tools to answer the author's
+    question grounded in real data. Does NOT force a first tool call and does NOT write
+    an episode unless explicitly asked."""
+    convo = ""
+    for h in history or []:
+        role = h.get("role", "user")
+        text = (h.get("text") or "").strip()
+        if text:
+            convo += f"{'AUTHOR' if role == 'user' else 'YOU'}: {text}\n"
+    user = (
+        f"CURRENT EPISODE id={episode_id}.\n"
+        + (f"CONVERSATION SO FAR:\n{convo}\n" if convo else "")
+        + f"AUTHOR: {message}\n\n"
+        "Answer the author. Call whatever tools you need first, then reply."
+    )
+    yield from _run(CHAT_SYSTEM, user, force_first_tool=False)

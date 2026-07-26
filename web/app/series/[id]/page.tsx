@@ -43,7 +43,13 @@ export default function SeriesEntry({ params }: { params: { id: string } }) {
             <p className="text-sm text-text">
               {state === "error" ? "Couldn’t load this series." : `${series?.title ?? "This series"} has no episodes yet.`}
             </p>
-            <Link href="/" className="mt-2 inline-block text-[13px] text-fork hover:underline">
+            {state === "empty" && (
+              <div className="mt-3 flex items-center justify-center gap-4 text-[13px]">
+                <Link href={`/series/${id}/episode/new`} className="text-canon hover:underline">Write first episode</Link>
+                <Link href={`/series/${id}/characters`} className="text-fork hover:underline">Add characters</Link>
+              </div>
+            )}
+            <Link href="/" className="mt-3 inline-block text-[13px] text-muted hover:underline">
               ← Back to series
             </Link>
           </div>

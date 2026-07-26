@@ -1,8 +1,11 @@
 "use client";
 import * as React from "react";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { getSeries } from "@/lib/api";
 import { useAsync } from "@/lib/useAsync";
 import { Shell } from "@/components/layout/Shell";
+import { Button } from "@/components/ui/Button";
 import { SeriesCard } from "@/components/SeriesCard";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -33,13 +36,18 @@ export default function Home() {
               {loading ? "…" : `${filtered.length} multiverses`} · fork any timeline, hear it change
             </p>
           </div>
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Filter by title or genre…"
-            aria-label="Filter series"
-            className="h-8 w-64 rounded-md border border-line-2 bg-panel px-3 text-[13px] text-text placeholder:text-muted focus:border-fork/60 focus:outline-none"
-          />
+          <div className="flex items-center gap-2">
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Filter by title or genre…"
+              aria-label="Filter series"
+              className="h-8 w-64 rounded-md border border-line-2 bg-panel px-3 text-[13px] text-text placeholder:text-muted focus:border-fork/60 focus:outline-none"
+            />
+            <Button asChild variant="primary" size="sm">
+              <Link href="/series/new"><Plus className="h-3.5 w-3.5" /> New series</Link>
+            </Button>
+          </div>
         </div>
 
         {loading ? (

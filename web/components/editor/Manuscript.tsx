@@ -16,6 +16,12 @@ export function Manuscript({
         defaultLanguage="markdown"
         theme="vs-dark"
         value={value}
+        // Monaco loads from a CDN; show the script text immediately meanwhile.
+        loading={
+          <pre className="h-full w-full overflow-auto whitespace-pre-wrap px-4 py-3 text-left font-mono text-[13px] leading-relaxed text-body">
+            {value || "Loading editor…"}
+          </pre>
+        }
         onChange={(v) => onChange(v ?? "")}
         options={{
           fontSize: 14,

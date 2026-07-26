@@ -24,21 +24,25 @@ export function SeasonTree({
   const router = useRouter();
   const SEASON = "season:1";
 
-  // expand the season + the episode that owns the current node
-  const parentOfCurrent = React.useMemo(() => {
-    if (episodes.some((e) => e.id === currentId)) return currentId;
-    for (const e of episodes) {
-      if ((branchesByEpisode[e.id] ?? []).some((b) => b.id === currentId)) return e.id;
-    }
-    return undefined;
+  // full chain of ancestor node ids to expand so the current node is visible
+  // (walks arbitrarily deep sub-branches).
+  const ancestorsOfCurrent = React.useMemo(() => {
+    const path: string[] = [];
+    const walk = (id: string, trail: string[]): boolean => {
+      if (id === currentId) { path.push(...trail); return true; }
+      for (const b of branchesByEpisode[id] ?? []) {
+        if (walk(b.id, [...trail, id])) return true;
+      }
+      return false;
+    };
+    for (const e of episodes) if (walk(e.id, [])) break;
+    return path;
   }, [episodes, branchesByEpisode, currentId]);
 
   const [expanded, setExpanded] = React.useState<string[]>([]);
   React.useEffect(() => {
-    setExpanded((prev) =>
-      Array.from(new Set([...prev, SEASON, ...(parentOfCurrent ? [parentOfCurrent] : [])]))
-    );
-  }, [parentOfCurrent]);
+    setExpanded((prev) => Array.from(new Set([...prev, SEASON, ...ancestorsOfCurrent])));
+  }, [ancestorsOfCurrent]);
 
   const rowLabel = (
     left: React.ReactNode,
@@ -49,6 +53,32 @@ export function SeasonTree({
       {right}
     </div>
   );
+
+  // recursively render a branch node and any sub-branches (N+2 lineage)
+  function renderBranch(b: Episode): React.ReactNode {
+    const kids = branchesByEpisode[b.id] ?? [];
+    return (
+      <TreeItem
+        key={b.id}
+        itemId={b.id}
+        label={rowLabel(
+          <span
+            className={
+              "flex items-center gap-1.5 " +
+              (b.id === currentId ? "font-semibold text-text" : "text-fork")
+            }
+          >
+            <GitBranch className="h-3 w-3 shrink-0 text-fork" />
+            {b.title}
+            {b.verifiedByAuthor && <CheckCircle2 className="h-3 w-3 text-canon" />}
+          </span>,
+          b.avgRating ? <span className="font-mono text-[10px] text-muted">{b.avgRating}★</span> : null
+        )}
+      >
+        {kids.map((k) => renderBranch(k))}
+      </TreeItem>
+    );
+  }
 
   return (
     <SimpleTreeView
@@ -106,27 +136,7 @@ export function SeasonTree({
                 ) : null
               )}
             >
-              {branches.map((b) => (
-                <TreeItem
-                  key={b.id}
-                  itemId={b.id}
-                  label={rowLabel(
-                    <span
-                      className={
-                        "flex items-center gap-1.5 " +
-                        (b.id === currentId ? "font-semibold text-text" : "text-fork")
-                      }
-                    >
-                      <GitBranch className="h-3 w-3 shrink-0 text-fork" />
-                      {b.title}
-                      {b.verifiedByAuthor && <CheckCircle2 className="h-3 w-3 text-canon" />}
-                    </span>,
-                    b.avgRating ? (
-                      <span className="font-mono text-[10px] text-muted">{b.avgRating}★</span>
-                    ) : null
-                  )}
-                />
-              ))}
+              {branches.map((b) => renderBranch(b))}
             </TreeItem>
           );
         })}

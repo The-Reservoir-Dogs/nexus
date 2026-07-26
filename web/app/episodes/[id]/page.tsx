@@ -2,7 +2,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Rewind, GitBranch, ArrowUpRight, BarChart3, Pencil, ArrowLeft, Star, CheckCircle2 } from "lucide-react";
+import { Rewind, GitBranch, ArrowUpRight, BarChart3, Pencil, ArrowLeft, Star, CheckCircle2, StepForward } from "lucide-react";
 import {
   getEpisode,
   getEpisodes,
@@ -12,12 +12,13 @@ import {
   postRating,
   postReview,
   forkEpisode,
+  narrateEpisode,
 } from "@/lib/api";
 import type { Episode, Review, Series } from "@/lib/types";
-import { useAsync } from "@/lib/useAsync";
 import { useAuth } from "@/components/AuthProvider";
 import { useFork } from "@/components/ForkProvider";
 import { Shell } from "@/components/layout/Shell";
+import { AnalyticsDrawer } from "@/components/analytics/AnalyticsDrawer";
 import { SeasonTree } from "@/components/reader/SeasonTree";
 import { AudioPlayer } from "@/components/player/AudioPlayer";
 import { RatingStars } from "@/components/reader/RatingStars";
@@ -28,30 +29,79 @@ import { Skeleton } from "@/components/ui/Skeleton";
 
 const DRIVING_ID = "5001";
 
+// Module-level cache so switching episodes shows content instantly instead of a
+// skeleton flash. `lastEpisode` keeps the previously shown episode visible while
+// a not-yet-cached one loads (stale-while-revalidate).
+const episodeCache = new Map<string, Episode>();
+let lastEpisode: Episode | undefined;
+const seriesCache = new Map<string, Series>();
+type Tree = { siblings: Episode[]; branchesByEp: Record<string, Episode[]> };
+const treeCache = new Map<string, Tree>();
+const reviewsCache = new Map<string, Review[]>();
+
 export default function ReaderPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
   const fork = useFork();
   const { me } = useAuth();
 
-  const { data: episode, loading } = useAsync(() => getEpisode(id), [id]);
-  const { data: initialReviews } = useAsync(() => getReviews(id), [id]);
-
-  const [siblings, setSiblings] = React.useState<Episode[]>([]);
-  const [branchesByEp, setBranchesByEp] = React.useState<Record<string, Episode[]>>({});
-  const [series, setSeries] = React.useState<Series | undefined>();
-
+  const [episode, setEpisode] = React.useState<Episode | undefined>(
+    () => episodeCache.get(id) ?? lastEpisode
+  );
   React.useEffect(() => {
-    if (!episode) return;
-    getSeriesById(episode.seriesId).then(setSeries);
-    getEpisodes(episode.seriesId).then(async (eps) => {
-      setSiblings(eps);
-      const entries = await Promise.all(
-        eps.map(async (e) => [e.id, await getEpisodeTimelines(e.id)] as const)
-      );
-      setBranchesByEp(Object.fromEntries(entries));
+    let active = true;
+    const cached = episodeCache.get(id);
+    if (cached) { setEpisode(cached); lastEpisode = cached; }
+    getEpisode(id).then((e) => {
+      if (!active || !e) return;
+      episodeCache.set(id, e);
+      lastEpisode = e;
+      setEpisode(e);
     });
-  }, [episode?.seriesId, episode]);
+    return () => { active = false; };
+  }, [id]);
+  const seriesId = episode?.seriesId;
+  const [siblings, setSiblings] = React.useState<Episode[]>(
+    () => (seriesId ? treeCache.get(seriesId)?.siblings ?? [] : [])
+  );
+  const [branchesByEp, setBranchesByEp] = React.useState<Record<string, Episode[]>>(
+    () => (seriesId ? treeCache.get(seriesId)?.branchesByEp ?? {} : {})
+  );
+  const [series, setSeries] = React.useState<Series | undefined>(
+    () => (seriesId ? seriesCache.get(seriesId) : undefined)
+  );
+
+  // Series + tree cached at module scope so they survive the reader's remount on
+  // episode navigation (no left-rail / series skeleton after the first load).
+  React.useEffect(() => {
+    const sid = episode?.seriesId;
+    if (!sid) return;
+    const cs = seriesCache.get(sid);
+    if (cs) setSeries(cs);
+    else getSeriesById(sid).then((s) => { if (s) { seriesCache.set(sid, s); setSeries(s); } });
+
+    const ct = treeCache.get(sid);
+    if (ct) { setSiblings(ct.siblings); setBranchesByEp(ct.branchesByEp); return; }
+    getEpisodes(sid).then(async (eps) => {
+      const map: Record<string, Episode[]> = {};
+      const seen = new Set<string>();
+      let frontier = eps.map((e) => e.id);
+      while (frontier.length) {
+        const results = await Promise.all(
+          frontier.map(async (fid) => [fid, await getEpisodeTimelines(fid)] as const)
+        );
+        const nxt: string[] = [];
+        for (const [fid, forks] of results) {
+          if (forks.length) map[fid] = forks;
+          for (const f of forks) if (!seen.has(f.id)) { seen.add(f.id); nxt.push(f.id); }
+        }
+        frontier = nxt;
+      }
+      treeCache.set(sid, { siblings: eps, branchesByEp: map });
+      setSiblings(eps);
+      setBranchesByEp(map);
+    });
+  }, [episode?.seriesId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentBranches = branchesByEp[id] ?? (episode?.decisionPoint ? [] : []);
   const idx = siblings.findIndex((e) => e.id === id);
@@ -59,11 +109,37 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
   const isAuthor = !!me && !!series && (series.authorId === me.id || episode?.coAuthorId === me.id);
 
-  const [reviews, setReviews] = React.useState<Review[]>([]);
+  const [reviews, setReviews] = React.useState<Review[]>(() => reviewsCache.get(id) ?? []);
   const [rating, setRating] = React.useState<{ avg: number; count: number } | null>(null);
   const [rewinding, setRewinding] = React.useState(false);
+  const [analyticsOpen, setAnalyticsOpen] = React.useState(false);
+  const [narrating, setNarrating] = React.useState(false);
+  const [narrateError, setNarrateError] = React.useState("");
 
-  React.useEffect(() => { if (initialReviews) setReviews(initialReviews); }, [initialReviews]);
+  async function handleNarrate() {
+    setNarrating(true);
+    setNarrateError("");
+    try {
+      const { audioUrl } = await narrateEpisode(id);
+      if (audioUrl) {
+        // cache-bust so the <audio> reloads a freshly rendered file
+        const src = `${audioUrl}?t=${Date.now()}`;
+        setEpisode((e) => (e ? { ...e, audioUrl: src } : e));
+        const c = episodeCache.get(id);
+        if (c) episodeCache.set(id, { ...c, audioUrl: src });
+      }
+    } catch (e: any) {
+      setNarrateError(e?.message ?? "Narration failed");
+    } finally {
+      setNarrating(false);
+    }
+  }
+
+  React.useEffect(() => {
+    const cr = reviewsCache.get(id);
+    if (cr) setReviews(cr);
+    getReviews(id).then((rs) => { reviewsCache.set(id, rs); setReviews(rs); });
+  }, [id]);
   React.useEffect(() => {
     if (episode) setRating({ avg: episode.avgRating ?? 0, count: episode.ratingCount ?? 0 });
   }, [episode]);
@@ -75,6 +151,17 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
       setRating({ avg: res.avgRating, count: res.ratingCount });
     } catch {
       if (episode) setRating({ avg: episode.avgRating ?? 0, count: episode.ratingCount ?? 0 });
+    }
+  }
+
+  async function handleReply(parentReviewId: string, text: string) {
+    try {
+      await postReview(id, text, parentReviewId);
+      const fresh = await getReviews(id);
+      reviewsCache.set(id, fresh);
+      setReviews(fresh);
+    } catch {
+      /* ignore */
     }
   }
 
@@ -95,12 +182,21 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   async function handleRewind() {
     if (!episode) return;
     setRewinding(true);
-    const ctx = await forkEpisode(episode.id, DRIVING_ID);
+    // seed the driving comment only for the seeded decision point (ep with reviews);
+    // any other episode forks cleanly and the author types the what-if in the chat.
+    const useDriving = episode.decisionPoint ? DRIVING_ID : undefined;
+    const ctx = await forkEpisode(episode.id, useDriving);
     fork.reset();
     fork.setContext(ctx);
-    fork.setWhatIf("");
-    fork.setDrivingReviewId(DRIVING_ID);
+    fork.setWhatIf(episode.decisionPoint ?? "");
+    fork.setDrivingReviewId(useDriving ?? null);
     router.push(`/episodes/${episode.id}/editor`);
+  }
+
+  function handleContinue() {
+    if (!episode) return;
+    fork.reset();
+    router.push(`/episodes/${episode.id}/editor?mode=continue`);
   }
 
   return (
@@ -133,19 +229,24 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
         <section className="flex min-h-0 flex-col">
           {/* toolbar */}
           <div className="flex items-center gap-2 border-b border-line px-4 py-2">
-            {episode?.isCanonical ? <Badge variant="canon">canon</Badge> : <Badge variant="fork">branch</Badge>}
-            {episode?.decisionPoint && (
+            {episode && !episode.isCanonical && <Badge variant="fork">branch</Badge>}
+            {episode && (
               <Button variant="fork" size="sm" onClick={handleRewind}>
                 <GitBranch className="h-3.5 w-3.5" /> Create branch
               </Button>
             )}
+            {isAuthor && !episode?.isCanonical && (
+              <Button variant="fork" size="sm" onClick={handleContinue}>
+                <StepForward className="h-3.5 w-3.5" /> Continue timeline
+              </Button>
+            )}
             {isAuthor && (
               <div className="ml-auto flex items-center gap-1.5">
-                <Button asChild variant="pill" size="sm">
-                  <Link href={`/episodes/${id}/analytics`}><BarChart3 className="h-3.5 w-3.5" /> Analytics</Link>
+                <Button variant="pill" size="sm" onClick={() => setAnalyticsOpen(true)}>
+                  <BarChart3 className="h-3.5 w-3.5" /> Analytics
                 </Button>
                 <Button asChild variant="pill" size="sm">
-                  <Link href={`/episodes/${id}/editor`}><Pencil className="h-3.5 w-3.5" /> Edit</Link>
+                  <Link href={`/episodes/${id}/editor?mode=edit`}><Pencil className="h-3.5 w-3.5" /> Edit</Link>
                 </Button>
               </div>
             )}
@@ -153,7 +254,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
 
           {/* script */}
           <div className="min-h-0 flex-1 overflow-y-auto scroll-thin px-6 py-5">
-            {loading || !episode ? (
+            {!episode ? (
               <div className="mx-auto max-w-[74ch] space-y-3">
                 <Skeleton className="h-7 w-2/3" />
                 {Array.from({ length: 10 }).map((_, i) => <Skeleton key={i} className="h-4 w-full" />)}
@@ -223,9 +324,12 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
               bare
               src={episode?.audioUrl}
               title={episode?.title}
+              onGenerate={isAuthor ? handleNarrate : undefined}
+              generating={narrating}
               onPrev={prev ? () => router.push(`/episodes/${prev.id}`) : undefined}
               onNext={next ? () => router.push(`/episodes/${next.id}`) : undefined}
             />
+            {narrateError && <div className="px-1 pt-1 text-[11px] text-danger">{narrateError}</div>}
           </div>
         </section>
 
@@ -235,13 +339,22 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
             Comments
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto scroll-thin p-3">
-            <CommentThread reviews={reviews} drivingId={DRIVING_ID} />
+            <CommentThread reviews={reviews} drivingId={DRIVING_ID} onReply={handleReply} />
           </div>
           <div className="border-t border-line p-3">
             <CommentComposer onPost={handlePost} />
           </div>
         </aside>
       </div>
+
+      {episode && (
+        <AnalyticsDrawer
+          episodeId={id}
+          title={episode.title}
+          open={analyticsOpen}
+          onClose={() => setAnalyticsOpen(false)}
+        />
+      )}
     </Shell>
   );
 }

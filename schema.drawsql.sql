@@ -44,6 +44,7 @@ CREATE TABLE "episodes"(
     "author_id" BIGINT NOT NULL,
     "co_author_id" BIGINT NULL,
     "forked_from_episode_id" BIGINT NULL,
+    "prev_episode_id" BIGINT NULL,
     "decision_point" TEXT NULL,
     "is_canonical" BOOLEAN NOT NULL,
     "verified_by_author" BOOLEAN NOT NULL,
@@ -109,10 +110,29 @@ CREATE TABLE "character_state"(
     "character_id" BIGINT NOT NULL,
     "episode_id" BIGINT NULL,
     "memory_snapshot" TEXT NOT NULL,
-    "char_summary" TEXT NOT NULL
+    "char_summary" TEXT NOT NULL,
+    "status" VARCHAR(20) NULL
 );
 ALTER TABLE
     "character_state" ADD PRIMARY KEY("id");
+CREATE TABLE "char_relationship_state"(
+    "id" BIGINT NOT NULL,
+    "char_id" BIGINT NOT NULL,
+    "relation_char_id" BIGINT NOT NULL,
+    "episode_id" BIGINT NOT NULL,
+    "relationship_summary" TEXT NULL
+);
+ALTER TABLE
+    "char_relationship_state" ADD PRIMARY KEY("id");
+CREATE TABLE "plot_thread_state"(
+    "id" BIGINT NOT NULL,
+    "thread_id" BIGINT NOT NULL,
+    "episode_id" BIGINT NOT NULL,
+    "status" VARCHAR(20) NOT NULL,
+    "note" TEXT NULL
+);
+ALTER TABLE
+    "plot_thread_state" ADD PRIMARY KEY("id");
 CREATE TABLE "char_relationship"(
     "id" BIGINT NOT NULL,
     "char_id" BIGINT NOT NULL,
@@ -168,6 +188,8 @@ ALTER TABLE
 ALTER TABLE
     "episodes" ADD CONSTRAINT "episodes_forked_from_episode_id_foreign" FOREIGN KEY("forked_from_episode_id") REFERENCES "episodes"("id");
 ALTER TABLE
+    "episodes" ADD CONSTRAINT "episodes_prev_episode_id_foreign" FOREIGN KEY("prev_episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
     "ratings" ADD CONSTRAINT "ratings_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
 ALTER TABLE
     "ratings" ADD CONSTRAINT "ratings_user_id_foreign" FOREIGN KEY("user_id") REFERENCES "users"("id");
@@ -188,6 +210,12 @@ ALTER TABLE
 ALTER TABLE
     "char_relationship" ADD CONSTRAINT "char_relationship_relation_char_id_foreign" FOREIGN KEY("relation_char_id") REFERENCES "characters"("id");
 ALTER TABLE
+    "char_relationship_state" ADD CONSTRAINT "char_relationship_state_char_id_foreign" FOREIGN KEY("char_id") REFERENCES "characters"("id");
+ALTER TABLE
+    "char_relationship_state" ADD CONSTRAINT "char_relationship_state_relation_char_id_foreign" FOREIGN KEY("relation_char_id") REFERENCES "characters"("id");
+ALTER TABLE
+    "char_relationship_state" ADD CONSTRAINT "char_relationship_state_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
     "world" ADD CONSTRAINT "world_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
 ALTER TABLE
     "style_guide" ADD CONSTRAINT "style_guide_series_id_foreign" FOREIGN KEY("series_id") REFERENCES "series"("id");
@@ -197,6 +225,10 @@ ALTER TABLE
     "plot_threads" ADD CONSTRAINT "plot_threads_opened_episode_id_foreign" FOREIGN KEY("opened_episode_id") REFERENCES "episodes"("id");
 ALTER TABLE
     "plot_threads" ADD CONSTRAINT "plot_threads_resolved_episode_id_foreign" FOREIGN KEY("resolved_episode_id") REFERENCES "episodes"("id");
+ALTER TABLE
+    "plot_thread_state" ADD CONSTRAINT "plot_thread_state_thread_id_foreign" FOREIGN KEY("thread_id") REFERENCES "plot_threads"("id");
+ALTER TABLE
+    "plot_thread_state" ADD CONSTRAINT "plot_thread_state_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
 ALTER TABLE
     "playback_events" ADD CONSTRAINT "playback_events_episode_id_foreign" FOREIGN KEY("episode_id") REFERENCES "episodes"("id");
 ALTER TABLE

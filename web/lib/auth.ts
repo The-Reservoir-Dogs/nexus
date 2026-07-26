@@ -7,9 +7,12 @@ export type CurrentUser = { id: string; username: string; email: string | null }
 
 export async function getIdentity(): Promise<{ email: string | null; username: string }> {
   const h = headers();
+  // Local dev / e2e: impersonate a seeded user via header or DEV_USER env
+  // (no Databricks OAuth headers present locally).
+  const devUser = h.get("x-nexus-dev-user") ?? process.env.DEV_USER ?? null;
   const email =
     h.get("x-forwarded-email") ?? h.get("x-forwarded-user") ?? null;
-  const username = (email ? email.split("@")[0] : null) ?? "dev_user";
+  const username = devUser ?? (email ? email.split("@")[0] : null) ?? "dev_user";
   return { email, username };
 }
 

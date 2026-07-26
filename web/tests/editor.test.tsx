@@ -6,6 +6,7 @@ import EditorPage from "@/app/episodes/[id]/editor/page";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
   usePathname: () => "/episodes/1003/editor",
 }));
 
@@ -45,7 +46,7 @@ describe("Co-author editor", () => {
       { timeout: 8000 }
     );
 
-    // chat shows an AI draft bubble
-    expect(screen.getByText("draft")).toBeInTheDocument();
+    // chat shows the AI co-author reply in the thread
+    expect(screen.getAllByText("AI Co-Author").length).toBeGreaterThan(0);
   }, 10000);
 });

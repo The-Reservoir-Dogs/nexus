@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
-import { query } from "@/lib/db";
-import { ok } from "@/lib/types";
+import { query, withTx } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
+import { ok, fail } from "@/lib/types";
 
 export async function GET() {
   const rows = await query(
@@ -17,4 +18,29 @@ export async function GET() {
      ORDER BY s.id`
   );
   return ok(rows);
+}
+
+// Create a new series (the current user becomes the author). Auto-creates Season 1
+// so the author can start writing canonical episodes immediately.
+export async function POST(req: Request) {
+  const b = await req.json().catch(() => null);
+  if (!b?.title) return fail("BAD_REQUEST", "title required");
+  const me = await getCurrentUser();
+  const created = await withTx(async (c) => {
+    const s = await c.query(
+      `INSERT INTO series (title, description, summary, genre, tag, author_id)
+       VALUES ($1,$2,$3,$4,$5,$6)
+       RETURNING id::text, title, description, summary, genre, tag,
+                 author_id::text AS "authorId"`,
+      [b.title, b.description ?? null, b.summary ?? null, b.genre ?? null, b.tag ?? null, me.id]
+    );
+    const series = s.rows[0];
+    await c.query(
+      `INSERT INTO seasons (series_id, title, summary, description, order_index)
+       VALUES ($1, 'Season 1', $2, $3, 1)`,
+      [series.id, b.summary ?? null, b.description ?? null]
+    );
+    return { ...series, authorName: me.username, episodeCount: 0, contributorCount: 0, avgRating: 0 };
+  });
+  return ok(created);
 }
