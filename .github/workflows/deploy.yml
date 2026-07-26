@@ -111,6 +111,10 @@ jobs:
 
       - name: Sync + deploy agent
         run: |
+          # The app ships only agent/, but narrate.py reuses the tts pipeline. Bundle the
+          # stdlib-only tts modules flat into agent/ so `import render` resolves in prod
+          # and /narrate works (no new pip deps; no filename collisions with agent/).
+          cp tts/render.py tts/gemini_tts.py tts/voices.py agent/
           retry() { for i in 1 2 3; do timeout 600 "$@" && return 0; echo "attempt $i failed, retrying in 15s…"; sleep 15; done; return 1; }
           retry databricks sync agent "${WORKSPACE_BASE}/agent" --full
           retry databricks apps deploy nexus-agent --source-code-path "${WORKSPACE_BASE}/agent"
