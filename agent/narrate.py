@@ -11,16 +11,27 @@ import os
 import sys
 import wave
 
-# Make the sibling tts/ package importable (it in turn adds ../agent for `tools`).
-_TTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "tts")
-if _TTS_DIR not in sys.path:
-    sys.path.insert(0, _TTS_DIR)
+import tools  # agent read-only DB tools
 
-import render  # noqa: E402  (tts/render.py: parse_script + tts/voices helpers)
 
-tts = render.tts
-voices = render.voices
-import tools  # noqa: E402  (agent read-only DB tools)
+def _load_render():
+    """Lazily import the tts/ pipeline (render + tts + voices).
+
+    Kept OUT of module import so the agent app can start even when the sibling tts/
+    package isn't shipped alongside agent/ (the Databricks App only deploys agent/).
+    Narration then fails with a clear error only if it is actually invoked.
+    """
+    tts_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "tts")
+    if tts_dir not in sys.path:
+        sys.path.insert(0, tts_dir)
+    try:
+        import render  # tts/render.py: parse_script + tts/voices helpers
+    except ModuleNotFoundError as e:
+        raise RuntimeError(
+            "narration pipeline unavailable: the tts/ package is not deployed with the "
+            "agent. Ship tts/ alongside agent/ to enable /narrate."
+        ) from e
+    return render, render.tts, render.voices
 
 
 def render_episode(episode_id: str, limit: int = 0) -> tuple[bytes, int]:
@@ -42,6 +53,7 @@ def render_episode(episode_id: str, limit: int = 0) -> tuple[bytes, int]:
     if lines and lines[0].strip().upper().startswith("TITLE:"):
         text = "\n".join(lines[1:]).strip()
 
+    render, tts, voices = _load_render()
     script = tts.scriptify(text, names)
     segs = render.parse_script(script)
     if limit:
