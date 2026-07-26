@@ -35,7 +35,6 @@ export function TimelineTree({ episodes, forksByEpisode }: TimelineTreeProps) {
               className="group flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-panel-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-canon"
             >
               <span className="font-medium text-text">{ep.title}</span>
-              {ep.isCanonical && <Badge variant="canon">Canon</Badge>}
               <span className="ml-auto inline-flex items-center gap-1 font-mono text-xs text-muted">
                 <Star className="h-3 w-3 fill-canon text-canon" /> {ep.avgRating}
               </span>

@@ -50,13 +50,15 @@ async function getPassword(): Promise<string> {
 
 async function getPool(): Promise<Pool> {
   if (pool) return pool;
+  // Local dev talks to a plain Postgres (no TLS); Lakebase requires SSL.
+  const sslDisabled = process.env.PGSSLMODE === "disable";
   pool = new Pool({
     host: process.env.PGHOST,
     port: Number(process.env.PGPORT ?? 5432),
     database: process.env.PGDATABASE ?? "databricks_postgres",
     user: process.env.PGUSER,
     password: await getPassword(),
-    ssl: { rejectUnauthorized: false }, // PGSSLMODE=require
+    ssl: sslDisabled ? false : { rejectUnauthorized: false },
     max: 5,
   });
   return pool;

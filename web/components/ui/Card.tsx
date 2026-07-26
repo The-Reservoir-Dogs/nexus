@@ -5,7 +5,7 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
   return (
     <div
       className={cn(
-        "border border-line bg-panel p-4 shadow-card transition-colors",
+        "rounded-md border border-line bg-panel p-3 transition-colors",
         className
       )}
       {...props}
@@ -14,9 +14,9 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn("font-display text-lg text-text", className)} {...props} />;
+  return <h3 className={cn("text-sm font-semibold text-text", className)} {...props} />;
 }
 
 export function CardMeta({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn("font-mono text-xs text-muted", className)} {...props} />;
+  return <p className={cn("text-xs text-muted", className)} {...props} />;
 }

@@ -12,9 +12,9 @@ describe("UI kit", () => {
     expect(btn.className).toContain("bg-fork");
   });
 
-  it("Button primary is the gold canon color by default", () => {
+  it("Button primary uses the green accent color by default", () => {
     render(<Button>Go</Button>);
-    expect(screen.getByRole("button", { name: "Go" }).className).toContain("bg-canon");
+    expect(screen.getByRole("button", { name: "Go" }).className).toContain("bg-accent");
   });
 
   it("Badge canon variant shows gold styling", () => {

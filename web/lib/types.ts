@@ -12,6 +12,7 @@ export type Series = {
   episodeCount?: number;
   contributorCount?: number;
   avgRating?: number;
+  firstEpisodeId?: string; // convenience: first canonical episode, to link straight to the reader
   createdAt?: string;
 };
 
@@ -40,6 +41,8 @@ export type Episode = {
   decisionPoint: string | null;
   isCanonical: boolean;
   verifiedByAuthor: boolean;
+  audioUrl?: string | null;
+  audioDurationMs?: number | null;
   avgRating?: number;
   ratingCount?: number;
   createdAt?: string;
@@ -67,6 +70,22 @@ export type Character = {
   goals: string | null;
   speechStyle: string | null;
   status: string;
+};
+
+// Audience retention (derived from playback_events + episode_retention view).
+export type RetentionPoint = {
+  bucket10s: number;
+  retention: number; // 0..1 fraction of starters still active
+  activeSessions: number;
+};
+export type Retention = {
+  episodeId: string;
+  durationMs: number | null;
+  plays: number;
+  avgListenMs: number;
+  completionRate: number; // 0..1
+  curve: RetentionPoint[];
+  dropoff: { bucket10s: number; from: number; to: number } | null;
 };
 
 export function ok<T>(data: T, meta?: Record<string, unknown>) {

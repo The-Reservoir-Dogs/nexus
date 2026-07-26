@@ -21,7 +21,7 @@ describe("Comments", () => {
   it("marks the driving comment and nests replies", () => {
     const nested = nestReviews(reviews.filter((r) => r.episodeId === "1003").map((r) => ({ ...r })));
     render(<CommentThread reviews={nested} drivingId="5001" />);
-    expect(screen.getByText("DRIVING COMMENT")).toBeInTheDocument();
+    expect(screen.getByText(/driving comment/i)).toBeInTheDocument();
     // reply text is rendered under its parent
     expect(screen.getByText(/explore the darker path/)).toBeInTheDocument();
   });

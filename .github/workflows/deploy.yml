@@ -9,7 +9,10 @@ on:
 #   DATABRICKS_HOST   e.g. https://dbc-60b5b94b-8e3e.cloud.databricks.com
 #   DATABRICKS_TOKEN  service-principal token (or PAT)
 # Optional repo variables:
-#   WORKSPACE_BASE    e.g. /Workspace/Users/<sp-or-user>/nexus  (default below)
+#   WORKSPACE_BASE     e.g. /Workspace/Users/<sp-or-user>/nexus  (default below)
+# Narration audio is persisted to the Unity Catalog Volume set in web/app.yaml below
+# (NARRATION_VOLUME). The app SP needs WRITE/READ VOLUME on it; edit the value there if
+# your catalog/schema differ. Unset -> app writes to its (ephemeral) local disk.
 
 env:
   DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
@@ -41,6 +44,8 @@ jobs:
               value: "databricks-claude-sonnet-5"
             - name: "AGENT_URL"
               value: "${{ vars.AGENT_URL }}"
+            - name: "NARRATION_VOLUME"
+              value: "/Volumes/nexus/media/narration"
           EOF
           # No secrets in app.yaml. The Gemini key is read at runtime from the
           # Databricks secret scope (nexus/gemini_api_key) by the app's service principal.

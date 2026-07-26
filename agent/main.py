@@ -6,11 +6,12 @@ POST /analyze streams retention insight for the author.
 """
 import json
 
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
 
 import agent
+import narrate as narration
 
 app = FastAPI(title="nexus-agent")
 
@@ -24,6 +25,22 @@ class GenerateRequest(BaseModel):
 
 class AnalyzeRequest(BaseModel):
     episodeId: str
+
+
+class ChatMessage(BaseModel):
+    role: str
+    text: str
+
+
+class ChatRequest(BaseModel):
+    episodeId: str
+    message: str
+    history: list[ChatMessage] | None = None
+
+
+class NarrateRequest(BaseModel):
+    episodeId: str
+    limit: int | None = 0
 
 
 @app.get("/health")
@@ -44,8 +61,9 @@ def _strip_title(full: str) -> tuple[str, str]:
     return "Untitled", full.strip()
 
 
-def _pump(events):
-    """Translate agent event dicts -> SSE lines. Accumulates prose for the done event."""
+def _pump(events, chat: bool = False):
+    """Translate agent event dicts -> SSE lines. Accumulates prose for the done event.
+    chat=True: the done event carries the plain answer text, not an episode draft."""
     buf: list[str] = []
     try:
         for ev in events:
@@ -60,9 +78,12 @@ def _pump(events):
             elif etype == "tool_result":
                 yield _sse("tool_result", {"name": ev["name"], "summary": ev.get("summary", "")})
             elif etype == "done":
-                title, content = _strip_title("".join(buf))
-                title = ev.get("title") or title
-                yield _sse("done", {"draft": {"title": title, "content": content, "summary": ""}})
+                if chat:
+                    yield _sse("done", {"message": "".join(buf).strip()})
+                else:
+                    title, content = _strip_title("".join(buf))
+                    title = ev.get("title") or title
+                    yield _sse("done", {"draft": {"title": title, "content": content, "summary": ""}})
             elif etype == "error":
                 yield _sse("error", {"message": ev.get("message", "error")})
     except Exception as e:  # surface any error into the stream
@@ -80,3 +101,27 @@ def generate(req: GenerateRequest):
 @app.post("/analyze")
 def analyze(req: AnalyzeRequest):
     return StreamingResponse(_pump(agent.analyze_stream(req.episodeId)), media_type="text/event-stream")
+
+
+@app.post("/chat")
+def chat(req: ChatRequest):
+    history = [h.model_dump() for h in (req.history or [])]
+    events = agent.chat_stream(req.episodeId, req.message, history)
+    return StreamingResponse(_pump(events, chat=True), media_type="text/event-stream")
+
+
+@app.post("/narrate")
+def narrate(req: NarrateRequest):
+    """Render episode narration to a .wav and return the bytes. The web backend owns
+    persistence (UC Volume / local) and the episodes.audio_url write."""
+    try:
+        wav, duration_ms = narration.render_episode(req.episodeId, req.limit or 0)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"narration failed: {e}")
+    return Response(
+        content=wav,
+        media_type="audio/wav",
+        headers={"X-Duration-Ms": str(duration_ms)},
+    )

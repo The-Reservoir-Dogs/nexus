@@ -5,3 +5,11 @@ __pycache__/
 # TTS render output (not committed)
 output/
 tts/__pycache__/
+
+# playwright
+/web/test-results/
+/web/playwright-report/
+/web/.playwright/
+
+# generated narration audio (persisted to UC Volume / local disk at runtime)
+/web/public/narration/

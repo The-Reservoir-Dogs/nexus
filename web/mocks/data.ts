@@ -348,6 +348,33 @@ export const characters: Character[] = [
   },
 ];
 
+// Mock retention (10s-bucket curve, % of starters still listening). Shape mirrors
+// GET /api/episodes/:id/retention. Keyed by episode id.
+export const retention: Record<string, {
+  episodeId: string;
+  durationMs: number;
+  plays: number;
+  avgListenMs: number;
+  completionRate: number;
+  curve: { bucket10s: number; retention: number; activeSessions: number }[];
+  dropoff: { bucket10s: number; from: number; to: number } | null;
+}> = {
+  "1003": (() => {
+    const pct = [1.0, 0.98, 0.95, 0.91, 0.88, 0.79, 0.74, 0.71, 0.68, 0.61, 0.44, 0.41, 0.39, 0.37, 0.35, 0.33];
+    const plays = 1284;
+    const curve = pct.map((r, i) => ({ bucket10s: i, retention: r, activeSessions: Math.round(r * plays) }));
+    return {
+      episodeId: "1003",
+      durationMs: 174000,
+      plays,
+      avgListenMs: 161000,
+      completionRate: 0.33,
+      curve,
+      dropoff: { bucket10s: 10, from: 0.61, to: 0.44 },
+    };
+  })(),
+};
+
 // The hard-coded alternate episode the mock generate() streams.
 export const generatedDraft = {
   title: "The Fallen Blade",
