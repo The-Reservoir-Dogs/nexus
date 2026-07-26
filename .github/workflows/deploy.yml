@@ -49,7 +49,7 @@ jobs:
             - name: "DATABRICKS_SERVING_ENDPOINT"
               value: "databricks-claude-sonnet-5"
             - name: "AGENT_URL"
-              value: "${{ vars.AGENT_URL }}"
+              value: "${{ vars.AGENT_URL || 'https://nexus-agent-7474644774817152.aws.databricksapps.com' }}"
             - name: "NARRATION_VOLUME"
               value: "/Volumes/workspace/media/narration"
           EOF
