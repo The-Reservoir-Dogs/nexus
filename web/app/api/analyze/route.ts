@@ -1,4 +1,6 @@
 export const dynamic = "force-dynamic";
+// SSE stream: allow up to 60s (Vercel default is 10s, which would truncate it).
+export const maxDuration = 60;
 import { query } from "@/lib/db";
 
 // Streamed LLM analytics insight for an episode. Proxies the Python agent's
