@@ -1,9 +1,14 @@
 """Read-only Lakebase (Postgres) access for the agent's context tools.
 
-Local dev: set PGPASSWORD in the environment (start.sh does this).
-Deployed on Databricks Apps with a bound Database resource: PG* are injected;
-mint a short-lived credential token via the Databricks SDK.
+Connection params are resolved in this order:
+  1. Environment (local dev / start.sh sets PGHOST/PGUSER/PGPASSWORD/...).
+  2. The Databricks secret scope (deployed: the agent app has no bound DB
+     resource and no PG* in app.yaml, so we read pg_host/pg_port/pg_user/
+     pg_db/pg_password from the scope, mirroring how the Gemini key is loaded).
+  3. As a last resort for the password, mint a short-lived Lakebase credential
+     token via the Databricks SDK.
 """
+import base64
 import os
 import time
 from contextlib import contextmanager
@@ -11,11 +16,35 @@ from contextlib import contextmanager
 import psycopg
 
 _cached = {"pw": None, "exp": 0.0}
+_secret_cache: dict[str, str] = {}
 _INSTANCE = os.environ.get("LAKEBASE_INSTANCE", "nexus-db")
+_SECRET_SCOPE = os.environ.get("SECRET_SCOPE", "nexus")
+
+
+def _secret(key: str) -> str | None:
+    """Fetch + base64-decode a secret from the scope; cached. Returns None if the
+    scope/key is unavailable (e.g. local dev without workspace auth)."""
+    if key in _secret_cache:
+        return _secret_cache[key]
+    try:
+        from databricks.sdk import WorkspaceClient
+
+        raw = WorkspaceClient().secrets.get_secret(scope=_SECRET_SCOPE, key=key).value
+        val = base64.b64decode(raw).decode()
+        _secret_cache[key] = val
+        return val
+    except Exception:  # noqa: BLE001 — no scope/auth locally; fall back to env
+        return None
+
+
+def _param(env_key: str, secret_key: str, default: str | None = None) -> str | None:
+    """Prefer the environment, then the secret scope, then a default."""
+    return os.environ.get(env_key) or _secret(secret_key) or default
 
 
 def _password() -> str:
-    pw = os.environ.get("PGPASSWORD")
+    # 1) explicit env (local dev), 2) secret scope, 3) minted Lakebase credential.
+    pw = os.environ.get("PGPASSWORD") or _secret("pg_password")
     if pw:
         return pw
     now = time.time()
@@ -31,13 +60,16 @@ def _password() -> str:
 
 
 def _conninfo() -> str:
+    host = _param("PGHOST", "pg_host")
+    if not host:
+        raise RuntimeError("No PGHOST in env or secret scope; cannot reach Lakebase.")
     return (
-        f"host={os.environ['PGHOST']} "
-        f"port={os.environ.get('PGPORT','5432')} "
-        f"dbname={os.environ.get('PGDATABASE','databricks_postgres')} "
-        f"user={os.environ['PGUSER']} "
+        f"host={host} "
+        f"port={_param('PGPORT', 'pg_port', '5432')} "
+        f"dbname={_param('PGDATABASE', 'pg_db', 'databricks_postgres')} "
+        f"user={_param('PGUSER', 'pg_user')} "
         f"password={_password()} "
-        f"sslmode={os.environ.get('PGSSLMODE','require')}"
+        f"sslmode={os.environ.get('PGSSLMODE', 'require')}"
     )
 
 
