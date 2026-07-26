@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.0",
+  "generated_for": "Pulse — canon memory + AI co-author, Gemini TTS pipeline",
+
+  "source": {
+    "title": "Sherlock Holmes (1954)",
+    "producer": "Guild Films / Sheldon Reynolds",
+    "starring": "Ronald Howard as Holmes, Howard Marion-Crawford as Watson",
+    "rights": "Public Domain Mark 1.0",
+    "archive_url": "https://archive.org/details/SherlockHolmes1954",
+    "episodes_used": [
+      { "source_episode": 1, "title": "The Case of the Cunningham Heritage", "runtime_sec": 1607 },
+      { "source_episode": 2, "title": "The Case of Lady Beryl", "runtime_sec": 1479 }
+    ],
+    "total_source_sec": 3086,
+    "transcript_quality": "IMPORTANT: the source is a YouTube auto-generated transcript with heavy speech-recognition errors. Character names were corrupted throughout (Lord Beryl appears as 'barrel', 'battle', 'metal', 'bell'; Herr Oberstein as 'her over Stein'; 221B as 'two to one'). All dialogue here is a RESTORATION of intended lines, not a verbatim transcript. Do not present it as the original script."
+  },
+
+  "series": {
+    "series_id": 20,
+    "title": "Sherlock Holmes: The Baker Street Casebook",
+    "logline": "A wounded army doctor answers an advertisement for lodgings and walks into the most amazing adventure of his life.",
+    "summary": "Doctor John Watson returns wounded from Afghanistan, meets an eccentric chemist named Sherlock Holmes, and takes rooms with him at two two one B, Baker Street. Across two cases, a poisoned inheritance and a diplomat's murdered visitor, Watson learns that the difference between success and disaster is always the little things.",
+    "genre": "Detective mystery",
+    "tags": ["detective", "period", "mystery", "victorian", "procedural"],
+    "season": 1,
+    "episode_count": 12,
+    "target_episode_duration_sec": [240, 300],
+    "narrator": "Doctor John Watson, first person, retrospective"
+  },
+
+  "tts": {
+    "engine": "gemini-2.5-flash-preview-tts",
+    "critical_constraints": [
+      "Gemini multi-speaker config supports a MAXIMUM OF 2 speakers per call. Scenes here often have 3 or more. Synthesise line by line with single-speaker calls and stitch with pydub.",
+      "The lines[] array is the single source of truth. Never hand raw JSON to the TTS model.",
+      "Every text value is already TTS-safe: no asterisks, hashes, underscores, brackets, em dashes, ellipses, or markdown of any kind.",
+      "Abbreviations are expanded in full: Doctor not Dr, Mister not Mr, Missus not Mrs, Inspector not Insp.",
+      "Numbers are spelled out as they should be spoken: two two one B, thirty eight calibre, three hundred pounds.",
+      "Do not send stage directions to the TTS model. Use the style_prompt field instead."
+    ],
+    "global_style_prompt": "Read as a nineteen fifties radio detective drama. Measured pace, clear diction, understated British delivery. Let pauses carry tension. Never rush a deduction.",
+    "voice_map": {
+      "NARRATOR": { "gemini_voice": "Charon", "note": "Watson looking back. Warm, unhurried, slightly wry." },
+      "WATSON": { "gemini_voice": "Charon", "note": "Same voice as narrator. Watson is the narrator." },
+      "HOLMES": { "gemini_voice": "Orus", "note": "Crisp, quick, faintly amused. Speeds up on deductions." },
+      "LESTRADE": { "gemini_voice": "Fenrir", "note": "Blunt, official, defensive when challenged." },
+      "STAMFORD": { "gemini_voice": "Puck", "note": "Cheerful, gossipy." },
+      "RALPH": { "gemini_voice": "Fenrir", "note": "Smooth, then cornered." },
+      "MOTHER_CUNNINGHAM": { "gemini_voice": "Leda", "note": "Grief turned to iron." },
+      "MRS_CUNNINGHAM": { "gemini_voice": "Aoede", "note": "Young, frightened, truthful." },
+      "LORD_BERYL": { "gemini_voice": "Orus", "note": "Clipped, senior, used to being obeyed." },
+      "LADY_BERYL": { "gemini_voice": "Kore", "note": "Composed. Protecting someone." },
+      "ROSS": { "gemini_voice": "Puck", "note": "Helpful, precise, one shade too helpful." },
+      "WILKINS": { "gemini_voice": "Fenrir", "note": "Plain, deferential." },
+      "SERVANT": { "gemini_voice": "Puck", "note": "Brief functional lines." }
+    },
+    "voice_names_warning": "Gemini prebuilt voice names change between model versions. Verify against the current API before batch rendering. Fall back to edge-tts if a name is rejected."
+  },
+
+  "style_guide": {
+    "pov": "first-person retrospective, Doctor Watson",
+    "tense": "past",
+    "tone": "Dry, warm, faintly astonished. The comedy comes from Watson being one step behind.",
+    "pacing": "Deductions land fast. Everything around them is unhurried.",
+    "content_rating": "PG",
+    "narrative_voice": "Plain declarative sentences. Watson never oversells Holmes, which is what makes Holmes land.",
+    "dialogue_rules": [
+      "Holmes answers a question with a better question, or with the answer three steps ahead.",
+      "Watson asks what the listener is thinking.",
+      "Lestrade is never stupid, only certain.",
+      "Nobody explains a deduction until Holmes chooses to."
+    ],
+    "forbidden": [
+      "Modern idiom or slang.",
+      "Holmes being cruel to Watson. He is impatient, never contemptuous.",
+      "Onscreen gore. Violence is reported, not described.",
+      "Any deduction the listener could not have made from something already stated."
+    ]
+  },
+
+  "characters": [
+    {
+      "character_id": 800,
+      "name": "Sherlock Holmes",
+      "tts_speaker": "HOLMES",
+      "role": "protagonist",
+      "status": "alive",
+      "description": "A consulting chemist and the first man to devise a reliable test for bloodstains.",
+      "personality": "Brilliant, restless, indifferent to credit and to any fact he judges useless.",
+      "backstory": "Working on forensic chemistry at Bart's when Watson meets him. Beats corpses with a stick to study post mortem bruising.",
+      "goals": "Establish criminal investigation as a science.",
+      "flaw": "He discards knowledge he deems irrelevant, including that the Earth circles the Sun.",
+      "speech_style": "Rapid, precise, faintly amused. Asks a question he already knows the answer to.",
+      "knows": ["Chemistry and poisons exhaustively", "Sensational literature and every major crime of the last hundred years", "Ballistics"],
+      "does_not_know": ["Astronomy", "Philosophy", "Politics", "Literature"],
+      "signature_line": "It is the little things that make the difference between success and disaster."
+    },
+    {
+      "character_id": 801,
+      "name": "Doctor John Watson",
+      "tts_speaker": "WATSON",
+      "role": "narrator, deuteragonist",
+      "status": "alive",
+      "description": "An army doctor invalided home from Afghanistan.",
+      "personality": "Decent, observant by training, repeatedly astonished.",
+      "backstory": "Wounded in the shoulder in Afghanistan, contracted a tropical fever, discharged with instructions to rest.",
+      "goals": "Find comfortable quarters at a reasonable price. Then, keep up.",
+      "flaw": "He sees everything Holmes sees and concludes nothing from it.",
+      "speech_style": "Plain, courteous, asks the obvious question on the listener's behalf.",
+      "knows": ["Medicine", "Military service", "That Holmes is usually right"],
+      "does_not_know": ["How Holmes does it, ever"],
+      "narrative_function": "The listener's proxy. Every explanation in the series is delivered to him."
+    },
+    {
+      "character_id": 802,
+      "name": "Inspector Lestrade",
+      "tts_speaker": "LESTRADE",
+      "role": "recurring foil",
+      "status": "alive",
+      "description": "Scotland Yard. Competent, conventional, and always one certainty ahead of the evidence.",
+      "personality": "Proud, decent, defensive. Takes the credit and means no harm by it.",
+      "goals": "Close the case cleanly and quickly.",
+      "flaw": "He decides what happened and then collects the facts that agree.",
+      "speech_style": "Official, blunt. Repeats his position louder when challenged.",
+      "spin_off_note": "SECONDARY SPIN-OFF CANDIDATE. Recurring across both cases, consistently wrong in an interesting way, and the only character with an ongoing relationship to Holmes that changes."
+    },
+    { "character_id": 803, "name": "Stamford", "tts_speaker": "STAMFORD", "role": "functional", "status": "alive", "description": "An old acquaintance of Watson's who makes the introduction.", "speech_style": "Cheerful, gossipy, delighted to shock." },
+    { "character_id": 804, "name": "Peter Cunningham", "tts_speaker": null, "role": "victim", "status": "dead", "description": "A wealthy man, secretly married a week before his death. Stabbed in his own home.", "note": "Dead before the case opens. Appears only in testimony." },
+    { "character_id": 805, "name": "Missus Cunningham", "tts_speaker": "MRS_CUNNINGHAM", "role": "suspect", "status": "alive", "description": "Peter's secret wife. Served nine months in Holloway five years ago for theft.", "personality": "Frightened, honest, badly placed.", "note": "The transcript never gives her a first name. None has been invented." },
+    { "character_id": 806, "name": "Ralph Cunningham", "tts_speaker": "RALPH", "role": "antagonist", "status": "alive", "description": "Peter's brother. Blackmailer and murderer.", "personality": "Plausible, aggrieved, entirely without conscience.", "motive": "Peter was buying up his promissory notes and had given him one week to leave the country." },
+    { "character_id": 807, "name": "Missus Cunningham senior", "tts_speaker": "MOTHER_CUNNINGHAM", "role": "supporting", "status": "alive", "description": "Peter's mother. Certain the widow murdered her son.", "personality": "Grief converted into certainty." },
+    { "character_id": 808, "name": "Lord Beryl", "tts_speaker": "LORD_BERYL", "role": "supporting", "status": "alive", "description": "Senior official of the Foreign Office.", "personality": "Correct, protective of his wife, unaware of his own household." },
+    { "character_id": 809, "name": "Lady Beryl", "tts_speaker": "LADY_BERYL", "role": "supporting", "status": "alive", "description": "Austrian born, raised in America, five years in England.", "personality": "Composed under arrest. Lies well and for good reasons.", "secret": "Confessed to a murder she did not commit, believing she was shielding her husband." },
+    { "character_id": 810, "name": "Herr Oberstein", "tts_speaker": null, "role": "victim", "status": "dead", "description": "Austrian freelance agent who bought and sold anything he could get his hands on.", "note": "Killed by a blow to the head, not by the revolver found beside him." },
+    { "character_id": 811, "name": "Mister Ross", "tts_speaker": "ROSS", "role": "antagonist", "status": "alive", "description": "Lord Beryl's private secretary.", "personality": "Impeccably helpful. Volunteers one correction too many.", "motive": "Selling Foreign Office secrets to Oberstein, then killing him to keep the money and the papers." },
+    { "character_id": 812, "name": "Sergeant Wilkins", "tts_speaker": "WILKINS", "role": "functional", "status": "alive", "description": "A retired sergeant of Marines, now a police messenger." }
+  ],
+
+  "relationships": [
+    { "from": 800, "to": 801, "relation": "flatmates and colleagues", "sentiment": "growing regard", "evolves": "Ep 1 strangers, Ep 3 flatmates, Ep 6 partners, Ep 12 settled friendship" },
+    { "from": 800, "to": 802, "relation": "consultant and inspector", "sentiment": "mutual exasperation, grudging need", "evolves": "Ep 5 open conflict, Ep 6 Lestrade takes the credit, Ep 7 Lestrade defends Holmes to the press, Ep 12 asks for him by name" },
+    { "from": 801, "to": 802, "relation": "acquaintances", "sentiment": "cordial", "note": "Lestrade likes Watson because Watson agrees with him." },
+    { "from": 801, "to": 803, "relation": "old acquaintances", "sentiment": "friendly", "note": "Stamford makes the introduction and vanishes from the series." },
+    { "from": 805, "to": 804, "relation": "secret wife", "sentiment": "love", "note": "Married a week, at Brighton. Concealed at Peter's request." },
+    { "from": 806, "to": 804, "relation": "brothers", "sentiment": "blackmail and hatred" },
+    { "from": 807, "to": 805, "relation": "mother in law and accused", "sentiment": "certainty and contempt" },
+    { "from": 808, "to": 809, "relation": "husband and wife", "sentiment": "devotion", "note": "Each believes they are protecting the other." },
+    { "from": 811, "to": 810, "relation": "seller and buyer", "sentiment": "transactional, then lethal" },
+    { "from": 811, "to": 808, "relation": "secretary and employer", "sentiment": "betrayal concealed by usefulness" }
+  ],
+
+  "objects": [
+    { "object_id": 950, "name": "The bloodstain test", "type": "discovery", "first_seen_episode": 2, "significance": "Holmes's haemoglobin precipitation test. The reason Watson takes him seriously." },
+    { "object_id": 951, "name": "Two two one B, Baker Street", "type": "location", "first_seen_episode": 2, "significance": "The rooms. Taken in episode two, occupied from episode three." },
+    { "object_id": 952, "name": "The violin", "type": "personal", "first_seen_episode": 2, "significance": "Holmes asks whether Watson minds it before he asks anything else." },
+    { "object_id": 953, "name": "The anchor tattoo", "type": "clue", "first_seen_episode": 3, "significance": "On the back of the messenger's hand. How Holmes knows he is a retired Marine." },
+    { "object_id": 954, "name": "The knife", "type": "weapon", "first_seen_episode": 4, "significance": "In Peter Cunningham's chest. The widow pulled it out, which is what damned her." },
+    { "object_id": 955, "name": "The chequebook", "type": "clue", "first_seen_episode": 5, "significance": "A thousand pounds drawn every week for six weeks. Peter buying up Ralph's promissory notes." },
+    { "object_id": 956, "name": "The marks on the carpet", "type": "clue", "first_seen_episode": 5, "significance": "Signs of a struggle. Peter was over six feet. He would not have lost to the woman accused." },
+    { "object_id": 957, "name": "The sunburn and the ring mark", "type": "clue", "first_seen_episode": 5, "significance": "Fading sunburn, a new ring indentation, on both their hands. A weekend at Brighton. They were married." },
+    { "object_id": 958, "name": "The pygmy poison extract", "type": "experiment", "first_seen_episode": 8, "significance": "Holmes's running experiment. He leaves the gas on under it. The last line of the series." },
+    { "object_id": 959, "name": "Oberstein's revolver", "type": "red herring", "first_seen_episode": 9, "significance": "A Schmidt thirty eight found beside the body. Never fired. Lady Beryl saw it and assumed." },
+    { "object_id": 960, "name": "The broken eyeglasses", "type": "clue", "first_seen_episode": 11, "significance": "Oberstein put them on to read the papers he was buying. They broke when he fell. Ross gathered up the pieces and threw the frames into the garden." }
+  ],
+
+  "locations": [
+    { "name": "Two two one B, Baker Street", "type": "lodgings", "description": "Sitting room, chemical apparatus on the table, retort and burner permanently in use." },
+    { "name": "Saint Bartholomew's laboratory", "type": "laboratory", "description": "Where Watson first meets Holmes, mid experiment." },
+    { "name": "The Cunningham house", "type": "crime scene", "description": "Front room, patterned carpet, a cabinet of papers." },
+    { "name": "Scotland Yard", "type": "police", "description": "Lestrade's office. Newspapers on the desk." },
+    { "name": "Lord Beryl's study", "type": "crime scene", "description": "Foreign Office papers, a safe, a window onto the garden." }
+  ],
+
+  "world_rules": [
+    { "rule": "Deduction from physical trace", "description": "Every conclusion must rest on something physically present and already mentioned to the listener." },
+    { "rule": "The police are certain, not stupid", "description": "Lestrade's errors always come from deciding first and looking second." },
+    { "rule": "Watson narrates", "description": "The listener never learns anything before Watson does, except what they can see for themselves." },
+    { "rule": "No supernatural element", "description": "Ever." }
+  ],
+
+  "plot_threads": [
+    { "thread_id": 500, "summary": "Watson and Holmes become flatmates and colleagues.", "status": "resolved", "importance": "primary", "opened_episode": 1, "resolved_episode": 3, "audience_investment": "high" },
+    { "thread_id": 501, "summary": "The murder of Peter Cunningham and who inherits.", "status": "resolved", "importance": "primary", "opened_episode": 4, "resolved_episode": 6, "audience_investment": "high" },
+    { "thread_id": 502, "summary": "Holmes versus Lestrade, over who decides what the evidence means.", "status": "open", "importance": "primary", "opened_episode": 4, "audience_investment": "high", "note": "The spine of the whole series. Never resolved." },
+    { "thread_id": 503, "summary": "Holmes's forensic research and his campaign for scientific investigation.", "status": "open", "importance": "secondary", "opened_episode": 2, "audience_investment": "medium" },
+    { "thread_id": 504, "summary": "The murder of Herr Oberstein and who sold the Foreign Office secrets.", "status": "resolved", "importance": "primary", "opened_episode": 7, "resolved_episode": 12, "audience_investment": "high" },
+    { "thread_id": 505, "summary": "Why Lady Beryl confessed to a murder she did not commit.", "status": "resolved", "importance": "primary", "opened_episode": 9, "resolved_episode": 12, "audience_investment": "high" }
+  ],
+
+  "predicted_weak_points": {
+    "note": "NOT planted. These are the structural sags inherent to detective fiction, predicted before measurement. If the engagement data flags these, the detector is working on a story we did not author.",
+    "primary": { "episode": 3, "reason": "Watson's classification of Holmes's knowledge is a list, not a scene. No stakes, no antagonist, pure characterisation." },
+    "secondary": { "episode": 10, "reason": "The ballistics explanation is a lecture. Holmes is correct at length while nothing happens." },
+    "tertiary": { "episode": 8, "reason": "The tea and chemistry scene delays the case with no new information." },
+    "recovery_beats": [
+      { "episode": 6, "reason": "The break in, the confession and the gunshot." },
+      { "episode": 12, "reason": "Ross exposed in the room, then the gas left on under the experiment." }
+    ]
+  }
+}
