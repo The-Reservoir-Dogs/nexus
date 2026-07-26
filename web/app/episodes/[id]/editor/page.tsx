@@ -72,16 +72,25 @@ export default function EditorPage({ params }: { params: { id: string } }) {
       fork.setDrivingReviewId(null);
       return true;
     }
-    if (!fork.context) {
-      const ctx = await forkEpisode(id, isContinue ? undefined : "5001");
+    // Create-branch / continue mode: load the current episode as source context
+    // and seed the editor with its real manuscript so contributors edit from
+    // the actual story, not a blank page. Only seed when empty to avoid
+    // clobbering user edits if async work resolves late.
+    let ctx = fork.context;
+    const needsFreshContext = !ctx || ctx.sourceEpisode.id !== id;
+    if (needsFreshContext) {
+      ctx = await forkEpisode(id, isContinue ? undefined : "5001");
       fork.setContext(ctx);
-      if (isContinue) {
-        fork.setDrivingReviewId(null);
-        fork.setWhatIf("");
-      } else {
-        fork.setDrivingReviewId("5001");
-        fork.setWhatIf("What if she killed him instead?");
-      }
+    }
+    if (!ctx) throw new Error("Could not load episode context");
+    setTitle((prev) => prev || `${ctx.sourceEpisode.title} — Branch`);
+    setManuscript((prev) => prev || (ctx.sourceEpisode.content ?? ""));
+    if (isContinue) {
+      fork.setDrivingReviewId(null);
+      fork.setWhatIf("");
+    } else if (needsFreshContext) {
+      fork.setDrivingReviewId("5001");
+      fork.setWhatIf("What if she killed him instead?");
     }
     return true;
   }, [id]);
@@ -288,9 +297,9 @@ export default function EditorPage({ params }: { params: { id: string } }) {
         forkedFromEpisodeId: isContinue ? (src.forkedFromEpisodeId ?? src.id) : src.id,
         prevEpisodeId: isContinue ? src.id : undefined,
         decisionPoint: isContinue ? "" : fork.whatIf,
-        title: fork.draft?.title ?? "Untitled Alternate",
+        title: fork.draft?.title ?? (title.trim() || `${src.title} — Branch`),
         content: manuscript,
-        summary: fork.draft?.summary ?? "",
+        summary: fork.draft?.summary ?? src.summary ?? "",
       });
       router.push(`/episodes/${created.id}`);
     } catch (e: any) {

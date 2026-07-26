@@ -4,8 +4,11 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { ForkProvider } from "@/components/ForkProvider";
 import EditorPage from "@/app/episodes/[id]/editor/page";
 
+const push = vi.fn();
+const replace = vi.fn();
+
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useRouter: () => ({ push, replace }),
   useSearchParams: () => new URLSearchParams(),
   usePathname: () => "/episodes/1003/editor",
 }));
@@ -29,24 +32,28 @@ function setup() {
 }
 
 describe("Co-author editor", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    localStorage.clear();
+    push.mockClear();
+    replace.mockClear();
+  });
 
-  it("does not auto-generate on entry; streams the draft only after /rewrite", async () => {
+  it("loads the source episode content into a new branch editor without auto-generating", async () => {
     setup();
-    // HITL controls present immediately
     expect(await screen.findByRole("button", { name: /approve/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /discard/i })).toBeInTheDocument();
 
-    // no auto-generate: manuscript stays empty on entry
     const ta = screen.getByTestId("manuscript") as HTMLTextAreaElement;
-    expect(ta.value).toBe("");
+    await waitFor(() => expect(ta.value).toContain("The blade hovered at Lady Corvin's throat"));
+    expect(ta.value).toContain("Mercy changed everything.");
 
-    // user explicitly triggers generation with /rewrite
+    // no auto-generate: generated alternate copy appears only after explicit /rewrite
+    expect(ta.value).not.toContain("The blade fell");
+
     const input = screen.getByLabelText("Instruct the AI");
     fireEvent.change(input, { target: { value: "/rewrite" } });
     fireEvent.submit(input.closest("form")!);
 
-    // wait for streaming to fill the manuscript with the alternate text
     await waitFor(
       () => {
         expect((screen.getByTestId("manuscript") as HTMLTextAreaElement).value).toContain("The blade fell");
@@ -54,7 +61,16 @@ describe("Co-author editor", () => {
       { timeout: 8000 }
     );
 
-    // chat shows the AI co-author reply in the thread
     expect(screen.getAllByText("AI Co-Author").length).toBeGreaterThan(0);
   }, 10000);
+
+  it("publishes the current manuscript as a stored branch", async () => {
+    setup();
+    const ta = (await screen.findByTestId("manuscript")) as HTMLTextAreaElement;
+    await waitFor(() => expect(ta.value).toContain("The blade hovered at Lady Corvin's throat"));
+
+    fireEvent.click(screen.getByRole("button", { name: /approve/i }));
+
+    await waitFor(() => expect(push).toHaveBeenCalledWith(expect.stringMatching(/^\/episodes\/new-/)));
+  });
 });
