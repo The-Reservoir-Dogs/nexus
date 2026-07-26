@@ -1,4 +1,5 @@
 import { Pool, PoolClient } from "pg";
+import { randomUUID } from "node:crypto";
 
 // ---------------------------------------------------------------------------
 // Lakebase (Postgres) connection.
@@ -27,7 +28,8 @@ async function fetchCredentialToken(): Promise<string> {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ instance_names: [INSTANCE_NAME] }),
+    // request_id (UUID) is REQUIRED by GenerateDatabaseCredential; omitting it 400s.
+    body: JSON.stringify({ request_id: randomUUID(), instance_names: [INSTANCE_NAME] }),
   });
   if (!res.ok) {
     throw new Error(`Lakebase credential request failed: ${res.status} ${await res.text()}`);
