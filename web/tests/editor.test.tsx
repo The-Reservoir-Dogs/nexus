@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ForkProvider } from "@/components/ForkProvider";
 import EditorPage from "@/app/episodes/[id]/editor/page";
@@ -31,17 +31,25 @@ function setup() {
 describe("Co-author editor", () => {
   beforeEach(() => localStorage.clear());
 
-  it("streams the generated draft into the manuscript and chat, shows HITL buttons", async () => {
+  it("does not auto-generate on entry; streams the draft only after /rewrite", async () => {
     setup();
     // HITL controls present immediately
     expect(await screen.findByRole("button", { name: /approve/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /discard/i })).toBeInTheDocument();
 
+    // no auto-generate: manuscript stays empty on entry
+    const ta = screen.getByTestId("manuscript") as HTMLTextAreaElement;
+    expect(ta.value).toBe("");
+
+    // user explicitly triggers generation with /rewrite
+    const input = screen.getByLabelText("Instruct the AI");
+    fireEvent.change(input, { target: { value: "/rewrite" } });
+    fireEvent.submit(input.closest("form")!);
+
     // wait for streaming to fill the manuscript with the alternate text
     await waitFor(
       () => {
-        const ta = screen.getByTestId("manuscript") as HTMLTextAreaElement;
-        expect(ta.value).toContain("The blade fell");
+        expect((screen.getByTestId("manuscript") as HTMLTextAreaElement).value).toContain("The blade fell");
       },
       { timeout: 8000 }
     );
