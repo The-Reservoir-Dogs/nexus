@@ -59,7 +59,10 @@ async function getPool(): Promise<Pool> {
     user: process.env.PGUSER,
     password: await getPassword(),
     ssl: sslDisabled ? false : { rejectUnauthorized: false },
-    max: 5,
+    // Serverless (Vercel) spins many short-lived instances; keep a tiny pool per
+    // instance so we don't exhaust Lakebase connections. Override via PG_POOL_MAX.
+    max: Number(process.env.PG_POOL_MAX ?? (process.env.VERCEL ? 2 : 5)),
+    idleTimeoutMillis: 10_000,
   });
   return pool;
 }
