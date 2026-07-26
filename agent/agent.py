@@ -186,6 +186,8 @@ def _summarize(name: str, result) -> str:
     if isinstance(result, list):
         return f"{len(result)} row(s)"
     if isinstance(result, dict):
+        if result.get("error"):
+            return f"error: {result['error']}"
         title = result.get("title") or result.get("name")
         return title or "1 record"
     return "ok" if result is not None else "empty"
