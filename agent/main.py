@@ -43,6 +43,16 @@ class NarrateRequest(BaseModel):
     limit: int | None = 0
 
 
+class EditRequest(BaseModel):
+    episodeId: str
+    manuscript: str
+    instruction: str
+
+
+class RouteRequest(BaseModel):
+    message: str
+
+
 @app.get("/health")
 def health():
     return {"ok": True}
@@ -61,9 +71,10 @@ def _strip_title(full: str) -> tuple[str, str]:
     return "Untitled", full.strip()
 
 
-def _pump(events, chat: bool = False):
+def _pump(events, chat: bool = False, edit: bool = False):
     """Translate agent event dicts -> SSE lines. Accumulates prose for the done event.
-    chat=True: the done event carries the plain answer text, not an episode draft."""
+    chat=True: the done event carries the plain answer text, not an episode draft.
+    edit=True: tokens are the revised manuscript; done carries only the change summary."""
     buf: list[str] = []
     try:
         for ev in events:
@@ -78,7 +89,9 @@ def _pump(events, chat: bool = False):
             elif etype == "tool_result":
                 yield _sse("tool_result", {"name": ev["name"], "summary": ev.get("summary", "")})
             elif etype == "done":
-                if chat:
+                if edit:
+                    yield _sse("done", {"summary": ev.get("summary", "")})
+                elif chat:
                     yield _sse("done", {"message": "".join(buf).strip()})
                 else:
                     title, content = _strip_title("".join(buf))
@@ -108,6 +121,17 @@ def chat(req: ChatRequest):
     history = [h.model_dump() for h in (req.history or [])]
     events = agent.chat_stream(req.episodeId, req.message, history)
     return StreamingResponse(_pump(events, chat=True), media_type="text/event-stream")
+
+
+@app.post("/edit")
+def edit(req: EditRequest):
+    events = agent.edit_stream(req.episodeId, req.manuscript, req.instruction)
+    return StreamingResponse(_pump(events, edit=True), media_type="text/event-stream")
+
+
+@app.post("/route")
+def route(req: RouteRequest):
+    return {"intent": agent.route_intent(req.message)}
 
 
 @app.post("/narrate")
