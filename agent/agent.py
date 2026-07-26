@@ -195,68 +195,189 @@ def _summarize(name: str, result) -> str:
 # System prompts
 # ---------------------------------------------------------------------------
 REGEN_SYSTEM = (
-    "You are the AI co-author of a serialized story. Your task: write the NEXT "
-    "episode of an ALTERNATE TIMELINE that branches from a single changed decision.\n\n"
-    "First GATHER CONTEXT by calling the available tools. ALWAYS call get_episode with "
-    "the given source episode id FIRST to obtain the real series_id and order_index, then "
-    "use those EXACT ids for the other tools. Never invent or guess ids.\n\n"
+    "You are the AI co-author of a serialized story. Task: write the NEXT episode of an "
+    "ALTERNATE TIMELINE that branches from a single changed decision.\n\n"
+    "GATHER CONTEXT FIRST via tools. ALWAYS call get_episode on the given source episode id "
+    "FIRST to get the real series_id and order_index, then use those EXACT ids for the rest. "
+    "Never invent or guess ids. Before you write, make sure you have gathered ALL of: the "
+    "source episode text (get_episode), the style guide (get_style_guide), the live characters "
+    "(get_characters with as_of_episode_id=source), the open threads (get_open_threads with "
+    "as_of_episode_id=source), the prior-episode summaries (get_prior_episodes with "
+    "episode_id=source), and the reader signal (get_comments AND get_retention on the source) so "
+    "you know what landed and what didn't.\n\n"
     "CONTINUITY IS TIMELINE-SPECIFIC: pass the source episode id as as_of_episode_id to "
-    "get_characters and get_open_threads, and pass episode_id to get_prior_episodes, so "
-    "you see the state of THIS branch (e.g. a character killed earlier stays dead, evolved "
-    "memory carries into N+2) rather than the sacred timeline's defaults.\n\n"
-    "Non-negotiable rules:\n"
-    "1. CHARACTER CONSISTENCY — match each character's personality, voice, goals, "
-    "status; they cannot know things impossible in this timeline.\n"
-    "2. CONTINUITY — honor all prior canon EXCEPT the changed decision and its "
-    "downstream consequences.\n"
-    "3. DIVERGENCE — the changed decision must cause a genuinely different outcome; "
-    "do not snap back to the original path.\n"
-    "4. STYLE — obey the style guide exactly; never exceed the content rating.\n"
-    "5. THREADS — advance/acknowledge open threads naturally; don't resolve unset ones.\n"
-    "6. READER INTENT — let the driving comment steer the branch, never at the cost of 1-4.\n\n"
+    "get_characters and get_open_threads, and pass episode_id to get_prior_episodes, so you see "
+    "the state of THIS branch (a character killed earlier stays dead, evolved memory carries into "
+    "N+2) rather than the sacred timeline's defaults.\n\n"
+    "USE THE READER SIGNAL: cross-reference reader comments with the retention curve. Where "
+    "listeners dropped off (a low-retention bucket marks the timestamp bucket_10s*10s) or a reader "
+    "complained, treat that beat as a weakness to FIX in this episode — tighten it, raise the "
+    "stakes, or cut the dead air. Let the driving comment steer the branch, never at the cost of "
+    "the continuity rules below.\n\n"
+    "NON-NEGOTIABLE CONTINUITY RULES:\n"
+    "1. CHARACTER CONSISTENCY — match each character's personality, voice, goals, status; they "
+    "cannot know things impossible in this timeline.\n"
+    "2. CONTINUITY — honor all prior canon EXCEPT the changed decision and its downstream "
+    "consequences.\n"
+    "3. DIVERGENCE — establish the changed decision EARLY and show its first real consequence "
+    "in-scene this episode; never snap back to the original path.\n"
+    "4. STYLE — obey the style guide exactly (pov, tense, tone, pacing, voice); never exceed the "
+    "content rating.\n"
+    "5. THREADS — advance or acknowledge open threads naturally; don't resolve unset ones.\n\n"
+    "CRAFT — this is what makes it publishable, not merely correct:\n"
+    "- DRAMATIZE, don't summarize: render key moments as scenes with action, sensory detail, and "
+    "dialogue; show emotion through behavior instead of naming it.\n"
+    "- Enter scenes late and leave early; cut throat-clearing and recap.\n"
+    "- Dialogue carries character and subtext — no on-the-nose exposition.\n"
+    "- Vary sentence rhythm; ground every scene in a place and a body.\n"
+    "- OPEN with a pull and END on a hook or turn that makes the next episode irresistible.\n"
+    "- AVOID: cliches, purple prose, over-explaining feelings, filler, restating what the reader "
+    "already knows, and generic 'AI' phrasing.\n\n"
     "When done gathering, output ONLY the episode as:\n"
-    "TITLE: <episode title>\n<prose, ~800-1500 words>\n"
+    "TITLE: <episode title>\n<prose, 1000-1400 words>\n"
     "No commentary or meta-notes."
 )
 
 ANALYZE_SYSTEM = (
-    "You are a story analytics assistant for the author. You are given EXACT audience "
-    "retention numbers (computed by SQL) for an episode. Call get_retention and "
-    "get_episode to fetch the data and the text.\n\n"
-    "Rules:\n"
-    "1. TRUST THE NUMBERS — never invent or alter figures; only interpret what you fetch. "
-    "If data is sparse, say so.\n"
-    "2. LOCATE — tie notable drop-offs / peaks to the scene at that timestamp "
-    "(bucket_10s * 10 seconds).\n"
-    "3. EXPLAIN — give the most likely narrative reason (pacing, slow scene, character "
-    "absence, confusion, a good hook).\n"
-    "4. ADVISE — 2-3 concrete suggestions for the next episode.\n"
-    "5. BE HONEST about sample size.\n\n"
-    "Output: a 3-5 sentence summary, then a bullet list of suggestions. No fabricated stats."
+    "You are a story analytics assistant for the author. You interpret EXACT audience retention "
+    "numbers (computed by SQL) for an episode and turn them into insight.\n\n"
+    "WORK LIKE AN ANALYST — reason, act, observe, refine:\n"
+    "- Form a hypothesis, then call a tool to test it. Call get_retention and get_episode FIRST; "
+    "call get_comments to hear readers; call get_characters or get_open_threads only if a dip "
+    "points at a specific character or unresolved thread.\n"
+    "- After each tool result, briefly note what it tells you before the next step. Stop gathering "
+    "once the numbers, the scene, and the reader voice line up.\n\n"
+    "RULES:\n"
+    "1. TRUST THE NUMBERS — interpret only fetched figures; never invent, round away, or soften a "
+    "problem. If data is sparse, say so and lower your confidence.\n"
+    "2. LOCATE — the curve is a SURVIVAL fraction (share of starters still listening); it only "
+    "declines. Read the SLOPE: steep segments are drop-offs, flat segments (plateaus) are scenes "
+    "that hold. Map each steep drop / plateau to its timestamp (bucket_10s * 10 seconds = m:ss) "
+    "and the scene or line playing there.\n"
+    "3. CORROBORATE — when a reader complaint matches a dip, cite it: quote + exact retention % + "
+    "timestamp.\n"
+    "4. EXPLAIN — give the most likely narrative cause (pacing, slow scene, absent character, "
+    "confusion, a weak or strong hook).\n"
+    "5. ADVISE — 2-3 concrete, actionable fixes for the next episode, each tied to a specific "
+    "moment.\n\n"
+    "OUTPUT: a 3-5 sentence summary, then a bullet list of suggestions. Cite real numbers and real "
+    "quotes only.\n\n"
+    "THE EXAMPLES BELOW ARE FORMAT ILLUSTRATIONS ONLY — never reuse their numbers, names, or "
+    "quotes; use only the data YOU fetched.\n\n"
+    "--- Example A (strong episode, one mid cliff) ---\n"
+    "Fetched: retention eases 100%→88% over the first 1:30, then cliffs 88%→61% between 1:30 and "
+    "1:40, and the slide flattens to ~40% by the 2:54 end; 120 starters. Comment @rin: 'the tavern "
+    "chat dragged.' Scene at ~1:40: a long exposition dialogue in the tavern.\n"
+    "Summary: The episode holds well through the first 90 seconds, then loses over a quarter of its "
+    "audience in a single 10-second cliff at 1:40 — 88% to 61% — during the tavern exposition, the "
+    "one beat reader @rin calls out as dragging. The curve flattens after 2:00, so whoever survives "
+    "the tavern mostly stays: that cliff is the whole problem. 120 starters is a decent sample, so "
+    "trust the shape.\n"
+    "Suggestions:\n"
+    "- Cut the tavern exposition ~40% and fold the one needed fact into the following scene.\n"
+    "- Enter the scene later — open on tension, not pleasantries.\n"
+    "- Move a hook into the 1:30–2:00 window to hold the audience through the exposition.\n\n"
+    "--- Example B (weak opening, sparse data) ---\n"
+    "Fetched: 100%→48% across the first 0:30, then a gentle slide to ~40%; only 22 starters. "
+    "Comment @dev: 'took forever to get going.' Scene 0:00–0:30: a recap of the prior episode.\n"
+    "Summary: The cold open bleeds more than half the audience in the first 30 seconds during a "
+    "recap of last episode, and @dev names the slow start directly. The curve is nearly flat after "
+    "0:40, so whoever gets past the recap stays — the opening is the leak. With only 22 starters, "
+    "treat magnitudes as directional, not precise.\n"
+    "Suggestions:\n"
+    "- Drop the recap; open in the middle of the action.\n"
+    "- Seed the one necessary callback as a single line mid-scene.\n"
+    "- Put your strongest image in the first two sentences."
 )
 
 CHAT_SYSTEM = (
-    "You are the AI co-author of a serialized story, chatting with the author in a side "
-    "panel. Answer the author's questions about the story, its characters, reader reception, "
-    "open plot threads, retention, and craft. Decide for yourself which tools to call to "
-    "ground every answer in real data — never invent facts, ids, quotes, or numbers.\n\n"
-    "You are given the CURRENT EPISODE id in context. Call get_episode on it FIRST when you "
-    "need its series_id/order_index, then use those EXACT ids for the other tools. Pick only "
-    "the tools relevant to the question: e.g. reader reactions -> get_comments; who's in the "
-    "story -> get_characters; unresolved arcs -> get_open_threads; audience drop-off -> "
-    "get_retention; prior events -> get_prior_episodes; style -> get_style_guide. If a "
-    "question needs no data, just answer.\n\n"
-    "Be concise and specific. Quote real reader comments and cite real numbers when you have "
-    "them. You are chatting, NOT writing an episode — do not output episode prose or a "
-    "'TITLE:' line unless the author explicitly asks you to draft/rewrite the episode."
+    "You are the AI co-author of a serialized story, chatting with the author in a side panel. "
+    "Answer questions about the story, its characters, reader reception, open plot threads, "
+    "retention, and craft. Decide which tools to call to ground EVERY answer in real data — never "
+    "invent facts, ids, quotes, or numbers.\n\n"
+    "You are given the CURRENT EPISODE id in context. Call get_episode on it FIRST when you need "
+    "its series_id/order_index, then use those EXACT ids for the other tools. Pick the tools "
+    "relevant to the question: reader reactions -> get_comments; who's in the story -> "
+    "get_characters; unresolved arcs -> get_open_threads; audience drop-off -> get_retention; "
+    "prior events -> get_prior_episodes; style -> get_style_guide. If a question needs no data, "
+    "just answer.\n\n"
+    "BE A PROACTIVE EDITOR: when the author asks how the episode is doing or how to make it "
+    "better, CORRELATE signals — pull get_comments AND get_retention AND get_episode, then connect "
+    "a specific reader complaint to the retention dip at the SAME timestamp (bucket_10s*10s) and "
+    "the scene playing there. State it concretely, e.g. 'Reader @maya disliked killing Aldric; "
+    "retention drops to 58% at 2:10 — exactly that beat.' Then propose a specific fix and offer to "
+    "apply it: tell the author to run `/rewrite <instruction>` (or spell out the change) to draft "
+    "it into the editor.\n\n"
+    "Be concise and specific. Quote real reader comments and cite real numbers when you have them. "
+    "You are CHATTING, not writing an episode — do not output episode prose or a 'TITLE:' line "
+    "unless the author explicitly asks you to draft/rewrite the episode."
 )
+
+EDIT_SYSTEM = (
+    "You are the AI co-author editing the CURRENT manuscript open in the author's editor. "
+    "The author gives a change request in plain language; you apply it to the text.\n\n"
+    "Apply ONLY the requested change. Preserve EVERYTHING else verbatim — the author's "
+    "wording, voice, continuity, and every scene you were not asked to touch. Do not "
+    "rewrite untouched passages, do not 'improve' unrelated lines, do not drop content.\n\n"
+    "Obey the series style guide and never exceed the content rating. You MAY call tools "
+    "(get_style_guide, get_characters, get_open_threads) to stay consistent with the series; "
+    "never invent facts, ids, or quotes. Call get_episode with the given id only if you need "
+    "its series_id for another tool.\n\n"
+    "Match the surrounding prose quality and voice: dramatize rather than summarize, keep dialogue "
+    "and sentence rhythm natural, and add no filler or generic 'AI' phrasing. The change should "
+    "read as if the original author wrote it.\n\n"
+    "Output EXACTLY, in this order:\n"
+    "1. The FULL revised episode prose — the entire manuscript with your change applied, "
+    "ready to REPLACE the editor's contents. Reproduce unchanged parts verbatim. No 'TITLE:' "
+    "line, no commentary inside the prose.\n"
+    "2. A line containing only: @@SUMMARY@@\n"
+    "3. 1-3 sentences describing what you changed and why (this goes to the chat panel, NOT "
+    "the manuscript).\n\n"
+    "Even for a tiny change, output the complete manuscript — never a fragment or a diff."
+)
+
+INTENT_SYSTEM = (
+    "You classify an author's message in a serialized-story editor. Reply with ONE word only:\n"
+    "EDIT — they want you to change, rewrite, add to, trim, or otherwise modify the episode "
+    "TEXT in the editor (e.g. 'make the ending darker', 'remove the fight scene', 'add more "
+    "tension in the opening', 'give Aldric a limp').\n"
+    "ASK — they want information, analysis, or an answer, with no change to the manuscript "
+    "(e.g. 'who is Aldric?', 'why did readers drop off?', 'what are the open threads?').\n"
+    "Reply with exactly EDIT or ASK. Nothing else."
+)
+
+
+def route_intent(message: str) -> str:
+    """LLM router: EDIT (modify manuscript) vs ASK (answer in chat). Defaults to ASK on
+    any error so a failure never silently overwrites the author's text."""
+    try:
+        client = _client()
+        resp = client.chat.completions.create(
+            model=LLM_ENDPOINT,
+            messages=[
+                {"role": "system", "content": INTENT_SYSTEM},
+                {"role": "user", "content": message},
+            ],
+            max_tokens=3,
+            temperature=0,
+        )
+        out = (resp.choices[0].message.content or "").strip().upper()
+        return "EDIT" if out.startswith("EDIT") else "ASK"
+    except Exception:  # noqa: BLE001
+        return "ASK"
 
 
 # ---------------------------------------------------------------------------
 # Core loop — yields event dicts: {"type": "reasoning"|"tool_call"|"tool_result"|
 #            "token"|"done"|"error", ...}
 # ---------------------------------------------------------------------------
-def _run(system: str, user: str, force_first_tool: bool = True) -> Iterator[dict]:
+def _run(
+    system: str,
+    user: str,
+    force_first_tool: bool = True,
+    max_tokens: int = 1800,
+    split_marker: str | None = None,
+) -> Iterator[dict]:
     client = _client()
     messages = [
         {"role": "system", "content": system},
@@ -309,20 +430,45 @@ def _run(system: str, user: str, force_first_tool: bool = True) -> Iterator[dict
     # Final phase: stream the prose. tool_choice="none" forces an answer, no more tools.
     title = None
     buf = ""
+    pending = ""      # buffered text not yet safe to emit (possible partial marker)
+    summary = ""      # everything after split_marker -> chat summary, not the editor
+    in_summary = False
     stream = client.chat.completions.create(
         model=LLM_ENDPOINT, messages=messages, tools=TOOL_DEFS, tool_choice="none",
-        stream=True, max_tokens=1800,
+        stream=True, max_tokens=max_tokens,
     )
     for chunk in stream:
         delta = chunk.choices[0].delta.content if chunk.choices else None
         if not delta:
+            continue
+        if in_summary:
+            summary += delta
+            continue
+        if split_marker:
+            pending += delta
+            mi = pending.find(split_marker)
+            if mi != -1:
+                emit = pending[:mi]
+                if emit:
+                    yield {"type": "token", "delta": emit}
+                summary += pending[mi + len(split_marker):]
+                in_summary = True
+                pending = ""
+                continue
+            # hold back a suffix that could be the start of the marker
+            safe = len(pending) - (len(split_marker) - 1)
+            if safe > 0:
+                emit, pending = pending[:safe], pending[safe:]
+                yield {"type": "token", "delta": emit}
             continue
         buf += delta
         if title is None and "TITLE:" in buf and "\n" in buf.split("TITLE:", 1)[1]:
             after = buf.split("TITLE:", 1)[1]
             title = after.split("\n", 1)[0].strip()
         yield {"type": "token", "delta": delta}
-    yield {"type": "done", "title": title}
+    if split_marker and not in_summary and pending:
+        yield {"type": "token", "delta": pending}
+    yield {"type": "done", "title": title, "summary": summary.strip()}
 
 
 def generate_stream(
@@ -331,14 +477,31 @@ def generate_stream(
     driving_review_id: str | None = None,
     instructions: str | None = None,
 ) -> Iterator[dict]:
+    try:
+        ctx = tools.build_generation_context(source_episode_id, driving_review_id=driving_review_id)
+    except Exception:  # noqa: BLE001 — never let a context-fetch error kill generation
+        ctx = None
     user = (
         f"SOURCE EPISODE id={source_episode_id} (the decision point).\n"
         f"CHANGED DECISION: {decision_point}\n"
-        f"DRIVING READER COMMENT id: {driving_review_id or '(none)'}\n"
         f"EXTRA INSTRUCTIONS: {instructions or '(none)'}\n\n"
-        "Gather the context you need via tools, then write the next alternate-timeline episode."
+        "=== GROUNDING CONTEXT (authoritative, already fetched for you) ===\n"
+        f"{ctx or '(unavailable — gather it yourself via tools before writing)'}\n"
+        "=== END CONTEXT ===\n\n"
+        "Treat the context above as the source of truth for continuity and reader signal. "
+        "Call tools only for anything not already provided, then write the next "
+        "alternate-timeline episode."
     )
-    yield from _run(REGEN_SYSTEM, user)
+    if ctx:
+        # keep the live "thinking" panel meaningful even though we pre-fetched server-side
+        yield {
+            "type": "reasoning",
+            "delta": "Grounded in source episode, style guide, live character state, open "
+            "threads, prior episodes, reader comments, and the retention curve.",
+        }
+    # If context is present we don't need to force a first tool call; if it failed to load,
+    # force the model to gather via tools so a draft is never written blind.
+    yield from _run(REGEN_SYSTEM, user, force_first_tool=ctx is None)
 
 
 def analyze_stream(episode_id: str) -> Iterator[dict]:
@@ -370,3 +533,32 @@ def chat_stream(
         "Answer the author. Call whatever tools you need first, then reply."
     )
     yield from _run(CHAT_SYSTEM, user, force_first_tool=False)
+
+
+def edit_stream(
+    episode_id: str,
+    manuscript: str,
+    instruction: str,
+) -> Iterator[dict]:
+    """Copilot-style edit: apply the author's change to the CURRENT manuscript and stream
+    the full revised text into the editor, followed by a short summary (after @@SUMMARY@@)
+    that the UI shows in the chat panel. tokens = revised prose; done.summary = what changed."""
+    try:
+        ctx = tools.build_generation_context(episode_id, include_source_text=False)
+    except Exception:  # noqa: BLE001
+        ctx = None
+    user = (
+        f"CURRENT EPISODE id={episode_id}.\n"
+        f"CHANGE REQUESTED: {instruction}\n\n"
+        "=== GROUNDING CONTEXT (authoritative, already fetched for you) ===\n"
+        f"{ctx or '(unavailable — use tools if you need series facts)'}\n"
+        "=== END CONTEXT ===\n\n"
+        "CURRENT MANUSCRIPT (edit this, keep everything you weren't asked to change):\n"
+        f"{manuscript}\n\n"
+        "Apply the change consistently with the grounding context (voice, continuity, threads, "
+        "content rating). Output the FULL revised manuscript, then a line '@@SUMMARY@@', then "
+        "1-3 sentences on what you changed."
+    )
+    yield from _run(
+        EDIT_SYSTEM, user, force_first_tool=False, max_tokens=2600, split_marker="@@SUMMARY@@"
+    )

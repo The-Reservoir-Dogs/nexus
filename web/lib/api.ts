@@ -450,6 +450,77 @@ export async function* chat(
   return text;
 }
 
+// ---------- Intent routing (EDIT manuscript vs ASK) ----------
+export async function routeIntent(message: string): Promise<"EDIT" | "ASK"> {
+  if (isMock) {
+    await delay(60);
+    return /\b(rewrite|revise|edit|change|make it|make the|add|remove|cut|trim|darker|tenser|expand|tighten)\b/i.test(message)
+      ? "EDIT"
+      : "ASK";
+  }
+  const res = await live<{ intent: "EDIT" | "ASK" }>("/route-intent", {
+    method: "POST",
+    body: JSON.stringify({ message }),
+  });
+  return res?.intent === "EDIT" ? "EDIT" : "ASK";
+}
+
+// ---------- Edit (Copilot-style: streams revised manuscript, returns change summary) ----------
+/** Async generator: yields revised-manuscript chunks (stream into editor), returns the
+ * change summary (render in chat). Non-token events surface via onEvent like generate(). */
+export async function* editStream(
+  body: { episodeId: string; manuscript: string; instruction: string },
+  onEvent?: (e: AgentEvent) => void
+): AsyncGenerator<string, string, unknown> {
+  if (!isMock) {
+    const base = process.env.NEXT_PUBLIC_BASE_URL ?? "";
+    const res = await fetch(`${base}/api/edit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok || !res.body) throw new Error("edit failed");
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = "";
+    let summary = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const frames = buf.split("\n\n");
+      buf = frames.pop() ?? "";
+      for (const frame of frames) {
+        let event = "message", data = "";
+        for (const line of frame.split("\n")) {
+          if (line.startsWith("event:")) event = line.slice(6).trim();
+          else if (line.startsWith("data:")) data += line.slice(5).trim();
+        }
+        if (!data) continue;
+        let parsed: any;
+        try { parsed = JSON.parse(data); } catch { continue; }
+        if (event === "token" && parsed.delta) { yield parsed.delta as string; }
+        else if (event === "token" && parsed.text) { yield parsed.text as string; }
+        else if (event === "reasoning") onEvent?.({ type: "reasoning", text: parsed.text ?? parsed.delta ?? "" });
+        else if (event === "tool_call") onEvent?.({ type: "tool_call", name: parsed.name ?? "tool", args: parsed.args });
+        else if (event === "tool_result") onEvent?.({ type: "tool_result", name: parsed.name ?? "tool", summary: parsed.summary });
+        else if (event === "done") { summary = parsed.summary ?? summary; }
+        else if (event === "error") { summary = `[edit failed: ${parsed.message ?? "unknown error"}]`; }
+      }
+    }
+    return summary;
+  }
+  // mock: stream the manuscript back unchanged + a canned summary
+  const steps: AgentEvent[] = [
+    { type: "reasoning", text: `Applying "${body.instruction}" to the manuscript…` },
+    { type: "tool_call", name: "get_style_guide" },
+    { type: "tool_result", name: "get_style_guide", summary: "1 record" },
+  ];
+  if (onEvent) for (const s of steps) { await delay(150); onEvent(s); }
+  for (const w of (body.manuscript || "").split(/(\s+)/)) { await delay(10); yield w; }
+  return `Applied "${body.instruction}", keeping the rest of the manuscript intact.`;
+}
+
 // ---------- Narration (TTS render) ----------
 export async function narrateEpisode(id: string): Promise<{ audioUrl: string; durationMs: number }> {
   if (!isMock) return live(`/episodes/${id}/narrate`, { method: "POST" });

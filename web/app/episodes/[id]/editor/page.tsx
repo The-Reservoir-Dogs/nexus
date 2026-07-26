@@ -3,7 +3,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Sparkles, Check, X, Columns2, Send, Bot, ArrowLeft, ChevronRight } from "lucide-react";
-import { generate, chat as chatStream, approveEpisode, forkEpisode, getEpisodes, getEpisodeTimelines, updateEpisode, CHAT_COMMANDS, type Draft, type AgentEvent, type ChatTurn } from "@/lib/api";
+import { generate, chat as chatStream, editStream, routeIntent, approveEpisode, forkEpisode, getEpisodes, getEpisodeTimelines, updateEpisode, CHAT_COMMANDS, type Draft, type AgentEvent, type ChatTurn } from "@/lib/api";
 import type { Episode } from "@/lib/types";
 import { useAsync } from "@/lib/useAsync";
 import { useFork } from "@/components/ForkProvider";
@@ -23,8 +23,9 @@ type ChatMsg =
   | {
       role: "ai";
       at: number;
-      // "generate" streams a draft into the editor; "chat" answers in the panel.
-      kind: "generate" | "chat";
+      // "generate" streams a fresh draft; "edit" revises the current manuscript;
+      // both stream into the editor. "chat" answers in the panel only.
+      kind: "generate" | "edit" | "chat";
       steps: Step[];
       status: "thinking" | "writing" | "done";
       words: number;
@@ -178,6 +179,42 @@ export default function EditorPage({ params }: { params: { id: string } }) {
     [id, fork.whatIf, fork.drivingReviewId, isContinue]
   );
 
+  // Copilot-style edit — applies a plain-language change to the CURRENT manuscript,
+  // streams the full revision back into the editor, then posts a summary in the chat.
+  const runEdit = React.useCallback(
+    async (message: string) => {
+      const current = manuscript;
+      setGenerating(true);
+      setChat((c) => [...c,
+        { role: "user", text: message, at: Date.now() },
+        { role: "ai", at: Date.now(), kind: "edit", steps: [], status: "thinking", words: 0, reply: "" }]);
+      try {
+        const gen = editStream(
+          { episodeId: id, manuscript: current, instruction: message },
+          (e) => patchAi((m) => ({ ...m, steps: [...m.steps, toStep(e)] }))
+        );
+        let acc = "";
+        let res = await gen.next();
+        while (!res.done) {
+          acc += res.value;
+          setManuscript(acc);
+          patchAi((m) => (m.status === "writing" ? m : { ...m, status: "writing" }));
+          res = await gen.next();
+        }
+        const summary = (res.value as string) || "Done.";
+        const wc = acc.trim() ? acc.trim().split(/\s+/).length : 0;
+        patchAi((m) => ({ ...m, status: "done", words: wc, reply: summary }));
+      } catch (e: any) {
+        // don't clobber the author's text on failure
+        setManuscript(current);
+        patchAi((m) => ({ ...m, status: "done", reply: `Sorry — ${e?.message ?? "edit failed"}.` }));
+      } finally {
+        setGenerating(false);
+      }
+    },
+    [id, manuscript, patchAi]
+  );
+
   // Conversational turn — answers in the panel, NEVER touches the manuscript.
   const sendChat = React.useCallback(
     async (message: string) => {
@@ -213,14 +250,19 @@ export default function EditorPage({ params }: { params: { id: string } }) {
   // Route a submitted instruction: /rewrite streams into the editor; a bare message
   // (or any other slash command) is a chat turn that leaves the manuscript untouched.
   const handleSubmit = React.useCallback(
-    (raw: string) => {
+    async (raw: string) => {
       const text = raw.trim();
       if (!text || generating) return;
       const m = text.match(/^\/rewrite\b\s*(.*)$/i);
-      if (m) runGenerate(m[1].trim() || undefined);
+      if (m) { runGenerate(m[1].trim() || undefined); return; }
+      if (text.startsWith("/")) { sendChat(text); return; } // other slash cmds -> chat
+      // Plain language: let the router decide edit-the-manuscript vs answer-a-question.
+      // Only edit when there's actually a manuscript to change.
+      const intent = manuscript.trim() ? await routeIntent(text) : "ASK";
+      if (intent === "EDIT") runEdit(text);
       else sendChat(text);
     },
-    [generating, runGenerate, sendChat]
+    [generating, manuscript, runGenerate, runEdit, sendChat]
   );
 
   const started = React.useRef(false);
@@ -420,15 +462,15 @@ export default function EditorPage({ params }: { params: { id: string } }) {
                             <span className="thinking-dot h-1.5 w-1.5 rounded-full bg-ai [animation-delay:0.3s]" />
                           </span>
                         )}
-                        {/* generate: only a live "writing" indicator (no verbose done line) */}
-                        {m.kind === "generate" && m.status === "writing" && (
+                        {/* generate/edit: live "writing" indicator while streaming into the editor */}
+                        {(m.kind === "generate" || m.kind === "edit") && m.status === "writing" && (
                           <div className="flex items-center gap-1.5 pt-1 text-[12px] text-ai">
                             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ai" />
-                            Writing draft… streaming into the editor
+                            {m.kind === "edit" ? "Editing manuscript… updating the editor" : "Writing draft… streaming into the editor"}
                           </div>
                         )}
-                        {/* chat: render the conversational reply */}
-                        {m.kind === "chat" && m.reply && (
+                        {/* edit summary + chat reply: render in the panel */}
+                        {(m.kind === "chat" || m.kind === "edit") && m.reply && (
                           <div className="whitespace-pre-wrap pt-1 text-[13px] leading-relaxed text-body">
                             {m.reply}
                           </div>
