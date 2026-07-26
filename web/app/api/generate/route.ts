@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 // SSE stream: allow up to 60s (Vercel default is 10s, which would truncate it).
 export const maxDuration = 60;
 import { query } from "@/lib/db";
+import { agentJsonHeaders } from "@/lib/agent";
 
 // Proxy to the Python agent's POST /generate (SSE). Normalizes the stream so the
 // frontend never changes even if the agent's internal shape differs.
@@ -20,7 +21,7 @@ export async function POST(req: Request) {
     try {
       const upstream = await fetch(`${agentUrl}/generate`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: agentJsonHeaders(),
         body,
       });
       if (upstream.ok && upstream.body) {
