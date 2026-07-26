@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "series_id": 10,
+  "season": 1,
+  "title": "The Hollow Crown",
+  "canon_file": "hollow_crown_metadata.json",
+  "note": "Episode scripts. Scene ids are 4000-range to avoid colliding with the existing 3011-3046 scenes in seed_pulse.sql. Craft attributes on each scene feed data/generate_pulse_data.py directly.",
+
+  "generation_status": {
+    "episodes_written": [1],
+    "episodes_remaining": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  },
+
+  "episodes": [
+    {
+      "episode_id": 1101,
+      "order_index": 1,
+      "title": "Rain on the Ramparts",
+      "act": 1,
+      "function": "hook",
+      "summary": "House Corvin declares war at harvest. Aldric reads the declaration four times, meets an envoy who knows he read it four times, and learns there is a fire burning on a northern ridge that should be empty.",
+      "prev_episode_summary": null,
+      "est_duration_sec": 280,
+      "word_count": 661,
+      "threads_opened": [402, 401, 403],
+      "threads_touched": [402, 401, 403],
+      "characters_present": [700, 702],
+      "objects_present": [900, 904],
+      "end_hook": "Someone in Greymoor is telling Lady Corvin things. And there is a fire in the north that has not moved and has not gone out.",
+
+      "scenes": [
+        {
+          "scene_id": 4011,
+          "order_index": 1,
+          "title": "The Declaration",
+          "function": "hook",
+          "est_duration_sec": 70,
+          "start_ms": 0,
+          "end_ms": 70000,
+          "characters_present": [700],
+          "threads_touched": [402],
+          "objects_present": [900],
+          "location": "Greymoor — the ramparts",
+          "text": "Rain hammered the ramparts of Greymoor.\n\nAldric read the declaration twice, then a third time, because the words refused to mean what they meant. House Corvin had declared war at harvest — at harvest, when the granaries were full and the men were tired and every road out of the highlands was mud to the axle.\n\nHe read it a fourth time.\n\nBelow him the courtyard went on with its evening as though nothing had changed. A boy hauled water across the stones, badly, slopping half of it. A smith shut his shutters against the wet and swore at the catch, which had needed replacing since spring.\n\nAldric folded the parchment along its crease and held it there.\n\nIn an hour he would have to go down and tell them. For now, he let them have the hour.",
+          "craft": { "quality": 0.90, "tension": 0.80, "emotional": 0.65, "thread_inv": 0.80, "hook": 0.85 }
+        },
+        {
+          "scene_id": 4012,
+          "order_index": 2,
+          "title": "Sera on the Wall",
+          "function": "character",
+          "est_duration_sec": 75,
+          "start_ms": 70000,
+          "end_ms": 145000,
+          "characters_present": [700, 702],
+          "threads_touched": [402],
+          "objects_present": [900],
+          "location": "Greymoor — the ramparts",
+          "text": "\"You've read it four times.\"\n\nSera was at his elbow. She arrived the way she always did — from a direction he had not been watching.\n\n\"Does it say something different on the fourth?\"\n\n\"It says my father would have known what to do.\"\n\n\"Your father would have burned their fields and called it strategy.\" She leaned on the parapet beside him, entirely unbothered by the rain, which had already soaked her through. \"You're not going to do that.\"\n\n\"You sound certain.\"\n\n\"I'm certain. It's why I'm still standing here and not halfway to the coast with your good horse.\"\n\nAldric almost smiled. \"That's the whole of your reason? That I won't burn a field?\"\n\n\"It's a better reason than most men have for anything,\" Sera said. She pushed off the wall. \"Don't waste it.\"",
+          "craft": { "quality": 0.95, "tension": 0.45, "emotional": 0.90, "thread_inv": 0.75, "hook": 0.70 }
+        },
+        {
+          "scene_id": 4013,
+          "order_index": 3,
+          "title": "Terms",
+          "function": "conflict",
+          "est_duration_sec": 80,
+          "start_ms": 145000,
+          "end_ms": 225000,
+          "characters_present": [700],
+          "threads_touched": [402, 403],
+          "objects_present": [900],
+          "location": "Greymoor — the gate",
+          "text": "Corvin's envoy came at dawn under a white banner, and did not dismount.\n\n\"My lady offers terms. Greymoor kneels. The north keeps its harvest.\"\n\n\"And if Greymoor doesn't kneel?\"\n\n\"Then the north keeps nothing, and my lady keeps her patience for someone who deserves it.\"\n\nThe man's horse shifted under him. He let it.\n\n\"She said you'd want the choice written down,\" the envoy said. \"She said you were the kind who reads a thing four times before he believes it.\"\n\nAldric did not move. Around him the gate went on with its morning — a hinge complaining, someone counting sacks.\n\nFour times.\n\nHe had stood alone on a wall in the rain, in the dark, with no one within thirty feet of him.\n\nThe envoy turned his horse and rode out through the mud, and Aldric stood in the gateway with the cold going through his chest, doing the only arithmetic that mattered.\n\nSomeone in Greymoor was telling her things.",
+          "craft": { "quality": 0.92, "tension": 0.90, "emotional": 0.60, "thread_inv": 0.88, "hook": 0.92 }
+        },
+        {
+          "scene_id": 4014,
+          "order_index": 4,
+          "title": "A Fire in the North",
+          "function": "close",
+          "est_duration_sec": 55,
+          "start_ms": 225000,
+          "end_ms": 280000,
+          "characters_present": [700, 702],
+          "threads_touched": [401],
+          "objects_present": [904],
+          "location": "Greymoor — the north tower",
+          "text": "That night Sera woke him.\n\nShe did not speak. She only pointed — north, past the last of Greymoor's own fires, out to where a light burned on a ridge that should have been empty.\n\nIt was not a Corvin fire. Corvin's fires burned where Corvin's men were, and there were no Corvin men north of the pass at harvest.\n\nIt was not the right colour for any fire Aldric knew.\n\n\"How long?\" he said.\n\n\"It was there when I took the watch.\" Sera did not lower her arm. \"That was four hours ago. It hasn't moved.\"\n\n\"Fires don't move.\"\n\n\"No,\" she agreed. \"And it hasn't gone out, either.\"",
+          "craft": { "quality": 0.88, "tension": 0.75, "emotional": 0.60, "thread_inv": 0.50, "hook": 0.95 }
+        }
+      ]
+    }
+  ]
+}

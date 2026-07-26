@@ -1,0 +1,73 @@
+{
+  "characters": [
+    {
+      "character_id": 702,
+      "name": "Sera",
+      "role": "side",
+      "scenes_present": 7,
+      "avg_replay_rate": 0.619,
+      "avg_skip_rate": 0.0,
+      "avg_drop_off_rate": 0.01,
+      "investment_score": 56.8
+    },
+    {
+      "character_id": 701,
+      "name": "Lady Corvin",
+      "role": "antagonist",
+      "scenes_present": 5,
+      "avg_replay_rate": 0.574,
+      "avg_skip_rate": 0.046,
+      "avg_drop_off_rate": 0.022,
+      "investment_score": 52.5
+    },
+    {
+      "character_id": 700,
+      "name": "Prince Aldric",
+      "role": "protagonist",
+      "scenes_present": 24,
+      "avg_replay_rate": 0.49,
+      "avg_skip_rate": 0.092,
+      "avg_drop_off_rate": 0.045,
+      "investment_score": 45.5
+    },
+    {
+      "character_id": 703,
+      "name": "Maester Ord",
+      "role": "side",
+      "scenes_present": 6,
+      "avg_replay_rate": 0.19,
+      "avg_skip_rate": 0.309,
+      "avg_drop_off_rate": 0.124,
+      "investment_score": 19.3
+    }
+  ],
+  "threads": [
+    {
+      "thread_id": 402,
+      "thread": "The war between Greymoor and House Corvin.",
+      "scenes_present": 13,
+      "avg_replay_rate": 0.551,
+      "avg_skip_rate": 0.051,
+      "avg_drop_off_rate": 0.029,
+      "investment_score": 50.7
+    },
+    {
+      "thread_id": 400,
+      "thread": "The fate of the captured Lady Corvin.",
+      "scenes_present": 11,
+      "avg_replay_rate": 0.546,
+      "avg_skip_rate": 0.061,
+      "avg_drop_off_rate": 0.035,
+      "investment_score": 50.0
+    },
+    {
+      "thread_id": 401,
+      "thread": "A shadow threat stirring beyond the northern border.",
+      "scenes_present": 6,
+      "avg_replay_rate": 0.339,
+      "avg_skip_rate": 0.192,
+      "avg_drop_off_rate": 0.087,
+      "investment_score": 32.5
+    }
+  ]
+}
