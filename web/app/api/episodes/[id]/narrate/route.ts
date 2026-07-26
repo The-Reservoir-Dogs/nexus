@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { ok, fail } from "@/lib/types";
 import path from "node:path";
 import { localWavPath, persistNarration } from "@/lib/storage";
+import { agentJsonHeaders } from "@/lib/agent";
 
 function fallbackWav(seconds = 2): Buffer {
   const sampleRate = 24000;
@@ -71,7 +72,7 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
     try {
       res = await fetch(`${agentUrl}/narrate`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: agentJsonHeaders(),
         body: JSON.stringify({ episodeId: id }),
       });
     } catch (e: any) {

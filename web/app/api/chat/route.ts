@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 import { query } from "@/lib/db";
+import { agentJsonHeaders } from "@/lib/agent";
 
 // AI Co-Author chat.
 //
@@ -210,7 +211,7 @@ export async function POST(req: Request) {
     try {
       const upstream = await fetch(`${agentUrl}/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: agentJsonHeaders(),
         body: JSON.stringify({ episodeId, message, history: body.history ?? [] }),
       });
       if (upstream.ok && upstream.body) {

@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import { agentJsonHeaders } from "@/lib/agent";
 
 // Classify a chat message: EDIT (modify the manuscript) vs ASK (answer in chat).
 // Proxies to the Python agent's POST /route. Falls back to a keyword heuristic when the
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
     try {
       const upstream = await fetch(`${agentUrl}/route`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: agentJsonHeaders(),
         body,
       });
       if (upstream.ok) {

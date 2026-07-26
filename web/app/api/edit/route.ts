@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+import { agentJsonHeaders } from "@/lib/agent";
 
 // Proxy to the Python agent's POST /edit (SSE). Copilot-style edit: tokens are the
 // full revised manuscript (stream into the editor), then a `done` event carrying the
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
     try {
       const upstream = await fetch(`${agentUrl}/edit`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: agentJsonHeaders(),
         body,
       });
       if (upstream.ok && upstream.body) {
