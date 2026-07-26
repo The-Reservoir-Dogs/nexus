@@ -11,16 +11,16 @@ vi.mock("next/navigation", () => ({
 describe("TopNav", () => {
   beforeEach(() => localStorage.setItem("nexus_session", "1"));
 
-  it("has brand, global search, and logout", async () => {
+  it("has brand on the left and account actions on the right", async () => {
     render(
       <AuthProvider>
         <TopNav />
       </AuthProvider>
     );
     expect(screen.getByText("nexus")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/search/i)).toBeInTheDocument();
     expect(screen.queryByText("Discover")).toBeNull();
     expect(screen.queryByText("Trending")).toBeNull();
+    await waitFor(() => expect(screen.getByText("@sriman")).toBeInTheDocument());
     await waitFor(() => expect(screen.getByLabelText("Log out")).toBeInTheDocument());
   });
 });

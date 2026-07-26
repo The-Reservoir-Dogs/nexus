@@ -22,6 +22,7 @@ async function live<T>(path: string, init?: RequestInit): Promise<T> {
   const base = process.env.NEXT_PUBLIC_BASE_URL ?? "";
   const res = await fetch(`${base}/api${path}`, {
     cache: "no-store",
+    credentials: "same-origin",
     headers: { "Content-Type": "application/json" },
     ...init,
   });
@@ -40,9 +41,25 @@ async function live<T>(path: string, init?: RequestInit): Promise<T> {
 
 // ---------- Reads ----------
 export async function getMe(): Promise<User> {
-  if (!isMock) return live<User>("/me");
-  await delay();
-  return db.me;
+  return live<User>("/me");
+}
+
+export async function loginUser(username: string, password: string): Promise<User> {
+  return live<User>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  });
+}
+
+export async function signupUser(username: string, password: string): Promise<User> {
+  return live<User>("/auth/signup", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  });
+}
+
+export async function logoutUser(): Promise<void> {
+  await live<{ loggedOut: boolean }>("/auth/logout", { method: "POST" });
 }
 
 export async function getSeries(params?: { q?: string; genre?: string }): Promise<Series[]> {

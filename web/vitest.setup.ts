@@ -44,3 +44,17 @@ if (typeof window !== "undefined" && !window.matchMedia) {
       dispatchEvent: () => false,
     }) as unknown as MediaQueryList;
 }
+
+globalThis.fetch = (async (input: RequestInfo | URL) => {
+  const url = String(input);
+  if (url.endsWith("/api/me")) {
+    return new Response(JSON.stringify({ data: { id: "1", username: "sriman" } }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  return new Response(JSON.stringify({ data: {} }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}) as typeof fetch;
