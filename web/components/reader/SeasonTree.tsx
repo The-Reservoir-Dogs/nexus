@@ -89,19 +89,19 @@ export function SeasonTree({
         if (id && !id.startsWith("season:")) router.push(`/episodes/${id}`);
       }}
       sx={{
-        color: "#c9d1d9",
+        color: "#3a3733",
         "& .MuiTreeItem-content": {
           borderRadius: "6px",
           padding: "1px 4px",
-          "&:hover": { backgroundColor: "#21262d" },
+          "&:hover": { backgroundColor: "#f3efe8" },
           "&.Mui-selected, &.Mui-selected:hover, &.Mui-focused": {
-            backgroundColor: "rgba(47,129,247,0.15)",
+            backgroundColor: "rgba(194,54,22,0.10)",
           },
         },
-        "& .MuiTreeItem-iconContainer svg": { fontSize: 18, color: "#8b949e" },
+        "& .MuiTreeItem-iconContainer svg": { fontSize: 18, color: "#736d63" },
         "& .MuiTreeItem-groupTransition": {
           marginLeft: "12px",
-          borderLeft: "1px solid #30363d",
+          borderLeft: "1px solid #e4e0d8",
           paddingLeft: "6px",
         },
       }}
