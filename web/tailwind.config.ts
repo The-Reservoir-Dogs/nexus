@@ -29,7 +29,8 @@ const config: Config = {
         cream: "#161b22",
       },
       fontFamily: {
-        display: ["var(--font-sans)", "system-ui", "sans-serif"],
+        // text-editor look: monospace-forward (script/screenplay aesthetic)
+        display: ["var(--font-mono)", "ui-monospace", "monospace"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
