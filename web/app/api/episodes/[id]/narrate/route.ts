@@ -3,7 +3,8 @@ import { promises as fs } from "node:fs";
 import { query } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { ok, fail } from "@/lib/types";
-import { LOCAL_DIR, localWavPath, persistNarration } from "@/lib/storage";
+import path from "node:path";
+import { localWavPath, persistNarration } from "@/lib/storage";
 
 // Generate multi-voice narration for an episode.
 //
@@ -59,8 +60,8 @@ export async function POST(_req: Request, { params }: { params: { id: string } }
   // 2) Persist: write locally first, then upload to the Volume (prod) or serve locally (dev).
   let audioUrl: string;
   try {
-    await fs.mkdir(LOCAL_DIR, { recursive: true });
     const wav = localWavPath(id);
+    await fs.mkdir(path.dirname(wav), { recursive: true }); // /tmp in Volume mode (serverless-safe)
     await fs.writeFile(wav, bytes);
     audioUrl = await persistNarration(id, wav);
   } catch (e: any) {

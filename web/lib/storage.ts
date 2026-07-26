@@ -14,8 +14,17 @@
 
 import { promises as fs, createReadStream, existsSync, statSync } from "node:fs";
 import path from "node:path";
+import os from "node:os";
 
+// Local-mode (dev) static dir, served at /narration/ep<id>.wav.
 export const LOCAL_DIR = path.join(process.cwd(), "public", "narration");
+
+// Where the renderer stages the wav before (maybe) uploading. In Volume mode the
+// copy is transient, so use a writable temp dir — serverless hosts (Vercel) have a
+// READ-ONLY app filesystem and only /tmp is writable. Local dev stages in public/.
+export function stagingDir(): string {
+  return volumeRoot() ? path.join(os.tmpdir(), "nexus-narration") : LOCAL_DIR;
+}
 
 export function volumeRoot(): string | null {
   const v = process.env.NARRATION_VOLUME?.trim();
@@ -24,7 +33,7 @@ export function volumeRoot(): string | null {
 
 /** Where the renderer should write the wav locally before we (maybe) upload it. */
 export function localWavPath(id: string): string {
-  return path.join(LOCAL_DIR, `ep${id}.wav`);
+  return path.join(stagingDir(), `ep${id}.wav`);
 }
 
 function filesApiUrl(volumePath: string): string {
