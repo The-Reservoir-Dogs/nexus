@@ -1,0 +1,3669 @@
+{
+  "schema_version": "1.0",
+  "series_id": 20,
+  "season": 1,
+  "title": "Sherlock Holmes: The Baker Street Casebook",
+  "canon_file": "sherlock_metadata.json",
+  "tts_contract": {
+    "source_of_truth": "scenes[].lines[] — never send this JSON file itself to the TTS model",
+    "engine": "gemini-2.5-flash-preview-tts",
+    "render_mode": "per-line single-speaker calls, stitched with pydub",
+    "reason": "Gemini multi-speaker config accepts a maximum of two speakers per call. Most scenes here have three or more.",
+    "text_guarantees": [
+      "no asterisks, hashes, underscores, backticks, angle brackets, square brackets or curly braces",
+      "no em dashes, en dashes or ellipses",
+      "no markdown of any kind",
+      "abbreviations expanded: Doctor, Mister, Missus, Inspector, Street",
+      "numbers spelled as spoken: two two one B, thirty eight calibre, three hundred pounds",
+      "validated by data/series/build_tts_script.py"
+    ]
+  },
+  "generation_status": {
+    "episodes_written": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "episodes_remaining": []
+  },
+  "episodes": [
+    {
+      "episode_id": 2101,
+      "order_index": 1,
+      "title": "A Chance Introduction",
+      "act": 1,
+      "function": "hook",
+      "source_range": "case one, zero minutes forty four seconds to three minutes twenty seconds",
+      "summary": "Doctor Watson returns wounded from Afghanistan, meets an old acquaintance in a public house, and hears about a strange man at the hospital who has spent the morning beating a corpse with a stick.",
+      "prev_episode_summary": null,
+      "est_duration_sec": 294,
+      "word_count": 712,
+      "threads_opened": [
+        500
+      ],
+      "threads_touched": [
+        500
+      ],
+      "characters_present": [
+        801,
+        803
+      ],
+      "objects_present": [],
+      "end_hook": "A man who beats a dead body with a stick, to learn whether you can bruise the dead. Watson wants to meet him.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Warm retrospective narration, then easy conversation in a quiet public house.",
+      "scenes": [
+        {
+          "scene_id": 5011,
+          "order_index": 1,
+          "title": "Home from Afghanistan",
+          "function": "hook",
+          "est_duration_sec": 89,
+          "start_ms": 0,
+          "end_ms": 89000,
+          "characters_present": [
+            801
+          ],
+          "threads_touched": [
+            500
+          ],
+          "location": "London streets",
+          "lines": [
+            {
+              "speaker": "NARRATOR",
+              "text": "There is no city in the world so attractive as the one you call home, and never more attractive than when you return to it after long and difficult years in other parts of the world."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "My name is Doctor John Watson. I had served in the more remote regions of Afghanistan. I was wounded there, in the shoulder, and I carried home a fever that very nearly finished what the bullet had begun. The Army discharged me with specific instructions to rest."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "The sight of London was already working its quiet cure. As I walked the familiar streets that autumn, with no duties and no particular direction, I felt myself becoming a man again rather than a casualty."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "There was, however, the question of money. A wounded officer's pension is a careful sort of income. It will keep a man in a hotel for a fortnight or in lodgings for a year, and I had already spent rather more of the fortnight than I care to admit. I had begun, that week, to read the advertisements at the back of the newspapers with real attention."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I never once suspected that a chance introduction, made in an ordinary public house on an ordinary afternoon, would lead me into the most amazing adventure of my entire life."
+            }
+          ],
+          "craft": {
+            "quality": 0.88,
+            "tension": 0.35,
+            "emotional": 0.7,
+            "thread_inv": 0.7,
+            "hook": 0.8
+          }
+        },
+        {
+          "scene_id": 5012,
+          "order_index": 2,
+          "title": "An Old Acquaintance",
+          "function": "character",
+          "est_duration_sec": 77,
+          "start_ms": 89000,
+          "end_ms": 166000,
+          "characters_present": [
+            801,
+            803
+          ],
+          "threads_touched": [
+            500
+          ],
+          "location": "A public house",
+          "lines": [
+            {
+              "speaker": "STAMFORD",
+              "text": "Watson. Good heavens. You were wounded."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I was. I am a great deal better than I was."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "You look it. Sit down, sit down. What are your plans now?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Nothing at all, at the moment. I am looking for lodgings. I am trying to solve the whole problem of comfortable quarters at a reasonable price."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "That is odd."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Is it?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "You are the second man today to use that exact expression."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Who was the other?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "A fellow doing some work in the chemical laboratory at the hospital. He wants to share rooms and cannot find anyone to share them with."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Then he has my sympathy, and possibly my address. Has he found somewhere?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "He has. That is rather the trouble. He has found a set of rooms he likes very much and cannot manage the rent alone, and he has been looking for a fortnight for somebody to go halves with him."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "A fortnight seems a long while to look."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "It does rather, does it not."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Well, I should not mind sharing a flat, if he is all right."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Ah."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Ah?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "He is rather strange."
+            }
+          ],
+          "craft": {
+            "quality": 0.9,
+            "tension": 0.45,
+            "emotional": 0.55,
+            "thread_inv": 0.85,
+            "hook": 0.85
+          }
+        },
+        {
+          "scene_id": 5013,
+          "order_index": 3,
+          "title": "Beating a Corpse",
+          "function": "conflict",
+          "est_duration_sec": 75,
+          "start_ms": 166000,
+          "end_ms": 241000,
+          "characters_present": [
+            801,
+            803
+          ],
+          "threads_touched": [
+            500,
+            503
+          ],
+          "location": "A public house",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "Strange in what way? What is wrong with him?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Nothing is wrong with him. Holmes is his name. Sherlock Holmes."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "And I saw him this morning. He was doing some research with a corpse."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "That is hardly strange. So do I."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "He was beating it with a stick."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "He was what?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Beating it. With a stick. For a considerable time."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "In heaven's name, why?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "I asked him. He said he wanted to find out whether it is possible to inflict a bruise on a body after death."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I set down my glass. In four years of military surgery I had examined a great many injuries and had been asked to say, more than once, whether a wound had been received before a man died or after it. I had given my opinion each time. I had never once been certain, and neither had anybody else."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Stamford. Do you understand what he is doing?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Beating a corpse with a stick, old man."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "He is settling a question that has hanged men and acquitted them for as long as there have been courts."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.6,
+            "emotional": 0.5,
+            "thread_inv": 0.88,
+            "hook": 0.92
+          }
+        },
+        {
+          "scene_id": 5014,
+          "order_index": 4,
+          "title": "One More Question",
+          "function": "close",
+          "est_duration_sec": 53,
+          "start_ms": 241000,
+          "end_ms": 294000,
+          "characters_present": [
+            801,
+            803
+          ],
+          "threads_touched": [
+            500
+          ],
+          "location": "A public house",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "And is it? Possible?"
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Do you know, I did not think to ask him."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I have thought about that answer many times since. Stamford had stood in a room with a man conducting an experiment that no one in the history of medicine had thought to conduct, and the only question that had occurred to him was whether the man was sane."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I do not blame him for it. I should very likely have done the same a year earlier. But I had come home from a place where the difference between a careful answer and a confident one was the difference between a man walking free and a man being shot, and I had lost my appetite for confident answers."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Stamford."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Yes?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I should like to meet him."
+            }
+          ],
+          "craft": {
+            "quality": 0.92,
+            "tension": 0.5,
+            "emotional": 0.65,
+            "thread_inv": 0.9,
+            "hook": 0.95
+          }
+        }
+      ]
+    },
+    {
+      "episode_id": 2102,
+      "order_index": 2,
+      "title": "You Have Been in Afghanistan",
+      "act": 1,
+      "function": "turn",
+      "source_range": "case one, three minutes twenty seconds to six minutes",
+      "summary": "Watson meets Holmes mid experiment. Holmes has devised the first reliable test for bloodstains, greets Watson by naming a country he has never mentioned, and offers him rooms in Baker Street.",
+      "prev_episode_summary": "Watson, home wounded from Afghanistan and looking for lodgings, hears of a strange man at the hospital who beats corpses to study bruising, and asks to meet him.",
+      "est_duration_sec": 297,
+      "word_count": 718,
+      "threads_opened": [
+        503
+      ],
+      "threads_touched": [
+        500,
+        503
+      ],
+      "characters_present": [
+        800,
+        801,
+        803
+      ],
+      "objects_present": [
+        950,
+        951,
+        952
+      ],
+      "end_hook": "Holmes explains how he knew about Afghanistan, and the explanation is somehow more astonishing than the trick.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Holmes is rapid and delighted, talking past Watson. Watson is polite and completely lost.",
+      "scenes": [
+        {
+          "scene_id": 5021,
+          "order_index": 1,
+          "title": "The Laboratory",
+          "function": "setup",
+          "est_duration_sec": 94,
+          "start_ms": 0,
+          "end_ms": 94000,
+          "characters_present": [
+            800,
+            801,
+            803
+          ],
+          "threads_touched": [
+            503
+          ],
+          "location": "Saint Bartholomew's laboratory",
+          "lines": [
+            {
+              "speaker": "NARRATOR",
+              "text": "We found him in the chemical laboratory, bent over a bench of glassware, and he did not look up when we entered."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It works. Do you understand me? It works."
+            },
+            {
+              "speaker": "STAMFORD",
+              "text": "Mister Holmes, this is Doctor Watson."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You are a doctor. Then you will realise you have just walked into the greatest chapter in the history of forensic medicine. Look at it. A test for haemoglobin that begins with this and ends with that."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I am afraid I do not."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You do not what?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Realise what it means."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It means a revolution in criminal investigation. Consider the general problem. A man is suspected of a crime months after it is committed. They find stains on his clothing, on his linen, on a weapon, and they cannot say whether it is blood, or mud, or rust. They have never been able to say. Now they can."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "The old test was guaiacum, was it not."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "The old test was guaiacum, and it was clumsy, and it was uncertain, and it required a quantity of fresh blood that no criminal has ever been obliging enough to leave behind. Mine requires a stain the size of a pinhead and it does not care how old the stain is. A year. Ten years."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Ten years."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Ten years, Doctor. Think what that does to a man who has been sleeping soundly for nine of them."
+            }
+          ],
+          "craft": {
+            "quality": 0.93,
+            "tension": 0.55,
+            "emotional": 0.6,
+            "thread_inv": 0.8,
+            "hook": 0.82
+          }
+        },
+        {
+          "scene_id": 5022,
+          "order_index": 2,
+          "title": "How Do You Do",
+          "function": "climax",
+          "est_duration_sec": 57,
+          "start_ms": 94000,
+          "end_ms": 151000,
+          "characters_present": [
+            800,
+            801
+          ],
+          "threads_touched": [
+            500,
+            503
+          ],
+          "location": "Saint Bartholomew's laboratory",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "Had this test been in existence a year ago, the man Bishop would most certainly have hanged. And that goes for Mason of Bradford, and for Muller, and for half a dozen others walking about at this moment in perfect health."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Who are these people?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Murderers, Doctor Watson. How do you do. I am delighted to meet you. You have been in Afghanistan, I perceive."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I had not mentioned Afghanistan. I had not mentioned the Army. I had not, so far as I could recall, mentioned anything at all except my own name, and that had been said by somebody else."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "How on earth did you know that?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is written all over you."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "That is not an answer."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "No. It is not, is it. Stamford tells me you are looking for someone to share a flat."
+            }
+          ],
+          "craft": {
+            "quality": 0.97,
+            "tension": 0.8,
+            "emotional": 0.75,
+            "thread_inv": 0.95,
+            "hook": 0.95
+          }
+        },
+        {
+          "scene_id": 5023,
+          "order_index": 3,
+          "title": "Written All Over You",
+          "function": "exposition",
+          "est_duration_sec": 112,
+          "start_ms": 151000,
+          "end_ms": 263000,
+          "characters_present": [
+            800,
+            801
+          ],
+          "threads_touched": [
+            503
+          ],
+          "location": "Saint Bartholomew's laboratory",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "Holmes. I must know. How did you know I had come from Afghanistan?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is obvious you are a doctor. That much I had from Stamford, so I will not claim it. But you carry yourself with the air of a military man, therefore an army doctor."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Go on."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You have acquired a heavy sunburn, and I know it is not your natural colouring because your wrists are white. Your face tells me you have been ill, badly and recently. I would say some manner of tropical fever."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And the wound?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You hold your left arm stiffly, as though the shoulder has been damaged and has not forgiven you for it. So. Where in the world does an army doctor acquire a tropical fever, a sunburn and a wounded shoulder, all at once, and come home this season to be discharged?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Afghanistan."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Afghanistan."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I have been asked since whether I felt made a fool of. I did not. What I felt, standing in that laboratory with my hat still in my hand, was something closer to relief. Every one of those observations had been available to me. I had looked at my own wrists that morning. The difference between us was not that he saw more than I did. It was that he troubled to put it together."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "It is remarkably simple, when you explain it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It always is. That is the great disappointment of my profession. I explain a thing and it stops being remarkable, and the person I explained it to concludes that anyone could have done it."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I did not say that."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "No. You did not. I noticed."
+            }
+          ],
+          "craft": {
+            "quality": 0.95,
+            "tension": 0.5,
+            "emotional": 0.6,
+            "thread_inv": 0.85,
+            "hook": 0.72
+          }
+        },
+        {
+          "scene_id": 5024,
+          "order_index": 4,
+          "title": "Do You Mind the Violin",
+          "function": "close",
+          "est_duration_sec": 34,
+          "start_ms": 263000,
+          "end_ms": 297000,
+          "characters_present": [
+            800,
+            801
+          ],
+          "threads_touched": [
+            500
+          ],
+          "location": "Saint Bartholomew's laboratory",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "I think you will like the flat. It is in Baker Street. We could go round this afternoon and look at it."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Yes. Yes, I should like that."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Good. Do you mind if I play the violin?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Now?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "When we are sharing the rooms."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Oh. Of course not. I like a bit of good music."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Excellent. I am not very good."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "We examined the rooms at two two one B, Baker Street that afternoon, and I moved in on the following day."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.35,
+            "emotional": 0.85,
+            "thread_inv": 0.8,
+            "hook": 0.78
+          }
+        }
+      ]
+    },
+    {
+      "episode_id": 2103,
+      "order_index": 3,
+      "title": "A Classification of Mister Holmes",
+      "act": 1,
+      "function": "character",
+      "source_range": "case one, six minutes to nine minutes forty five seconds",
+      "summary": "Watson discovers that Holmes does not know the Earth goes round the Sun, and intends to forget it again. He draws up a private classification of the man's knowledge, and then watches Holmes identify a stranger through a window.",
+      "prev_episode_summary": "Watson met Holmes at the hospital laboratory, was told he had been in Afghanistan by a man who had never met him, and took rooms with him at two two one B, Baker Street.",
+      "est_duration_sec": 260,
+      "word_count": 627,
+      "threads_opened": [],
+      "threads_touched": [
+        500,
+        503
+      ],
+      "characters_present": [
+        800,
+        801,
+        812
+      ],
+      "objects_present": [
+        951,
+        953
+      ],
+      "end_hook": "A messenger arrives from the police, and Holmes has named the man's entire career before he has opened his mouth.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Domestic and comic, then sharpening abruptly when the visitor arrives.",
+      "production_note": "PREDICTED WEAK EPISODE. The classification section is a list rather than a scene. No stakes, no antagonist. Predicted before measurement, deliberately not repaired.",
+      "scenes": [
+        {
+          "scene_id": 5031,
+          "order_index": 1,
+          "title": "Twenty Four Hours",
+          "function": "setup",
+          "est_duration_sec": 70,
+          "start_ms": 0,
+          "end_ms": 70000,
+          "characters_present": [
+            801
+          ],
+          "threads_touched": [
+            500
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "NARRATOR",
+              "text": "I had at that point known Sherlock Holmes for twenty four hours."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "In that time I had learned that he kept no regular hours, that he received no letters from family, and that the chemical apparatus on the sitting room table was not to be moved for any reason whatsoever, including cleaning, including fire."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "His powers of perception were fantastic. His personality was the least predictable I had ever encountered. Between the two of them they kept me in a state of more or less constant surprise, and I began, in self defence, to take notes."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "He rose at four one morning and did not rise at all the next. He would speak for an hour on the varieties of cigar ash and then not speak for a day and a half. Our landlady formed the view within a week that he was a gentleman of independent means recovering from a disappointment, and I did not correct her, chiefly because I had no better theory of my own."
+            }
+          ],
+          "craft": {
+            "quality": 0.8,
+            "tension": 0.25,
+            "emotional": 0.45,
+            "thread_inv": 0.6,
+            "hook": 0.55
+          }
+        },
+        {
+          "scene_id": 5032,
+          "order_index": 2,
+          "title": "The Solar System",
+          "function": "character",
+          "est_duration_sec": 58,
+          "start_ms": 70000,
+          "end_ms": 128000,
+          "characters_present": [
+            800,
+            801
+          ],
+          "threads_touched": [
+            503
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "Holmes. You cannot be serious."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I am entirely serious."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Every schoolchild in England knows that the Earth travels round the Sun."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Well. Now I know it too. And I shall do my best to forget it."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Forget it?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Why should I remember it? It is a natural phenomenon. Is it important? Does it affect us? If you told me tomorrow that the Earth went round the Moon instead, would it make the smallest difference to my work, or to yours, or to the price of a cab from here to Charing Cross?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Put that way. No."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Then it is useless information, and I shall do my best to forget it. I advise you to do the same."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "At times I thought the man was joking, and having a little fun at my expense. I soon learned he was in dead earnest."
+            }
+          ],
+          "craft": {
+            "quality": 0.91,
+            "tension": 0.3,
+            "emotional": 0.7,
+            "thread_inv": 0.65,
+            "hook": 0.6
+          }
+        },
+        {
+          "scene_id": 5033,
+          "order_index": 3,
+          "title": "The Classification",
+          "function": "exposition",
+          "est_duration_sec": 74,
+          "start_ms": 128000,
+          "end_ms": 202000,
+          "characters_present": [
+            801
+          ],
+          "threads_touched": [
+            503
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "NARRATOR",
+              "text": "Unknown to him, I drew up a brief classification of the man's knowledge."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "Literature. Nothing. Philosophy. Nothing. Astronomy. Nothing, and shortly to be less than nothing. Politics. Feeble. Botany. Variable, and entirely dependent on whether the plant in question could be used to poison somebody."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "Chemistry. Profound. Anatomy. Accurate, though unsystematic. Sensational literature. Immense. He appeared to know the details of every serious crime committed in the last hundred years."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I read the list back to myself and found that I had described a man who was ignorant of everything the world agreed was worth knowing, and expert in everything it agreed was not. I put the paper in a drawer. I did not throw it away."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I have kept it. It is in front of me now, in a hand rather steadier than the one I write with these days, and there is a note at the bottom in pencil which reads, in its entirety, what is he for."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I had the answer within the week, and I have spent the rest of my life setting it down."
+            }
+          ],
+          "craft": {
+            "quality": 0.72,
+            "tension": 0.15,
+            "emotional": 0.35,
+            "thread_inv": 0.45,
+            "hook": 0.4
+          }
+        },
+        {
+          "scene_id": 5034,
+          "order_index": 4,
+          "title": "The Retired Sergeant of Marines",
+          "function": "close",
+          "est_duration_sec": 58,
+          "start_ms": 202000,
+          "end_ms": 260000,
+          "characters_present": [
+            800,
+            801,
+            812
+          ],
+          "threads_touched": [
+            502
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "We have a visitor."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Coming here?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Coming here. A retired sergeant of Marines, I should say."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "That is one of the wildest statements I have ever heard. How can you possibly know that? You have never seen the man."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I have seen the man. I have not spoken to him. Ask him yourself, if you like."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Gentlemen. I have a message for Mister Sherlock Holmes."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Forgive me. Would you mind telling me your occupation?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Not at all, sir. I am a civil servant, employed by the police department."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And how long have you been with the police department?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Just under two years, sir."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And before that?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Before that I was a sergeant in the Marines. Good day, gentlemen."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "An interesting letter. A very interesting letter indeed. Perhaps you would care to come with me."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Where?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "To catch a murderer."
+            }
+          ],
+          "craft": {
+            "quality": 0.96,
+            "tension": 0.85,
+            "emotional": 0.65,
+            "thread_inv": 0.92,
+            "hook": 0.97
+          }
+        }
+      ]
+    },
+    {
+      "episode_id": 2104,
+      "order_index": 4,
+      "title": "A Matter of Your Name, Please",
+      "act": 2,
+      "function": "setup",
+      "source_range": "case one, nine minutes forty five seconds to fourteen minutes",
+      "summary": "Holmes and Watson reach the Cunningham house. A man has been stabbed in his own front room, his mother has already decided who did it, and Inspector Lestrade has already agreed with her.",
+      "prev_episode_summary": "Watson catalogued Holmes's strange knowledge, then watched him identify a police messenger as a retired sergeant of Marines through a window. The messenger brought a letter, and Holmes invited Watson to come and catch a murderer.",
+      "threads_opened": [
+        501,
+        502
+      ],
+      "threads_touched": [
+        501,
+        502
+      ],
+      "characters_present": [
+        800,
+        801,
+        802,
+        807,
+        805
+      ],
+      "objects_present": [
+        954,
+        956
+      ],
+      "end_hook": "There is no motive. The woman gains nothing by his death, and the mother wants her hanged regardless.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Brisk, procedural, with grief breaking through underneath.",
+      "scenes": [
+        {
+          "scene_id": 5041,
+          "order_index": 1,
+          "title": "The House on the Corner",
+          "function": "setup",
+          "est_duration_sec": 79,
+          "start_ms": 0,
+          "end_ms": 79000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            501
+          ],
+          "location": "The Cunningham house",
+          "lines": [
+            {
+              "speaker": "NARRATOR",
+              "text": "We took a cab across the river and I spent the journey asking questions that were not answered. Holmes had read the letter twice, put it in his pocket, and thereafter looked out of the window with the expression of a man attending a concert."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "You might tell me where we are going."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "To a house where a man was found dead on his own carpet last night with a knife in his chest and a young woman standing over him holding it."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Good heavens. Then it is perfectly clear."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is perfectly clear. That is what troubles me. Test your own powers of observation on the way in, Doctor. I should be interested to know what you make of the carpet."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "There was a constable at the door and a small crowd on the pavement being encouraged to disperse, which they were doing at the speed of people who have no intention of dispersing."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Move along there, please. Nothing to see. Move along."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Good morning."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "A matter of your name, please, sir."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Sherlock Holmes. This is Doctor Watson."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Oh. Quite all right, sir. Inspector Lestrade gave instructions to admit you."
+            }
+          ],
+          "craft": {
+            "quality": 0.88,
+            "tension": 0.65,
+            "emotional": 0.45,
+            "thread_inv": 0.85,
+            "hook": 0.75
+          }
+        },
+        {
+          "scene_id": 5042,
+          "order_index": 2,
+          "title": "The Body Has Been Moved",
+          "function": "conflict",
+          "est_duration_sec": 62,
+          "start_ms": 79000,
+          "end_ms": 141000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            501,
+            502
+          ],
+          "location": "The Cunningham front room",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "Has the body been removed?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "It has, sir. The medical examiner has only just finished with it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Of course it has. And these gentlemen have been walking about in here since dawn."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Is that a difficulty?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "The police forces of the world seem to have organised the moving of things about into a science. They have not yet organised the leaving of things alone. It is a much harder discipline and it catches a great many more murderers."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "He went down on one knee at the edge of the carpet and stayed there for some time without touching anything at all."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "What is it?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "The pile has been disturbed. Here, and here, and again by the leg of that chair. Somebody has moved across this floor with a good deal of force behind them."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "A struggle."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "A struggle, Doctor. Remember that we found one. It will be inconvenient later."
+            }
+          ],
+          "craft": {
+            "quality": 0.92,
+            "tension": 0.7,
+            "emotional": 0.4,
+            "thread_inv": 0.88,
+            "hook": 0.8
+          }
+        },
+        {
+          "scene_id": 5043,
+          "order_index": 3,
+          "title": "She Murdered Him",
+          "function": "climax",
+          "est_duration_sec": 65,
+          "start_ms": 141000,
+          "end_ms": 206000,
+          "characters_present": [
+            801,
+            807,
+            805
+          ],
+          "threads_touched": [
+            501
+          ],
+          "location": "The Cunningham front room",
+          "lines": [
+            {
+              "speaker": "MOTHER_CUNNINGHAM",
+              "text": "I do not know. I swear to you I do not know. I tried to help him. Do you not believe me?"
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "That was the young woman, and she was speaking to a much older one, who sat entirely upright in a chair by the window and did not look at her."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "I did what I could. Anyone would have done the same."
+            },
+            {
+              "speaker": "MOTHER_CUNNINGHAM",
+              "text": "You know that is not true. And I know it. And you know that I know it."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "You hate me. You have always hated me."
+            },
+            {
+              "speaker": "MOTHER_CUNNINGHAM",
+              "text": "Yes. I can, and I do. My son has been murdered, and there is the murderess, and I can only be grateful that she gains nothing at all by her crime."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "The older woman turned to us for the first time, and I have rarely seen a face so completely emptied of everything but purpose."
+            },
+            {
+              "speaker": "MOTHER_CUNNINGHAM",
+              "text": "They were engaged. Not with my blessing. Your duty now is to convict her."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.85,
+            "emotional": 0.9,
+            "thread_inv": 0.9,
+            "hook": 0.85
+          }
+        },
+        {
+          "scene_id": 5044,
+          "order_index": 4,
+          "title": "The Angle of Incision",
+          "function": "close",
+          "est_duration_sec": 70,
+          "start_ms": 206000,
+          "end_ms": 276000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            501,
+            503
+          ],
+          "location": "The Cunningham front room",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "The angle of incision. What was it?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Upward, I should say, from the state of the wound. And the force considerable. The blade went in to the hilt."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "How long before loss of consciousness?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "That is difficult to say. Two minutes. Perhaps three or four before death."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Three or four. Thank you, Doctor."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Forgive the interruption."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Inspector. I should have preferred an invitation before the body was moved."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I thought you would be interested, Holmes. May I introduce, this is my friend Doctor Watson."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You are stuck."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I beg your pardon."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You said you thought I would be interested. You have never once thought I would be interested. You are in a jam, Inspector, and it is a small enough word for it."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "That is not exactly true, Holmes. I have done you a favour. It is an interesting case. There are one or two unexplained details, but I do not believe it will be long before we are clear. Our principal problem is that there is no motive."
+            }
+          ],
+          "craft": {
+            "quality": 0.93,
+            "tension": 0.75,
+            "emotional": 0.5,
+            "thread_inv": 0.92,
+            "hook": 0.9
+          }
+        }
+      ],
+      "word_count": 666,
+      "est_duration_sec": 276
+    },
+    {
+      "episode_id": 2105,
+      "order_index": 5,
+      "title": "They Were Married",
+      "act": 2,
+      "function": "turn",
+      "source_range": "case one, fourteen minutes to nineteen minutes forty five seconds",
+      "summary": "Holmes supplies the motive Lestrade was missing, and in doing so hands the police the rope to hang an innocent woman. Then he explains how he knew, and nobody thanks him for it.",
+      "prev_episode_summary": "At the Cunningham house Holmes found signs of a struggle on the carpet, listened to a mother accuse her son's fiancee of murder, and learned from Lestrade that the case had no motive at all.",
+      "threads_opened": [],
+      "threads_touched": [
+        501,
+        502,
+        503
+      ],
+      "characters_present": [
+        800,
+        801,
+        802,
+        805
+      ],
+      "objects_present": [
+        957,
+        956
+      ],
+      "end_hook": "The woman had a prison record and now she has a motive. Lestrade has his case, and Holmes has begun to look unhappy.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Holmes is quick and pleased with himself, and then abruptly is not.",
+      "scenes": [
+        {
+          "scene_id": 5051,
+          "order_index": 1,
+          "title": "There Is No Motive",
+          "function": "setup",
+          "est_duration_sec": 55,
+          "start_ms": 0,
+          "end_ms": 55000,
+          "characters_present": [
+            800,
+            801,
+            802,
+            805
+          ],
+          "threads_touched": [
+            501
+          ],
+          "location": "The Cunningham front room",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "This would be a clear cut case if only she had a reason. There happened to be a constable in the street outside the whole of that evening, and he is quite certain that nobody entered this house except her."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Then who benefits by his death?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Nobody. That is the trouble. The estate was left in such a way that if he died before he married, everything went to charity."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "My dear Inspector Lestrade."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Holmes."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "He did not die before he married."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "The room went very quiet. The young woman raised her head."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "He did not die before he married this young lady, and the man whose body was carried out of here had been married for at least a week. In the event of his death I imagine everything passes to her."
+            }
+          ],
+          "craft": {
+            "quality": 0.96,
+            "tension": 0.88,
+            "emotional": 0.65,
+            "thread_inv": 0.95,
+            "hook": 0.92
+          }
+        },
+        {
+          "scene_id": 5052,
+          "order_index": 2,
+          "title": "How Did You Know",
+          "function": "conflict",
+          "est_duration_sec": 45,
+          "start_ms": 55000,
+          "end_ms": 100000,
+          "characters_present": [
+            800,
+            801,
+            802,
+            805
+          ],
+          "threads_touched": [
+            501
+          ],
+          "location": "The Cunningham front room",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "Is this true? Are you married to him?"
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "Yes."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Then you do benefit by his death."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "I only know that I did not kill him. I swear to you that I did not kill him."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Where were you married?"
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "At Brighton. We went down for the weekend."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Then why did he say nothing about it?"
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "I do not know. He asked me not to. He said there was something he had to finish first, and that after that it would not matter who knew."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I am afraid, young lady, I shall have to ask you to accompany me to headquarters."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "May I tell his mother?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "You may not."
+            }
+          ],
+          "craft": {
+            "quality": 0.93,
+            "tension": 0.85,
+            "emotional": 0.8,
+            "thread_inv": 0.92,
+            "hook": 0.82
+          }
+        },
+        {
+          "scene_id": 5053,
+          "order_index": 3,
+          "title": "The Sunburn and the Ring",
+          "function": "exposition",
+          "est_duration_sec": 57,
+          "start_ms": 100000,
+          "end_ms": 157000,
+          "characters_present": [
+            800,
+            801
+          ],
+          "threads_touched": [
+            501,
+            503
+          ],
+          "location": "Outside the Cunningham house",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "Holmes. How did you know they were married?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "The dead man's hands. There was the remains of a sunburn on them, and the fading mark of a ring that was not yet in place. A ring worn habitually leaves an indentation. This one had not had time to."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "A new ring."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "A new ring, on a hand that has spent a weekend somewhere with more sun in it than London has managed since April. Brighton explains the whole thing, and Brighton is where one goes to be married quickly and quietly."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I did not notice any of that."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You were looking at the wound. It is what you are trained to look at. The young lady's hands, by the way, were sunburned to precisely the same degree."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "The same weekend."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It would appear so, would it not."
+            }
+          ],
+          "craft": {
+            "quality": 0.86,
+            "tension": 0.4,
+            "emotional": 0.45,
+            "thread_inv": 0.75,
+            "hook": 0.55
+          }
+        },
+        {
+          "scene_id": 5054,
+          "order_index": 4,
+          "title": "Nine Months in Holloway",
+          "function": "close",
+          "est_duration_sec": 55,
+          "start_ms": 157000,
+          "end_ms": 212000,
+          "characters_present": [
+            800,
+            801,
+            802,
+            805
+          ],
+          "threads_touched": [
+            501,
+            502
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "Well now. It seems this girl has a record. Nine months in the women's prison at Holloway, some five years ago. Employed as a governess and convicted of stealing three hundred pounds from her employer."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "That is quite true. I knew you would find it out sooner or later."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "You did not think to mention it."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "I made a mistake five years ago and I paid for it. Peter knew all about it before we were married. I never tried to hide it from him."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "He did not know what else you had in mind."
+            },
+            {
+              "speaker": "MRS_CUNNINGHAM",
+              "text": "I had nothing else in mind, except that I loved him."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "Lestrade looked at Holmes, and Holmes looked at the window, and said nothing whatever."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I am afraid I must ask you to go with the officers."
+            }
+          ],
+          "craft": {
+            "quality": 0.9,
+            "tension": 0.75,
+            "emotional": 0.85,
+            "thread_inv": 0.88,
+            "hook": 0.85
+          }
+        }
+      ],
+      "word_count": 510,
+      "est_duration_sec": 212
+    },
+    {
+      "episode_id": 2106,
+      "order_index": 6,
+      "title": "A Thousand Pounds a Week",
+      "act": 2,
+      "function": "climax",
+      "source_range": "case one, nineteen minutes forty five seconds to twenty six minutes",
+      "summary": "Holmes finds a chequebook nobody thought to open, Lestrade refuses to reopen a closed case, and so Holmes breaks into the house at night and is still there when the murderer comes home with a revolver.",
+      "prev_episode_summary": "Holmes proved the dead man had secretly married, which gave the accused woman the motive the police were missing. Her old prison record did the rest, and she was taken to headquarters.",
+      "threads_opened": [],
+      "threads_touched": [
+        501,
+        502
+      ],
+      "characters_present": [
+        800,
+        801,
+        802,
+        806
+      ],
+      "objects_present": [
+        955,
+        956
+      ],
+      "end_hook": "The brother confesses to a room he believes he is about to empty, and Holmes has been standing in the dark listening to every word of it.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Tense and quiet in the dark house. The confession is calm, which makes it worse.",
+      "scenes": [
+        {
+          "scene_id": 5061,
+          "order_index": 1,
+          "title": "The Chequebook",
+          "function": "setup",
+          "est_duration_sec": 58,
+          "start_ms": 0,
+          "end_ms": 58000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            501,
+            502
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "That is how I like my cases. Fast and simple."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Then you will enjoy this. Peter Cunningham drew a cheque for one thousand pounds six weeks ago. And five weeks ago. And four, and three, and two."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "And?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "All of it in cash."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I do not get your point. He was a very rich man."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "It is a great deal of cash, Inspector."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "It was his own money. I suppose he could do as he liked with it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Five thousand pounds in cash, in five weeks, drawn by a careful man who told nobody he had married. And a week before he died he began to tell his wife that there was something he had to finish first."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Holmes, you are trying to start something that does not exist. And when there is not a mystery, you have to make one."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.8,
+            "emotional": 0.5,
+            "thread_inv": 0.92,
+            "hook": 0.85
+          }
+        },
+        {
+          "scene_id": 5062,
+          "order_index": 2,
+          "title": "I Will Not Stand For It",
+          "function": "conflict",
+          "est_duration_sec": 68,
+          "start_ms": 58000,
+          "end_ms": 126000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            501,
+            502
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "You are right. I am not happy."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Now look here."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "There are marks on that carpet indicating a struggle. The man whose body was carried out of that house was over six feet in height. If he had struggled with the young woman you have in a cell, I do not think he would have lost."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "She surprised him."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "He was expecting her. He had asked her to come."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Then she sneaked up on him."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "And stabbed him in the chest. How does one sneak up on a man and stab him in the chest, Inspector? I should be glad to learn it."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Look here, Holmes. That girl is in a cell, and she is guilty, and she is going to hang, and that is the end of the case. I will not stand for any more of it."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "We walked out into the street. Holmes said nothing for two streets together, which in my short experience of him was a very bad sign indeed."
+            }
+          ],
+          "craft": {
+            "quality": 0.95,
+            "tension": 0.88,
+            "emotional": 0.6,
+            "thread_inv": 0.94,
+            "hook": 0.88
+          }
+        },
+        {
+          "scene_id": 5063,
+          "order_index": 3,
+          "title": "Burglars Keys",
+          "function": "action",
+          "est_duration_sec": 53,
+          "start_ms": 126000,
+          "end_ms": 179000,
+          "characters_present": [
+            800,
+            801
+          ],
+          "threads_touched": [
+            501
+          ],
+          "location": "The Cunningham house at night",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "What time is it?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "A little after ten."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Then you might take a stroll with me. I should like to investigate this afternoon's affair a little further."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I thought you had forgotten about it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Not at all. I have been thinking about it all evening."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Where are we going?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "To the Cunningham house."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "You have made an appointment?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I have not."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Then who are we going to see?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Nobody, I hope."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Holmes, you cannot break into a house."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Why not?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Because it is against the law. That is why not."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Yes. It is a fair point and I have considered it at some length."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Where did you get that key?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is not a key exactly. It is a burglar's key. I have several. Mind the step."
+            }
+          ],
+          "craft": {
+            "quality": 0.96,
+            "tension": 0.82,
+            "emotional": 0.7,
+            "thread_inv": 0.9,
+            "hook": 0.9
+          }
+        },
+        {
+          "scene_id": 5064,
+          "order_index": 4,
+          "title": "He Married Her To Prove It",
+          "function": "climax",
+          "est_duration_sec": 82,
+          "start_ms": 179000,
+          "end_ms": 261000,
+          "characters_present": [
+            800,
+            801,
+            806
+          ],
+          "threads_touched": [
+            501
+          ],
+          "location": "The Cunningham house at night",
+          "lines": [
+            {
+              "speaker": "RALPH",
+              "text": "Do not move. Either of you."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I have been shot at in Afghanistan by men who meant it, and I can tell you there is a particular quality to a voice that has already decided."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Good evening. You will be the brother."
+            },
+            {
+              "speaker": "RALPH",
+              "text": "Looking for what, precisely?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Bank statements. Anything indicating a passage of money out of Peter Cunningham's account and into somebody else's."
+            },
+            {
+              "speaker": "RALPH",
+              "text": "You will not find it. I burned it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You were blackmailing him. His engagement to a woman with a prison record was a perfect opportunity to extract a little money."
+            },
+            {
+              "speaker": "RALPH",
+              "text": "It would have gone on for years if he had not been such a bullhead. He married her to prove to me that my blackmail would not stop him. And then he withheld the fact of it to give me one week to get out of the country before he exposed me."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And the money?"
+            },
+            {
+              "speaker": "RALPH",
+              "text": "Buying up my promissory notes. I was being pressed, Mister Holmes."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "So you killed him, and the jailbird made a perfect suspect."
+            },
+            {
+              "speaker": "RALPH",
+              "text": "Perfect. And you and Doctor Watson make perfect burglars. When I report your deaths to the police they can hardly blame a man for defending his own home."
+            }
+          ],
+          "craft": {
+            "quality": 0.98,
+            "tension": 0.97,
+            "emotional": 0.85,
+            "thread_inv": 0.96,
+            "hook": 0.95
+          }
+        }
+      ],
+      "word_count": 631,
+      "est_duration_sec": 261
+    },
+    {
+      "episode_id": 2107,
+      "order_index": 7,
+      "title": "The Newspapers Got It Wrong",
+      "act": 3,
+      "function": "hook",
+      "source_range": "case two, zero to three minutes ten seconds",
+      "summary": "The Cunningham case closes with Lestrade taking the credit and being genuinely embarrassed about it. Then a murder is reported at the home of a senior man in the Foreign Office, and Watson is invited along as a medical man.",
+      "prev_episode_summary": "Holmes broke into the Cunningham house at night, found the brother waiting with a revolver, and heard a full confession to blackmail and murder before a shot was fired.",
+      "threads_opened": [
+        504
+      ],
+      "threads_touched": [
+        502,
+        504
+      ],
+      "characters_present": [
+        801,
+        802
+      ],
+      "objects_present": [],
+      "end_hook": "A man is dead in a Foreign Office study, and the Inspector wants a medical opinion and a suggestion or two, though he will not call it that.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Comic and warm at Scotland Yard, turning official the moment the message arrives.",
+      "scenes": [
+        {
+          "scene_id": 5071,
+          "order_index": 1,
+          "title": "Absolutely Disgraceful",
+          "function": "hook",
+          "est_duration_sec": 59,
+          "start_ms": 0,
+          "end_ms": 59000,
+          "characters_present": [
+            801,
+            802
+          ],
+          "threads_touched": [
+            502
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "NARRATOR",
+              "text": "The brother was tried in the spring. The young widow was released within the week, and I never learned what became of her, which is a thing I have regretted more as I have got older."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "As for the newspapers, they were unanimous. They gave the credit for the whole affair to Inspector Lestrade of Scotland Yard."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Doctor Watson. I did not expect the pleasure of seeing you again so soon. Will you kindly read that."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "What is it?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Read it."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Oh. Oh, I see. Yes."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Disgraceful, sir. Absolutely disgraceful."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Well, I."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "And I am glad you agree, so that I can say it to you personally. You and I both know it was Sherlock Holmes who solved the Cunningham case. If it had not been for his brilliance and his persistence the facts would never have come to light at all."
+            }
+          ],
+          "craft": {
+            "quality": 0.9,
+            "tension": 0.45,
+            "emotional": 0.7,
+            "thread_inv": 0.8,
+            "hook": 0.72
+          }
+        },
+        {
+          "scene_id": 5072,
+          "order_index": 2,
+          "title": "He Does Not Care Who Gets The Credit",
+          "function": "character",
+          "est_duration_sec": 61,
+          "start_ms": 59000,
+          "end_ms": 120000,
+          "characters_present": [
+            801,
+            802
+          ],
+          "threads_touched": [
+            502
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "And I think it is scandalous, sir, that the newspapers should have given me the whole of the credit and said so very little about his magnificent achievement. What do you think, Doctor?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I. Yes. I absolutely agree with you."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I am glad you are on my side, Doctor. I am very glad you have taken it that way. What does Holmes think?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Oh, he does not mind. You know Holmes. He does not care who gets the credit."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Such a modest fellow."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "He is a great many things, Inspector."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Look, you must give him my kind regards, and tell him that although I know he thinks nothing whatever about it, I intend to get the newspapers to put the facts straight."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "That is very good of you."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "And the extraordinary thing, which I did not understand for some years, is that he meant every word of it."
+            }
+          ],
+          "craft": {
+            "quality": 0.92,
+            "tension": 0.35,
+            "emotional": 0.8,
+            "thread_inv": 0.82,
+            "hook": 0.68
+          }
+        },
+        {
+          "scene_id": 5073,
+          "order_index": 3,
+          "title": "A Murder at Lord Beryl's",
+          "function": "turn",
+          "est_duration_sec": 40,
+          "start_ms": 120000,
+          "end_ms": 160000,
+          "characters_present": [
+            801,
+            802
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "And what is Holmes doing these days?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "The last time I saw him he was playing about with a great many ink smudges and talking about the fingers of criminals."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Fingers."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Fingerprints, Inspector. He says it is the coming thing."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Nonsense."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "There was a knock at the door then, and a sergeant came in with a paper, and everything in the room changed temperature."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "What is it?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "A murder reported, sir. At the home of Lord Beryl."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Lord Beryl of the Foreign Office?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Himself, sir."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I shall be right with you. Excuse me, Doctor."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Yes, of course."
+            }
+          ],
+          "craft": {
+            "quality": 0.93,
+            "tension": 0.85,
+            "emotional": 0.5,
+            "thread_inv": 0.9,
+            "hook": 0.9
+          }
+        },
+        {
+          "scene_id": 5074,
+          "order_index": 4,
+          "title": "Perhaps A Suggestion Now And Then",
+          "function": "close",
+          "est_duration_sec": 64,
+          "start_ms": 160000,
+          "end_ms": 224000,
+          "characters_present": [
+            801,
+            802
+          ],
+          "threads_touched": [
+            504,
+            502
+          ],
+          "location": "Scotland Yard",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "The Foreign Office. This is going to be a tricky situation, Doctor, and no mistake."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Can I be of any assistance?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "I did not think so."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Ah."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "And then, of course, as a medical man. Mind you, I do not know what to expect, but I think you would be of invaluable assistance."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Say no more."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "There is a carriage waiting outside. And perhaps you would care to acquaint Sherlock Holmes with what has happened."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "I do not know myself what has happened."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "No. Quite. But as you say, the people involved make this case rather delicate. Perhaps a little suggestion now and then might help facilitate matters. One never knows."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "One never does, Inspector."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "So a message went to two two one B, Baker Street, and I got into the carriage, and it is worth recording that Inspector Lestrade had asked for Holmes's help twice in one conversation without once using the word."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.6,
+            "emotional": 0.75,
+            "thread_inv": 0.88,
+            "hook": 0.85
+          }
+        }
+      ],
+      "word_count": 541,
+      "est_duration_sec": 224
+    },
+    {
+      "episode_id": 2108,
+      "order_index": 8,
+      "title": "Some Poisons Do Good",
+      "act": 3,
+      "function": "exposition",
+      "source_range": "case two, three minutes ten seconds to five minutes thirty five seconds",
+      "summary": "The message reaches Baker Street and finds Holmes entirely uninterested in it. He is halfway through an extract of pygmy poison, and he would rather explain his apparatus to a police constable over a cup of tea.",
+      "prev_episode_summary": "The newspapers gave Lestrade the credit for the Cunningham case, which embarrassed him. Then a murder was reported at Lord Beryl's house, and Watson was sent ahead as a medical man.",
+      "threads_opened": [
+        503
+      ],
+      "threads_touched": [
+        503,
+        504
+      ],
+      "characters_present": [
+        800,
+        812
+      ],
+      "objects_present": [
+        958,
+        951
+      ],
+      "end_hook": "A man is lying dead across London, and Sherlock Holmes is asking a constable whether he takes milk.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Unhurried and domestic, deliberately at odds with the urgency elsewhere.",
+      "production_note": "PREDICTED WEAK EPISODE. Delays the case without advancing it and has no antagonist present. Predicted before measurement, deliberately not repaired.",
+      "scenes": [
+        {
+          "scene_id": 5081,
+          "order_index": 1,
+          "title": "A Message For Mister Holmes",
+          "function": "setup",
+          "est_duration_sec": 51,
+          "start_ms": 0,
+          "end_ms": 51000,
+          "characters_present": [
+            800,
+            812
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "WILKINS",
+              "text": "Mister Holmes?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Yes."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "There has been a murder committed at the home of Lord Beryl. Inspector Lestrade and Doctor Watson have already gone there."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Thank you."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "And Holmes, according to the constable's own account, which he gave me afterwards at some length and with considerable feeling, turned back to the bench and did not move for the better part of a minute."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Would you care for some tea?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Some tea, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is what is making that noise. Come along, I want to have a look at this."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Sir, the Inspector."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "The Inspector has a body, a house, a widow and eleven constables. What he does not have is a hypothesis, and he will not have one before four o'clock. Do you take milk?"
+            }
+          ],
+          "craft": {
+            "quality": 0.78,
+            "tension": 0.3,
+            "emotional": 0.45,
+            "thread_inv": 0.55,
+            "hook": 0.5
+          }
+        },
+        {
+          "scene_id": 5082,
+          "order_index": 2,
+          "title": "The Apparatus",
+          "function": "exposition",
+          "est_duration_sec": 72,
+          "start_ms": 51000,
+          "end_ms": 123000,
+          "characters_present": [
+            800,
+            812
+          ],
+          "threads_touched": [
+            503
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "WILKINS",
+              "text": "What is all this over here, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Leaves. Subtropical. They were sent to me by a friend in that part of the world. The essence passes through this tube here, across the table, and is condensed in that retort there."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "And the stuff in the bottom, sir? The slime."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "That acts as a catalytic agent. It combines the essence of the leaves with the dark tarlike substance you can see settling at the base."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "And what is that when it is finished, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "A poison used by certain peoples for their arrows, and one of the most efficient in the world. A quantity smaller than a grain of rice will stop a man's heart between one step and the next."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "That is a shocking thing to have on a table, sir, if you will pardon me."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is. I am working on it because I believe certain poisons, taken in the correct dose, may have beneficial rather than fatal effects."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Beneficial."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "The difference between a medicine and a murder is arithmetic, Sergeant. Very little else."
+            }
+          ],
+          "craft": {
+            "quality": 0.7,
+            "tension": 0.18,
+            "emotional": 0.3,
+            "thread_inv": 0.4,
+            "hook": 0.35
+          }
+        },
+        {
+          "scene_id": 5083,
+          "order_index": 3,
+          "title": "Do You Take Milk",
+          "function": "character",
+          "est_duration_sec": 53,
+          "start_ms": 123000,
+          "end_ms": 176000,
+          "characters_present": [
+            800,
+            812
+          ],
+          "threads_touched": [
+            503
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "Sugar?"
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Two, sir. Thank you, sir."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Help yourself."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Very good of you, sir."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "The constable told me later that they sat for eleven minutes. He told me the exact figure. He had been watching the clock on the mantel with the fixed attention of a man who expects to be asked about it in writing."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Begging your pardon, Mister Holmes. But there is a gentleman dead."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "There is."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "And you are not in any particular hurry about it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "No."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "May I ask why not, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Because the dead gentleman will still be dead at four o'clock, and by four o'clock Inspector Lestrade will have decided what happened, and it is a great deal easier to take a wrong idea away from a man than to stop him having it."
+            }
+          ],
+          "craft": {
+            "quality": 0.82,
+            "tension": 0.25,
+            "emotional": 0.55,
+            "thread_inv": 0.5,
+            "hook": 0.55
+          }
+        },
+        {
+          "scene_id": 5084,
+          "order_index": 4,
+          "title": "It Is Always Ready",
+          "function": "close",
+          "est_duration_sec": 55,
+          "start_ms": 176000,
+          "end_ms": 231000,
+          "characters_present": [
+            800,
+            812
+          ],
+          "threads_touched": [
+            503,
+            504
+          ],
+          "location": "Two two one B, Baker Street",
+          "lines": [
+            {
+              "speaker": "WILKINS",
+              "text": "Will you come now, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I will come now."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "And the experiment, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It will keep. It is a very patient sort of process."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Only there is a flame under it, sir."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "There is. Turn it down as you go, would you, there is a good fellow. No. Leave it. I shall want it at the temperature it is."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I record that exchange exactly as the constable gave it to me, because of what happened at the end of the week. He remembered it exactly. So, I am obliged to say, did the fire brigade."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Now then. Lord Beryl of the Foreign Office. A man dead in the study of somebody whose correspondence is worth more than his silver. That will not be a robbery, Sergeant."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "What will it be, sir?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "A transaction."
+            }
+          ],
+          "craft": {
+            "quality": 0.86,
+            "tension": 0.5,
+            "emotional": 0.55,
+            "thread_inv": 0.7,
+            "hook": 0.8
+          }
+        }
+      ],
+      "word_count": 561,
+      "est_duration_sec": 231
+    },
+    {
+      "episode_id": 2109,
+      "order_index": 9,
+      "title": "My Wife Has Confessed",
+      "act": 3,
+      "function": "conflict",
+      "source_range": "case two, five minutes thirty five seconds to eight minutes forty seconds",
+      "summary": "Lord Beryl is kept waiting half an hour in his own house before being told that his wife has confessed to shooting a man in his study. Lestrade lays out a complete and satisfying case, and every word of it rests on one assumption nobody has examined.",
+      "prev_episode_summary": "Holmes received news of the murder at Baker Street and spent the next quarter of an hour making tea for the constable who brought it, on the grounds that Lestrade would need a wrong idea removed later.",
+      "threads_opened": [
+        505
+      ],
+      "threads_touched": [
+        504,
+        505
+      ],
+      "characters_present": [
+        801,
+        802,
+        808,
+        812
+      ],
+      "objects_present": [
+        959
+      ],
+      "end_hook": "Shot in the back of the head, at close range, with her own countryman's revolver lying beside him. There is no possible defence, which is exactly what is wrong with it.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Formal, controlled, with real distress under the good manners.",
+      "scenes": [
+        {
+          "scene_id": 5091,
+          "order_index": 1,
+          "title": "I Demand To See My Wife",
+          "function": "setup",
+          "est_duration_sec": 60,
+          "start_ms": 0,
+          "end_ms": 60000,
+          "characters_present": [
+            801,
+            802,
+            808
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's house",
+          "lines": [
+            {
+              "speaker": "LORD_BERYL",
+              "text": "Inspector Lestrade. I demand to see my wife. You have kept me waiting half an hour in my own house, and I should now like an explanation."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "You are entitled to one, sir."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "I am aware that a man named Oberstein was found dead in my study. I was informed of that at the Ministry. It is a tragedy, of course, and an embarrassment, but I do not see."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Lord Beryl. Your wife has confessed to shooting him."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I have seen men take bad news in a great many ways. Lord Beryl took it the way a man takes a step that is not there."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "What?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "That is why I could not allow you to see her. We were taking her statement."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "What does she say?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Apart from the confession itself, she refuses to say anything at all. You may go in now, if you wish."
+            }
+          ],
+          "craft": {
+            "quality": 0.93,
+            "tension": 0.85,
+            "emotional": 0.85,
+            "thread_inv": 0.92,
+            "hook": 0.85
+          }
+        },
+        {
+          "scene_id": 5092,
+          "order_index": 2,
+          "title": "Who Was Oberstein",
+          "function": "exposition",
+          "est_duration_sec": 46,
+          "start_ms": 60000,
+          "end_ms": 106000,
+          "characters_present": [
+            801,
+            802
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's house",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "Who was he, Inspector? The dead man."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Carl Oberstein. Austrian, originally. For a number of years he has been a freelance agent."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Meaning what, exactly?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Meaning he bought and sold anything he could get his hands on, and he got his hands on a great deal. Naval estimates. Treaty drafts. Whatever a man in a position of trust could be persuaded to part with."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And he came here."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "He came here. He met Lord Beryl once, last week, and by his lordship's own account he was shown the door inside five minutes."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And came back."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "And came back, Doctor, and got himself shot in the back of the head for it."
+            }
+          ],
+          "craft": {
+            "quality": 0.85,
+            "tension": 0.55,
+            "emotional": 0.4,
+            "thread_inv": 0.8,
+            "hook": 0.62
+          }
+        },
+        {
+          "scene_id": 5093,
+          "order_index": 3,
+          "title": "The Back Of The Head",
+          "function": "climax",
+          "est_duration_sec": 53,
+          "start_ms": 106000,
+          "end_ms": 159000,
+          "characters_present": [
+            801,
+            802
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "I examined the body before it was removed. The entire back of the skull is gone. Death would have been instantaneous."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Did you find the bullet?"
+            },
+            {
+              "speaker": "WATSON",
+              "text": "No. The police surgeon will do that. It had not come out."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "And there is the whole case. A shot in the back of the head removes any possible chance that Lady Beryl may have had of claiming self defence."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "The weapon?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "A Schmidt, thirty eight calibre, lying beside the body where she dropped it. Austrian make. And Lady Beryl is Austrian born."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "That is rather damning."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "It is a great deal more than rather. She was found bending over him. She has confessed. The weapon is her countryman's. Doctor, in twenty years I have not been handed a case this tidy."
+            }
+          ],
+          "craft": {
+            "quality": 0.9,
+            "tension": 0.8,
+            "emotional": 0.55,
+            "thread_inv": 0.9,
+            "hook": 0.82
+          }
+        },
+        {
+          "scene_id": 5094,
+          "order_index": 4,
+          "title": "A Scandal In The Papers",
+          "function": "close",
+          "est_duration_sec": 55,
+          "start_ms": 159000,
+          "end_ms": 214000,
+          "characters_present": [
+            801,
+            802,
+            812
+          ],
+          "threads_touched": [
+            504,
+            505
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "WILKINS",
+              "text": "Will that be all, sir?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "That will be all, Wilkins. You have been a great help this afternoon."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Thank you, sir. And if I might say, sir, Mister Holmes is on his way."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Is he."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "He has been making tea, sir."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Making tea."
+            },
+            {
+              "speaker": "WILKINS",
+              "text": "Yes, sir. And he said a thing I did not follow at the time, sir, about it being easier to take a wrong idea away from a man than to stop him having it."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "There was a pause of some length."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Doctor Watson. I feel very sorry for Lord Beryl. It will be quite a scandal when this appears in the papers."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "It certainly will."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "One does wonder, though."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Wonder what, Inspector?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Why a woman who will not say one word in her own defence was so very quick to confess."
+            }
+          ],
+          "craft": {
+            "quality": 0.91,
+            "tension": 0.7,
+            "emotional": 0.7,
+            "thread_inv": 0.88,
+            "hook": 0.88
+          }
+        }
+      ],
+      "word_count": 519,
+      "est_duration_sec": 214
+    },
+    {
+      "episode_id": 2110,
+      "order_index": 10,
+      "title": "Oberstein Was Not Shot",
+      "act": 3,
+      "function": "turn",
+      "source_range": "case two, eight minutes forty seconds to twelve minutes ten seconds",
+      "summary": "Holmes remarks, more or less to himself, that he wonders why Lady Beryl lied. Watson makes him repeat it. What follows is a short lesson in ballistics that takes the entire case apart.",
+      "prev_episode_summary": "Lord Beryl learned that his wife had confessed to shooting Herr Oberstein in his study. Lestrade had a tidy case, an Austrian revolver, and a wife who would say nothing else.",
+      "threads_opened": [],
+      "threads_touched": [
+        504,
+        505,
+        503
+      ],
+      "characters_present": [
+        800,
+        801,
+        802
+      ],
+      "objects_present": [
+        959
+      ],
+      "end_hook": "If Lady Beryl did not do it, then somebody in that house did, and the confession was designed to stop anyone looking for him.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Holmes is patient and merciless. Lestrade gets quieter as it goes on.",
+      "production_note": "PREDICTED WEAK EPISODE. The ballistics reasoning is a lecture. Holmes is correct at length while nothing physically happens. Predicted before measurement, deliberately not repaired.",
+      "scenes": [
+        {
+          "scene_id": 5101,
+          "order_index": 1,
+          "title": "What Did You Say",
+          "function": "hook",
+          "est_duration_sec": 58,
+          "start_ms": 0,
+          "end_ms": 58000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            505
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "It is a shame she must remain in prison. Still, she may decide to tell you. I do wonder why Lady Beryl lied to you."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "What did you say?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I said nothing."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "You did. Just now. You said you wondered why Lady Beryl lied."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Oh. That. Yes."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "What do you mean, lied? She confessed."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "She did. And it was a lie. Lady Beryl did not shoot Herr Oberstein."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Now see here."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "She did not shoot him because he was not shot. His skull was broken with a blunt instrument. The revolver you have been calling the murder weapon belonged to Oberstein himself. She found it lying beside him, drew the obvious conclusion, and confessed in order to shield her husband."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Good heavens."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "She is no more guilty than you are, Doctor. Rather less, since you at least were in the building."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.85,
+            "emotional": 0.6,
+            "thread_inv": 0.94,
+            "hook": 0.9
+          }
+        },
+        {
+          "scene_id": 5102,
+          "order_index": 2,
+          "title": "Say That Again",
+          "function": "exposition",
+          "est_duration_sec": 64,
+          "start_ms": 58000,
+          "end_ms": 122000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            503,
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "Would you mind repeating that?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Which part?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "All of it. Slowly."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You told me Lady Beryl confessed to shooting Oberstein. But Oberstein was not shot. Because you found a man with the back of his head shattered and a gun lying beside him, you assumed the two facts were connected. They are not."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "But the bullet, Holmes. It had not emerged through the front of the skull. We assumed it had lodged."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You assumed. And here is the difficulty with that assumption. Any student of elementary ballistics knows that the greatest damage to a skull is on the side opposite to the one the bullet entered. The point of entry is always small and always clean."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And there was no clean entry wound."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "There was no entry wound at all. There was a great deal of damage and nothing to explain it but a heavy object swung by somebody standing close enough to be trusted."
+            }
+          ],
+          "craft": {
+            "quality": 0.8,
+            "tension": 0.4,
+            "emotional": 0.3,
+            "thread_inv": 0.72,
+            "hook": 0.48
+          }
+        },
+        {
+          "scene_id": 5103,
+          "order_index": 3,
+          "title": "But The Gun Was Austrian",
+          "function": "exposition",
+          "est_duration_sec": 70,
+          "start_ms": 122000,
+          "end_ms": 192000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "But the gun we found was an Austrian gun. And Lady Beryl is an Austrian. Now there is a logical bit of reasoning for you."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is not reasoning, Inspector, it is rhyming. Oberstein was Austrian. Oberstein was a man who bought and sold state papers for a living, and such men are in the habit of going armed. Whose revolver would you expect to find in his coat?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "His own."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "His own. It fell from his pocket when he went down."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And Lady Beryl came in and saw it lying there."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "And saw a dead man, and a revolver, and jumped to precisely the same conclusion the Inspector did, in rather less time and with rather better excuse, since she had reason to be frightened and he had not."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "You are saying my whole case rests on a mistake a distressed woman made in the dark."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I am saying you and she made the same mistake, Inspector. She made hers in ten seconds. You have had all afternoon."
+            }
+          ],
+          "craft": {
+            "quality": 0.84,
+            "tension": 0.55,
+            "emotional": 0.4,
+            "thread_inv": 0.78,
+            "hook": 0.55
+          }
+        },
+        {
+          "scene_id": 5104,
+          "order_index": 4,
+          "title": "Somebody Else Is Guilty",
+          "function": "close",
+          "est_duration_sec": 62,
+          "start_ms": 192000,
+          "end_ms": 254000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            504,
+            505
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "WATSON",
+              "text": "Then Lady Beryl is innocent."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Lady Beryl is innocent. And somebody else is guilty, and that somebody has spent this afternoon watching you build a case against a woman who was doing him the greatest favour of his life."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "We must get back to the premises and examine them for clues."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "We are standing in the premises."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Then we must examine them."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You have had eleven men examining them since one o'clock. They have moved the body, cleaned the carpet and tidied the desk. What I require now is not a search. It is a list of everybody who was in this house."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Holmes, if the confession was meant to protect Lord Beryl."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Then she believed her husband capable of it, which is interesting. And she was wrong, which is more interesting still. Because it means the person she was protecting him from is somebody she never once considered."
+            }
+          ],
+          "craft": {
+            "quality": 0.92,
+            "tension": 0.8,
+            "emotional": 0.6,
+            "thread_inv": 0.92,
+            "hook": 0.92
+          }
+        }
+      ],
+      "word_count": 614,
+      "est_duration_sec": 254
+    },
+    {
+      "episode_id": 2111,
+      "order_index": 11,
+      "title": "Search The Garden",
+      "act": 3,
+      "function": "escalation",
+      "source_range": "case two, twelve minutes ten seconds to nineteen minutes",
+      "summary": "Lady Beryl is released and still will not explain herself. Holmes asks Lord Beryl a question about his reading glasses, sends every constable in the house out to search a garden for nothing in particular, and asks to meet the secretary.",
+      "prev_episode_summary": "Holmes demonstrated that Oberstein was never shot at all, that the revolver was the dead man's own, and that Lady Beryl had confessed to a murder she did not commit in order to shield her husband.",
+      "threads_opened": [],
+      "threads_touched": [
+        504,
+        505
+      ],
+      "characters_present": [
+        800,
+        801,
+        802,
+        808,
+        809,
+        811
+      ],
+      "objects_present": [
+        960
+      ],
+      "end_hook": "Holmes has sent eleven policemen to look for anything that does not belong in a garden, and he has not told one of them what he expects them to find.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Courteous on the surface, with Holmes quietly setting a trap nobody notices.",
+      "scenes": [
+        {
+          "scene_id": 5111,
+          "order_index": 1,
+          "title": "You Are Being Released",
+          "function": "setup",
+          "est_duration_sec": 44,
+          "start_ms": 0,
+          "end_ms": 44000,
+          "characters_present": [
+            801,
+            802,
+            809
+          ],
+          "threads_touched": [
+            505
+          ],
+          "location": "A cell at Scotland Yard",
+          "lines": [
+            {
+              "speaker": "LESTRADE",
+              "text": "Lady Beryl. We are releasing you."
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "So I understand."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Do you know why?"
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "No."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Because we have been able to prove that you did not commit the murder you confessed to. We should however like an explanation as to why you confessed to it."
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "I prefer not to explain my actions."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "You realise that your actions are in themselves punishable, and that we could detain you for them."
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "I do."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "And you still prefer to make no statement."
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "I do."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "And she said nothing else at all. Holmes had told me on the way over that she would not, and had seemed rather to admire it."
+            }
+          ],
+          "craft": {
+            "quality": 0.9,
+            "tension": 0.65,
+            "emotional": 0.8,
+            "thread_inv": 0.88,
+            "hook": 0.72
+          }
+        },
+        {
+          "scene_id": 5112,
+          "order_index": 2,
+          "title": "Do You Use Glasses When You Read",
+          "function": "conflict",
+          "est_duration_sec": 56,
+          "start_ms": 44000,
+          "end_ms": 100000,
+          "characters_present": [
+            800,
+            801,
+            808
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "You are in the Foreign Office, Lord Beryl."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "I am."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Had you ever met Herr Oberstein before?"
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "Once. Last week. For the first and the last time."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It was his habit, I believe, to offer large sums of money to men in key positions for whatever they had access to."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "That was his habit."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Thank you. Has there been any attempt at forced entry into this house?"
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "None."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Have you examined your safe?"
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "I have. Every paper is intact."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Excellent. Lord Beryl, do you use glasses when you read?"
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "I do."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "These are your only pair?"
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "They are. Why do you ask?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Because I find it a useful question. Who has the combination to your safe?"
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "My secretary, Mister Ross. There has been no question of robbery."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Of course not. One must ask these things."
+            }
+          ],
+          "craft": {
+            "quality": 0.95,
+            "tension": 0.78,
+            "emotional": 0.45,
+            "thread_inv": 0.9,
+            "hook": 0.85
+          }
+        },
+        {
+          "scene_id": 5113,
+          "order_index": 3,
+          "title": "Anything That Does Not Belong",
+          "function": "turn",
+          "est_duration_sec": 52,
+          "start_ms": 100000,
+          "end_ms": 152000,
+          "characters_present": [
+            800,
+            801,
+            802
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "Inspector. How many men have you on the premises?"
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Eleven. Two outside. Why?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Good. I wonder if you would mind taking all of them into the garden behind this window and making a formal search of the ground, to a radius of thirty feet."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Looking for what?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Anything that does not belong in a garden."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Are you serious, Holmes?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Completely."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "That is the vaguest instruction I have ever been given in twenty years of service."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It is. If I told them what to find, they would find it, and a good defence counsel would spend a pleasant morning explaining to a jury exactly how they came to."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "And if you tell them nothing?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Then whatever they bring me, they brought me. Off you go, Inspector."
+            }
+          ],
+          "craft": {
+            "quality": 0.96,
+            "tension": 0.82,
+            "emotional": 0.5,
+            "thread_inv": 0.92,
+            "hook": 0.9
+          }
+        },
+        {
+          "scene_id": 5114,
+          "order_index": 4,
+          "title": "This Is My Secretary",
+          "function": "close",
+          "est_duration_sec": 46,
+          "start_ms": 152000,
+          "end_ms": 198000,
+          "characters_present": [
+            800,
+            801,
+            808,
+            811
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "LORD_BERYL",
+              "text": "This is my secretary, Mister Ross. Inspector Lestrade, Doctor Watson, and this gentleman is Mister Sherlock Holmes."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "How do you do. I understand it is through your efforts that Lady Beryl is returning home."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Partially through my efforts."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "The household is very much in your debt, sir."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Mister Ross, I wonder if I might impose upon you."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Anything at all."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Would you take these sheets of paper and lay them out roughly in the position in which you discovered the body."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Outline it? In scraps of paper?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "If you would be so kind."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Of course. Though I confess I do not see the purpose of it."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "No. Very few people do."
+            }
+          ],
+          "craft": {
+            "quality": 0.95,
+            "tension": 0.8,
+            "emotional": 0.55,
+            "thread_inv": 0.92,
+            "hook": 0.94
+          }
+        }
+      ],
+      "word_count": 477,
+      "est_duration_sec": 198
+    },
+    {
+      "episode_id": 2112,
+      "order_index": 12,
+      "title": "The Difference Between Success and Disaster",
+      "act": 3,
+      "function": "reveal",
+      "source_range": "case two, nineteen minutes to twenty four minutes thirty nine seconds",
+      "summary": "Holmes asks Lady Beryl to stand where she stood. The secretary corrects her position, and then corrects it again, and in being helpful twice too often he hangs himself.",
+      "prev_episode_summary": "Holmes asked Lord Beryl about his reading glasses, sent every constable into the garden to look for anything that did not belong there, and invited the secretary to lay out the position of the body in scraps of paper.",
+      "threads_opened": [],
+      "threads_touched": [
+        504,
+        505,
+        502
+      ],
+      "characters_present": [
+        800,
+        801,
+        802,
+        808,
+        809,
+        811
+      ],
+      "objects_present": [
+        960,
+        958
+      ],
+      "end_hook": "The case is closed, the credit is misfiled as usual, and there is a flame still burning under an experiment in Baker Street.",
+      "style_prompt": "Read as a nineteen fifties radio detective drama. Quiet and exact, tightening line by line, then breaking into comedy at the very end.",
+      "scenes": [
+        {
+          "scene_id": 5121,
+          "order_index": 1,
+          "title": "Stand Where You Stood",
+          "function": "setup",
+          "est_duration_sec": 39,
+          "start_ms": 0,
+          "end_ms": 39000,
+          "characters_present": [
+            800,
+            801,
+            808,
+            809,
+            811
+          ],
+          "threads_touched": [
+            505
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "Lady Beryl. If it would not be too much of an imposition, I should like you to take up the position in which Mister Ross discovered you."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "Mister Holmes, my wife has had a harrowing experience. Consider her nerves."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You are forgetting, Lord Beryl, that your wife confessed to a crime she did not commit. The circumstances are somewhat exceptional. But if Lady Beryl would rather not."
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "It is quite all right, George."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "She crossed the room without hurrying, and stopped, and stood very straight."
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "I was standing here."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Exactly there?"
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "I believe so."
+            }
+          ],
+          "craft": {
+            "quality": 0.94,
+            "tension": 0.8,
+            "emotional": 0.7,
+            "thread_inv": 0.92,
+            "hook": 0.85
+          }
+        },
+        {
+          "scene_id": 5122,
+          "order_index": 2,
+          "title": "A Little To Your Left",
+          "function": "conflict",
+          "est_duration_sec": 48,
+          "start_ms": 39000,
+          "end_ms": 87000,
+          "characters_present": [
+            800,
+            809,
+            811
+          ],
+          "threads_touched": [
+            504
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "Mister Ross. Are you quite certain that is the position in which Lady Beryl was standing?"
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Well. If you will pardon my saying so, sir, and only for the sake of accuracy, you understand."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "For the sake of accuracy. Please."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "I believe her ladyship was standing a little further to her left."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "A little to your left, Lady Beryl. Like that?"
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Yes. I would say just about there."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Good. And she had a revolver in her hand."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "That is correct."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "In which hand?"
+            },
+            {
+              "speaker": "LADY_BERYL",
+              "text": "My right hand."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "That is right. Her ladyship's right hand."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "I remember thinking that the man had a remarkable memory, and that it was a fortunate thing for everyone that he did."
+            }
+          ],
+          "craft": {
+            "quality": 0.97,
+            "tension": 0.9,
+            "emotional": 0.6,
+            "thread_inv": 0.95,
+            "hook": 0.92
+          }
+        },
+        {
+          "scene_id": 5123,
+          "order_index": 3,
+          "title": "There Were No Glasses On The Floor",
+          "function": "climax",
+          "est_duration_sec": 73,
+          "start_ms": 87000,
+          "end_ms": 160000,
+          "characters_present": [
+            800,
+            801,
+            802,
+            809,
+            811
+          ],
+          "threads_touched": [
+            504,
+            505
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "HOLMES",
+              "text": "And where in relation to the body was the pair of broken eyeglasses?"
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Over there. There, I think."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "The room went entirely still, and I understood, a good deal later than everybody else, exactly what had been done."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Mister Ross. Were there any glasses on the floor when you found the body?"
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Absolutely not."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "You are positive."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "Positive. I did not know what I was saying just then."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "There were no glasses on the floor when you found Lady Beryl bending over the body. But there were glasses on the floor when Herr Oberstein went down, because he had put them on to read the papers he had come here to buy from you."
+            },
+            {
+              "speaker": "ROSS",
+              "text": "That is a lie."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "He paid you. You struck him. He fell, and the glasses broke, and his revolver dropped from his pocket. You put the papers back in the safe, you pocketed the money, and you gathered up the pieces of the frames and threw them into the garden."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Where eleven of my men have just spent forty minutes finding them."
+            }
+          ],
+          "craft": {
+            "quality": 0.99,
+            "tension": 0.97,
+            "emotional": 0.85,
+            "thread_inv": 0.98,
+            "hook": 0.95
+          }
+        },
+        {
+          "scene_id": 5124,
+          "order_index": 4,
+          "title": "The Little Things",
+          "function": "close",
+          "est_duration_sec": 64,
+          "start_ms": 160000,
+          "end_ms": 224000,
+          "characters_present": [
+            800,
+            801,
+            802,
+            809
+          ],
+          "threads_touched": [
+            502,
+            505
+          ],
+          "location": "Lord Beryl's study",
+          "lines": [
+            {
+              "speaker": "LADY_BERYL",
+              "text": "I thought the gun was my husband's. It was similar. It was not the same."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "A very common pattern of frame, and a very common pattern of revolver. You read the evidence incorrectly, Lady Beryl. So did Scotland Yard. You had the better excuse."
+            },
+            {
+              "speaker": "LORD_BERYL",
+              "text": "My humble and very grateful thanks, Mister Holmes."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It has been a pleasure."
+            },
+            {
+              "speaker": "LESTRADE",
+              "text": "Brilliant, Holmes. Absolutely brilliant."
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "It was the little things, Inspector. It is always the little things. They are the difference between success and disaster, and one must never forget."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "He stopped. He had gone very pale."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "Holmes? What is it?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "I have left the gas on under the experiment."
+            },
+            {
+              "speaker": "WATSON",
+              "text": "You have what?"
+            },
+            {
+              "speaker": "HOLMES",
+              "text": "Baker Street will be blown up."
+            },
+            {
+              "speaker": "NARRATOR",
+              "text": "It was not blown up. It was, however, a near enough thing that our landlady raised the rent, and Holmes paid the increase without a word of complaint, which in the whole of our acquaintance he did exactly once."
+            }
+          ],
+          "craft": {
+            "quality": 0.97,
+            "tension": 0.75,
+            "emotional": 0.9,
+            "thread_inv": 0.9,
+            "hook": 0.88
+          }
+        }
+      ],
+      "word_count": 539,
+      "est_duration_sec": 224
+    }
+  ]
+}
