@@ -1,0 +1,58 @@
+# Render Blueprint — deploys ONLY the Next.js web app (web/).
+# The database (Lakebase), the Python agent, and the LLM stay on Databricks;
+# this service reaches them over the network. Import this repo in Render
+# (New → Blueprint) and fill the `sync: false` secrets in the dashboard.
+services:
+  - type: web
+    name: nexus-web
+    runtime: node
+    rootDir: web
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /login
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      # Frontend talks to its OWN /api routes (same origin), live mode.
+      - key: NEXT_PUBLIC_API_MODE
+        value: live
+      - key: NEXT_PUBLIC_BASE_URL
+        value: ""
+
+      # --- Lakebase (Databricks Postgres) ---------------------------------
+      # No PGPASSWORD: lib/db.ts mints a short-lived credential token via the
+      # Databricks REST API using DATABRICKS_HOST/DATABRICKS_TOKEN below.
+      - key: PGHOST
+        sync: false            # e.g. ep-round-bar-d8cmwzqy.database.us-east-2.cloud.databricks.com
+      - key: PGPORT
+        value: "5432"
+      - key: PGDATABASE
+        value: databricks_postgres
+      - key: PGUSER
+        sync: false            # e.g. nexus_app
+      - key: PGSSLMODE
+        value: require
+      - key: LAKEBASE_INSTANCE
+        value: nexus-db
+
+      # --- Databricks control plane (mint Lakebase creds) -----------------
+      - key: DATABRICKS_HOST
+        sync: false            # https://dbc-....cloud.databricks.com
+      - key: DATABRICKS_TOKEN
+        sync: false            # service-principal token (needs Lakebase credential + DB access)
+
+      # --- Agent (stays on Databricks Apps) -------------------------------
+      # Public URL of the deployed nexus-agent app; /api/generate + /api/analyze proxy here.
+      # If the agent isn't reachable/enabled, set GENERATE_FALLBACK=1 to stream canned output.
+      - key: AGENT_URL
+        sync: false            # https://nexus-agent-....databricksapps.com
+      - key: GENERATE_FALLBACK
+        value: "0"
+
+      # --- Demo identity (no Databricks OAuth off-platform) ---------------
+      # The login screen's username is stored in a cookie and used as the identity;
+      # DEV_USER is the fallback when no cookie/OAuth header is present.
+      - key: DEV_USER
+        value: sriman
