@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { Reply, Heart } from "lucide-react";
+import { GitBranch, Reply, Heart } from "lucide-react";
 import type { Review } from "@/lib/types";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
@@ -21,10 +21,12 @@ function ReviewNode({
   r,
   driving,
   onReply,
+  onBranch,
 }: {
   r: Review;
   driving?: boolean;
   onReply?: (parentId: string, text: string) => void;
+  onBranch?: (review: Review) => void;
 }) {
   const [replying, setReplying] = React.useState(false);
   const [liked, setLiked] = React.useState(false);
@@ -62,6 +64,15 @@ function ReviewNode({
             >
               <Heart className={cn("h-3 w-3", liked && "fill-canon")} /> Like
             </button>
+            {onBranch && (
+              <button
+                type="button"
+                onClick={() => onBranch(r)}
+                className="inline-flex items-center gap-1 transition-colors hover:text-fork"
+              >
+                <GitBranch className="h-3 w-3" /> Create branch
+              </button>
+            )}
           </div>
 
           {replying && (
@@ -93,7 +104,7 @@ function ReviewNode({
             <div className="relative mt-3 space-y-3 pl-4">
               <span className="absolute left-[13px] top-1 bottom-1 w-px bg-line" aria-hidden />
               {r.replies!.map((rep) => (
-                <ReviewNode key={rep.id} r={rep} onReply={onReply} />
+                <ReviewNode key={rep.id} r={rep} onReply={onReply} onBranch={onBranch} />
               ))}
             </div>
           )}
@@ -107,16 +118,18 @@ export function CommentThread({
   reviews,
   drivingId,
   onReply,
+  onBranch,
 }: {
   reviews: Review[];
   drivingId?: string;
   onReply?: (parentId: string, text: string) => void;
+  onBranch?: (review: Review) => void;
 }) {
   if (reviews.length === 0) return <p className="text-sm text-muted">No comments yet.</p>;
   return (
     <div className="space-y-5">
       {reviews.map((r) => (
-        <ReviewNode key={r.id} r={r} driving={r.id === drivingId} onReply={onReply} />
+        <ReviewNode key={r.id} r={r} driving={r.id === drivingId} onReply={onReply} onBranch={onBranch} />
       ))}
     </div>
   );

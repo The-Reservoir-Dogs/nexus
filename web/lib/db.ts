@@ -13,6 +13,8 @@ let pool: Pool | null = null;
 let cachedPassword: { value: string; expiresAt: number } | null = null;
 
 const INSTANCE_NAME = process.env.LAKEBASE_INSTANCE ?? "nexus-db";
+const isDatabricksRuntime = !!process.env.DATABRICKS_HOST || !!process.env.DATABRICKS_TOKEN;
+const isProduction = process.env.NODE_ENV === "production";
 
 async function fetchCredentialToken(): Promise<string> {
   const host = process.env.DATABRICKS_HOST;
@@ -41,6 +43,7 @@ async function fetchCredentialToken(): Promise<string> {
 async function getPassword(): Promise<string> {
   // Local dev / secret-based path.
   if (process.env.PGPASSWORD) return process.env.PGPASSWORD;
+  if (!isProduction && !isDatabricksRuntime) return "nexus_local_pw";
 
   // Runtime token path (deployed). Cache ~50 min (tokens last ~1h).
   const now = Date.now();
@@ -54,13 +57,14 @@ async function getPool(): Promise<Pool> {
   if (pool) return pool;
   // Local dev talks to a plain Postgres (no TLS); Lakebase requires SSL.
   const sslDisabled = process.env.PGSSLMODE === "disable";
+  const useLocalDefaults = !isProduction && !isDatabricksRuntime;
   pool = new Pool({
-    host: process.env.PGHOST,
+    host: process.env.PGHOST ?? (useLocalDefaults ? "localhost" : undefined),
     port: Number(process.env.PGPORT ?? 5432),
-    database: process.env.PGDATABASE ?? "databricks_postgres",
-    user: process.env.PGUSER,
+    database: process.env.PGDATABASE ?? (useLocalDefaults ? "nexus" : "databricks_postgres"),
+    user: process.env.PGUSER ?? (useLocalDefaults ? "nexus_app" : undefined),
     password: await getPassword(),
-    ssl: sslDisabled ? false : { rejectUnauthorized: false },
+    ssl: sslDisabled || useLocalDefaults ? false : { rejectUnauthorized: false },
     // Serverless (Vercel) spins many short-lived instances; keep a tiny pool per
     // instance so we don't exhaust Lakebase connections. Override via PG_POOL_MAX.
     max: Number(process.env.PG_POOL_MAX ?? (process.env.VERCEL ? 2 : 5)),

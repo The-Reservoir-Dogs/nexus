@@ -48,10 +48,11 @@ const COMMANDS: Record<string, Cmd> = {
         [seriesId]
       );
       const text = rows.length
-        ? "**Characters**\n" +
+        ? "Characters in this series:\n" +
           rows
-            .map((c) => `- **${c.name}** — ${c.role}${c.status ? ` · _${c.status}_` : ""}\n  ${c.personality ?? ""}`.trim())
-            .join("\n")
+            .map((c) => `${c.name} — ${c.role}${c.status ? ` · ${c.status}` : ""}\nPersonality: ${c.personality ?? ""}`.trim())
+            .join("\n\n") +
+          "\n\nCreative note: when rewriting, make each character reveal their motive through action and dialogue, not explanation."
         : "No characters found for this series.";
       return { summary: `${rows.length} rows: ${rows.map((r) => r.name).slice(0, 4).join(", ")}`, text };
     },
@@ -67,8 +68,10 @@ const COMMANDS: Record<string, Cmd> = {
         [episodeId]
       );
       const text = rows.length
-        ? "**Reader comments**\n" + rows.map((r) => `- **@${r.author}:** ${r.review_text}`).join("\n")
-        : "No reader comments on this episode yet.";
+        ? "Reader comments and branch opportunities:\n" + rows.map((r) =>
+            `@${r.author}: ${r.review_text}\nSuggestion: treat this as a pain point. Open the branch with a visible consequence, make the decision land sooner, then let the character pay for it emotionally in-scene.`
+          ).join("\n\n")
+        : "No reader comments on this episode yet. Use the decision point and retention curve to choose the branch pressure.";
       return { summary: `${rows.length} rows`, text };
     },
   },
@@ -82,7 +85,7 @@ const COMMANDS: Record<string, Cmd> = {
         [seriesId]
       );
       const text = rows.length
-        ? "**Open plot threads**\n" + rows.map((r) => `- ${r.thread}`).join("\n")
+        ? "Open plot threads to honor or advance:\n" + rows.map((r) => `${r.thread}\nSuggestion: touch this thread through a concrete object, choice, or consequence rather than summary.`).join("\n\n")
         : "No open plot threads.";
       return { summary: `${rows.length} rows`, text };
     },
@@ -99,7 +102,7 @@ const COMMANDS: Record<string, Cmd> = {
       );
       const s = rows[0];
       const text = s
-        ? `**Style guide**\n- POV: ${s.pov}\n- Tense: ${s.tense}\n- Tone: ${s.tone}\n- Pacing: ${s.pacing}\n- Rating: ${s.content_rating}\n- Voice: ${s.narrative_voice}`
+        ? `Style guide:\nPOV: ${s.pov}\nTense: ${s.tense}\nTone: ${s.tone}\nPacing: ${s.pacing}\nRating: ${s.content_rating}\nVoice: ${s.narrative_voice}\n\nCreative rule: keep suggestions in this voice. No generic AI phrasing, no markdown, no meta notes. Write like an editor beside the author.`
         : "No style guide set for this series.";
       return { summary: s ? "1 record" : "empty", text };
     },
@@ -117,8 +120,9 @@ const COMMANDS: Record<string, Cmd> = {
       const worst = rows.reduce((a, b) => (b.retention < a.retention ? b : a));
       const t = worst.bucket_10s * 10;
       const text =
-        `**Retention** — ${rows.length} buckets.\n` +
-        `Biggest drop-off: **${Math.round(worst.retention * 100)}%** around ${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}.`;
+        `Retention: ${rows.length} buckets.\n` +
+        `Lowest retention: ${Math.round(worst.retention * 100)}% around ${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}.\n` +
+        "Creative fix: move a stronger choice or image before this moment, then cut any explanation that delays consequence.";
       return { summary: `${rows.length} rows`, text };
     },
   },
@@ -132,7 +136,7 @@ const COMMANDS: Record<string, Cmd> = {
       );
       const e = rows[0];
       const text = e
-        ? `**${e.title}**\n${e.summary ?? ""}${e.decision_point ? `\n\n_Decision point:_ ${e.decision_point}` : ""}`
+        ? `Episode: ${e.title}\nSummary: ${e.summary ?? ""}${e.decision_point ? `\nDecision point: ${e.decision_point}` : ""}\n\nAlignment rule: any branch or rewrite must stay grounded in this exact episode, its prior timeline, and the visible manuscript.`
         : "Episode not found.";
       return { summary: e ? e.title : "empty", text };
     },
@@ -140,8 +144,8 @@ const COMMANDS: Record<string, Cmd> = {
 };
 
 function helpText(): string {
-  const lines = Object.entries(COMMANDS).map(([n, c]) => `- \`/${n}\` — ${c.help}`);
-  return "**Slash commands**\n" + lines.join("\n") + "\n- `/rewrite <instruction>` — draft/rewrite the episode into the editor.";
+  const lines = Object.entries(COMMANDS).map(([n, c]) => `/${n} — ${c.help}`);
+  return "Slash commands:\n" + lines.join("\n") + "\n/rewrite <instruction> — draft or rewrite the episode into the editor.";
 }
 
 async function streamSlash(cmdName: string, arg: string, episodeId: string): Promise<Response> {
@@ -159,7 +163,7 @@ async function streamSlash(cmdName: string, arg: string, episodeId: string): Pro
         }
         const cmd = COMMANDS[cmdName];
         if (!cmd) {
-          const text = `Unknown command \`/${cmdName}\`.\n\n${helpText()}`;
+          const text = `Unknown command /${cmdName}.\n\n${helpText()}`;
           send("token", { text });
           send("done", { message: text });
           controller.close();
@@ -228,8 +232,8 @@ export async function POST(req: Request) {
   // Fallback: the conversational LLM isn't available locally. Point the author at the
   // slash commands, which run live against the database.
   const text =
-    "The conversational model isn't wired up locally, but I can still pull real data on " +
-    "demand. Try a slash command:\n\n" +
+    "The conversational model is not wired up locally, but I can still pull real episode data on demand. " +
+    "Use a slash command below. I will answer in plain text and keep every suggestion aligned to the currently open episode.\n\n" +
     helpText();
   const stream = new ReadableStream({
     async start(controller) {

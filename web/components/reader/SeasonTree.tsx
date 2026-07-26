@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import { GitBranch, Star, CheckCircle2 } from "lucide-react";
@@ -21,7 +21,6 @@ export function SeasonTree({
   currentId: string;
   seasonTitle?: string;
 }) {
-  const router = useRouter();
   const SEASON = "season:1";
 
   // full chain of ancestor node ids to expand so the current node is visible
@@ -46,10 +45,22 @@ export function SeasonTree({
 
   const rowLabel = (
     left: React.ReactNode,
-    right?: React.ReactNode
+    right?: React.ReactNode,
+    href?: string
   ) => (
     <div className="flex items-center gap-2 py-[3px] pr-1 text-[13px]">
-      <span className="min-w-0 flex-1 truncate">{left}</span>
+      {href ? (
+        <Link
+          href={href}
+          prefetch
+          className="min-w-0 flex-1 truncate"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {left}
+        </Link>
+      ) : (
+        <span className="min-w-0 flex-1 truncate">{left}</span>
+      )}
       {right}
     </div>
   );
@@ -72,7 +83,8 @@ export function SeasonTree({
             {b.title}
             {b.verifiedByAuthor && <CheckCircle2 className="h-3 w-3 text-canon" />}
           </span>,
-          b.avgRating ? <span className="font-mono text-[10px] text-muted">{b.avgRating}★</span> : null
+          b.avgRating ? <span className="font-mono text-[10px] text-muted">{b.avgRating}★</span> : null,
+          `/episodes/${b.id}`
         )}
       >
         {kids.map((k) => renderBranch(k))}
@@ -85,23 +97,20 @@ export function SeasonTree({
       expandedItems={expanded}
       onExpandedItemsChange={(_, ids) => setExpanded(ids)}
       selectedItems={currentId}
-      onSelectedItemsChange={(_, id) => {
-        if (id && !id.startsWith("season:")) router.push(`/episodes/${id}`);
-      }}
       sx={{
-        color: "#c9d1d9",
+        color: "#3a3733",
         "& .MuiTreeItem-content": {
           borderRadius: "6px",
           padding: "1px 4px",
-          "&:hover": { backgroundColor: "#21262d" },
+          "&:hover": { backgroundColor: "#f3efe8" },
           "&.Mui-selected, &.Mui-selected:hover, &.Mui-focused": {
-            backgroundColor: "rgba(47,129,247,0.15)",
+            backgroundColor: "rgba(194,54,22,0.10)",
           },
         },
-        "& .MuiTreeItem-iconContainer svg": { fontSize: 18, color: "#8b949e" },
+        "& .MuiTreeItem-iconContainer svg": { fontSize: 18, color: "#736d63" },
         "& .MuiTreeItem-groupTransition": {
           marginLeft: "12px",
-          borderLeft: "1px solid #30363d",
+          borderLeft: "1px solid #e4e0d8",
           paddingLeft: "6px",
         },
       }}
@@ -133,7 +142,8 @@ export function SeasonTree({
                     <Star className="h-3 w-3 fill-canon" />
                     {ep.avgRating}
                   </span>
-                ) : null
+                ) : null,
+                `/episodes/${ep.id}`
               )}
             >
               {branches.map((b) => renderBranch(b))}

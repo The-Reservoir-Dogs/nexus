@@ -72,16 +72,25 @@ export default function EditorPage({ params }: { params: { id: string } }) {
       fork.setDrivingReviewId(null);
       return true;
     }
-    if (!fork.context) {
-      const ctx = await forkEpisode(id, isContinue ? undefined : "5001");
+    // Create-branch / continue mode: load the current episode as source context
+    // and seed the editor with its real manuscript so contributors edit from
+    // the actual story, not a blank page. Only seed when empty to avoid
+    // clobbering user edits if async work resolves late.
+    let ctx = fork.context;
+    const needsFreshContext = !ctx || ctx.sourceEpisode.id !== id;
+    if (needsFreshContext) {
+      ctx = await forkEpisode(id, isContinue ? undefined : "5001");
       fork.setContext(ctx);
-      if (isContinue) {
-        fork.setDrivingReviewId(null);
-        fork.setWhatIf("");
-      } else {
-        fork.setDrivingReviewId("5001");
-        fork.setWhatIf("What if she killed him instead?");
-      }
+    }
+    if (!ctx) throw new Error("Could not load episode context");
+    setTitle((prev) => prev || `${ctx.sourceEpisode.title} — Branch`);
+    setManuscript((prev) => prev || (ctx.sourceEpisode.content ?? ""));
+    if (isContinue) {
+      fork.setDrivingReviewId(null);
+      fork.setWhatIf("");
+    } else if (needsFreshContext) {
+      fork.setDrivingReviewId("5001");
+      fork.setWhatIf("What if she killed him instead?");
     }
     return true;
   }, [id]);
@@ -128,7 +137,29 @@ export default function EditorPage({ params }: { params: { id: string } }) {
   const [saving, setSaving] = React.useState(false);
   const [saveError, setSaveError] = React.useState("");
   const chatEnd = React.useRef<HTMLDivElement>(null);
+  const seededCommentBrief = React.useRef<string | null>(null);
   React.useEffect(() => { chatEnd.current?.scrollIntoView?.({ behavior: "smooth" }); }, [chat]);
+
+  React.useEffect(() => {
+    const dc = fork.context?.drivingComment;
+    if (!dc || isEdit || seededCommentBrief.current === dc.id) return;
+    seededCommentBrief.current = dc.id;
+    setChat((c) => [
+      ...c,
+      {
+        role: "ai",
+        at: Date.now(),
+        kind: "chat",
+        steps: [],
+        status: "done",
+        words: 0,
+        reply:
+          `Contributor brief: @${dc.authorName ?? "reader"} said “${dc.reviewText}”. ` +
+          "Use this as the pain point: identify what disappointed them, keep the original continuity, " +
+          "then edit or /rewrite the manuscript so this branch directly fixes that weakness.",
+      },
+    ]);
+  }, [fork.context?.drivingComment, isEdit]);
 
   // update the last (AI) chat message immutably
   const patchAi = React.useCallback((fn: (m: Extract<ChatMsg, { role: "ai" }>) => Extract<ChatMsg, { role: "ai" }>) => {
@@ -288,9 +319,9 @@ export default function EditorPage({ params }: { params: { id: string } }) {
         forkedFromEpisodeId: isContinue ? (src.forkedFromEpisodeId ?? src.id) : src.id,
         prevEpisodeId: isContinue ? src.id : undefined,
         decisionPoint: isContinue ? "" : fork.whatIf,
-        title: fork.draft?.title ?? "Untitled Alternate",
+        title: fork.draft?.title ?? (title.trim() || `${src.title} — Branch`),
         content: manuscript,
-        summary: fork.draft?.summary ?? "",
+        summary: fork.draft?.summary ?? src.summary ?? "",
       });
       router.push(`/episodes/${created.id}`);
     } catch (e: any) {

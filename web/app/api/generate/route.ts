@@ -64,13 +64,28 @@ export async function POST(req: Request) {
   try {
     parsed = JSON.parse(body || "{}");
     if (parsed.sourceEpisodeId) {
+      const driving = parsed.drivingReviewId
+        ? await query<{ reviewText: string; authorName: string }>(
+            `SELECT r.review_text AS "reviewText", u.username AS "authorName"
+               FROM reviews r JOIN users u ON u.id = r.created_by WHERE r.id = $1 LIMIT 1`,
+            [parsed.drivingReviewId]
+          )
+        : [];
       const rows = await query<{ title: string; summary: string; content: string; series_id: string }>(
         `SELECT title, summary, content, series_id::text AS series_id FROM episodes
          WHERE forked_from_episode_id = $1 AND is_canonical = false
          ORDER BY verified_by_author DESC LIMIT 1`,
         [parsed.sourceEpisodeId]
       );
-      if (rows[0]?.content) ({ title, summary, content } = rows[0]);
+      if (driving[0]) {
+        title = "The Reader's Cut";
+        summary = `A branch that addresses @${driving[0].authorName}'s feedback.`;
+        content =
+          `This branch opens from the reader pain point: “${driving[0].reviewText}”\n\n` +
+          "The scene keeps the same continuity, but turns toward the complaint instead of ignoring it. " +
+          "The slow beat tightens; the consequence arrives earlier; the character choice becomes visible in action, not explanation.\n\n" +
+          "By the end, the alternate timeline has answered the reader directly — not by undoing the story, but by making the wounded moment sharper, clearer, and harder to stop listening to.";
+      } else if (rows[0]?.content) ({ title, summary, content } = rows[0]);
       const src = await query<{ series_id: string }>(
         `SELECT series_id::text AS series_id FROM episodes WHERE id = $1`,
         [parsed.sourceEpisodeId]

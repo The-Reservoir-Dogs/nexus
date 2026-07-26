@@ -4,7 +4,10 @@ Sourced from characters.speech_style until characters.tts_voice/tts_style column
 Gemini prebuilt voices: Charon, Orus, Kore, Fenrir, Puck, Aoede, Leda, Zephyr, Enceladus...
 """
 
-DEFAULT_NARRATOR = ("Charon", "in a grave, cinematic storyteller's voice, measured and ominous")
+DEFAULT_NARRATOR = (
+    "Charon",
+    "in a grave, cinematic storyteller's voice, measured, intimate, emotionally reactive, with suspenseful pauses",
+)
 
 # Voices handed out to characters in order of appearance.
 VOICE_POOL = ["Orus", "Kore", "Fenrir", "Puck", "Aoede", "Leda", "Zephyr", "Enceladus", "Iapetus"]

@@ -2,15 +2,14 @@
 import * as React from "react";
 import type { Series } from "@/lib/types";
 import type { User } from "@/mocks/data";
-import { getMe } from "@/lib/api";
-
-const SESSION_KEY = "nexus_session";
+import { getMe, loginUser, logoutUser, signupUser } from "@/lib/api";
 
 type AuthCtx = {
   me: User | null;
   loading: boolean;
-  login: (username: string) => Promise<void>;
-  logout: () => void;
+  login: (username: string, password: string) => Promise<void>;
+  signup: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
   isOwner: (s: Pick<Series, "authorId">) => boolean;
 };
 
@@ -21,32 +20,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const hasSession =
-      typeof window !== "undefined" && !!localStorage.getItem(SESSION_KEY);
-    if (!hasSession) {
-      setLoading(false);
-      return;
-    }
     getMe()
       .then(setMe)
+      .catch(() => setMe(null))
       .finally(() => setLoading(false));
   }, []);
 
-  const login = React.useCallback(async (username: string) => {
-    localStorage.setItem(SESSION_KEY, "1");
-    // Off-platform (e.g. Render) there's no Databricks OAuth, so the chosen
-    // username is carried as a cookie and resolved server-side in getIdentity().
-    const clean = username.trim().replace(/[^a-zA-Z0-9_.-]/g, "_").slice(0, 40);
-    if (clean) {
-      document.cookie = `nexus_user=${encodeURIComponent(clean)}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax`;
-    }
-    const user = await getMe();
+  const login = React.useCallback(async (username: string, password: string) => {
+    const user = await loginUser(username, password);
     setMe(user);
   }, []);
 
-  const logout = React.useCallback(() => {
-    localStorage.removeItem(SESSION_KEY);
-    document.cookie = "nexus_user=; path=/; max-age=0; samesite=lax";
+  const signup = React.useCallback(async (username: string, password: string) => {
+    const user = await signupUser(username, password);
+    setMe(user);
+  }, []);
+
+  const logout = React.useCallback(async () => {
+    await logoutUser().catch(() => undefined);
     setMe(null);
   }, []);
 
@@ -56,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <Ctx.Provider value={{ me, loading, login, logout, isOwner }}>
+    <Ctx.Provider value={{ me, loading, login, signup, logout, isOwner }}>
       {children}
     </Ctx.Provider>
   );

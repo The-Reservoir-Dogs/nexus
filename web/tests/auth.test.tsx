@@ -16,25 +16,46 @@ function Probe() {
     <div>
       <span data-testid="me">{me?.username ?? "none"}</span>
       <span data-testid="owner">{String(isOwner({ authorId: "1" }))}</span>
-      <button onClick={() => login("sriman")}>login</button>
+      <button onClick={() => login("sriman", "secret123")}>login</button>
     </div>
   );
 }
 
 describe("AuthProvider", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.endsWith("/api/auth/login")) {
+          return new Response(JSON.stringify({ data: { id: "1", username: "sriman" } }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        return new Response(JSON.stringify({ error: { message: "Not logged in" } }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        });
+      })
+    );
+  });
 
-  it("starts logged out and logs in the mocked user", async () => {
+  it("starts logged out and logs in through the auth API", async () => {
     render(
       <AuthProvider>
         <Probe />
       </AuthProvider>
     );
-    expect(screen.getByTestId("me").textContent).toBe("none");
+    await waitFor(() => expect(screen.getByTestId("me").textContent).toBe("none"));
     await userEvent.click(screen.getByText("login"));
     await waitFor(() => expect(screen.getByTestId("me").textContent).toBe("sriman"));
     // isOwner true for series authored by user id 1
     expect(screen.getByTestId("owner").textContent).toBe("true");
-    expect(localStorage.getItem("nexus_session")).toBe("1");
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/auth/login",
+      expect.objectContaining({ method: "POST" })
+    );
   });
 });

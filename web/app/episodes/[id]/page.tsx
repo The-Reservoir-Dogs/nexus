@@ -110,7 +110,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   const isAuthor = !!me && !!series && (series.authorId === me.id || episode?.coAuthorId === me.id);
 
   const [reviews, setReviews] = React.useState<Review[]>(() => reviewsCache.get(id) ?? []);
-  const [rating, setRating] = React.useState<{ avg: number; count: number } | null>(null);
+  const [rating, setRating] = React.useState<{ avg: number; count: number; mine?: number } | null>(null);
   const [rewinding, setRewinding] = React.useState(false);
   const [analyticsOpen, setAnalyticsOpen] = React.useState(false);
   const [narrating, setNarrating] = React.useState(false);
@@ -145,10 +145,12 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
   }, [episode]);
 
   async function handleRate(score: number) {
-    setRating((r) => (r ? { avg: score, count: r.count + 1 } : r));
+    // Keep the star UI on exactly what the user clicked. Server avg is still
+    // shown in the summary, but selection must not jump back to old avg state.
+    setRating((r) => (r ? { ...r, mine: score } : { avg: 0, count: 0, mine: score }));
     try {
       const res = await postRating(id, score);
-      setRating({ avg: res.avgRating, count: res.ratingCount });
+      setRating({ avg: res.avgRating, count: res.ratingCount, mine: score });
     } catch {
       if (episode) setRating({ avg: episode.avgRating ?? 0, count: episode.ratingCount ?? 0 });
     }
@@ -179,18 +181,27 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
     }
   }
 
-  async function handleRewind() {
+  async function startBranch(drivingReview?: Review) {
     if (!episode) return;
     setRewinding(true);
-    // seed the driving comment only for the seeded decision point (ep with reviews);
-    // any other episode forks cleanly and the author types the what-if in the chat.
-    const useDriving = episode.decisionPoint ? DRIVING_ID : undefined;
+    const useDriving = drivingReview?.id ?? (episode.decisionPoint ? DRIVING_ID : undefined);
     const ctx = await forkEpisode(episode.id, useDriving);
     fork.reset();
     fork.setContext(ctx);
-    fork.setWhatIf(episode.decisionPoint ?? "");
+    if (drivingReview) {
+      fork.setWhatIf(
+        `Reader pain point from @${drivingReview.authorName ?? "reader"}: "${drivingReview.reviewText}". ` +
+        "Create a branch that directly addresses this feedback while preserving continuity."
+      );
+    } else {
+      fork.setWhatIf(episode.decisionPoint ?? "");
+    }
     fork.setDrivingReviewId(useDriving ?? null);
     router.push(`/episodes/${episode.id}/editor`);
+  }
+
+  async function handleRewind() {
+    await startBranch();
   }
 
   function handleContinue() {
@@ -311,7 +322,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
 
                 {rating && (
                   <div className="mt-8 border-t border-line pt-4">
-                    <RatingStars avg={rating.avg} count={rating.count} onRate={handleRate} />
+                    <RatingStars avg={rating.avg} count={rating.count} value={rating.mine} onRate={handleRate} />
                   </div>
                 )}
               </article>
@@ -339,7 +350,7 @@ export default function ReaderPage({ params }: { params: { id: string } }) {
             Comments
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto scroll-thin p-3">
-            <CommentThread reviews={reviews} drivingId={DRIVING_ID} onReply={handleReply} />
+            <CommentThread reviews={reviews} drivingId={DRIVING_ID} onReply={handleReply} onBranch={startBranch} />
           </div>
           <div className="border-t border-line p-3">
             <CommentComposer onPost={handlePost} />
