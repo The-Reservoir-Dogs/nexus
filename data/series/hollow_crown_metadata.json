@@ -1,0 +1,256 @@
+{
+  "schema_version": "1.0",
+  "generated_for": "Pulse — canon memory + AI co-author",
+  "note": "Canon bible for The Hollow Crown. Every rewrite MUST be checked against this file. Character ids match seed.sql (700-703 already exist there).",
+
+  "series": {
+    "series_id": 10,
+    "title": "The Hollow Crown",
+    "logline": "A kingdom fractured by a single act of mercy.",
+    "summary": "Political dark fantasy. Prince Aldric of Greymoor wins a war he did not want, captures the enemy who started it, and spares her life. The mercy buys a fragile truce, exposes a traitor inside his own walls, and leaves the northern border undefended against something that is not an army.",
+    "genre": "Dark political fantasy",
+    "tags": ["political", "drama", "dark", "siege", "betrayal"],
+    "season": 1,
+    "episode_count": 12,
+    "target_episode_duration_sec": [240, 300],
+    "author_id": 1
+  },
+
+  "style_guide": {
+    "pov": "third-limited",
+    "pov_anchor": "Prince Aldric, except Ep 10 (Sera) and Ep 12 (Lady Corvin)",
+    "tense": "past",
+    "tone": "Dark, tense, morally grey. Nobody is purely right.",
+    "pacing": "Measured, with sharp violent beats. Quiet scenes are short.",
+    "content_rating": "MA",
+    "narrative_voice": "Grounded and cinematic. Short punchy sentences at climaxes. Understatement over melodrama. Violence is brief and never savoured.",
+    "dialogue_rules": [
+      "No character explains something the listener already knows.",
+      "Sera undercuts tension with dry humour; never sentimental.",
+      "Corvin speaks in formal, clipped sentences and old proverbs.",
+      "Ord cannot finish a sentence without a qualifying clause.",
+      "Aldric avoids grand oaths. He says plain things."
+    ],
+    "forbidden": [
+      "Magic systems. The north is uncanny, never explained.",
+      "Prophecy, chosen ones, destiny.",
+      "On-page torture.",
+      "Any character reversing a decision without an on-page cause."
+    ]
+  },
+
+  "characters": [
+    {
+      "character_id": 700,
+      "name": "Prince Aldric",
+      "role": "protagonist",
+      "status": "alive",
+      "description": "Heir of Greymoor. Commands because there is nobody else.",
+      "personality": "Principled, weary, merciful to a fault. Decides slowly, then absolutely.",
+      "backstory": "Raised to rule, forged by a war he inherited. His father burned fields and called it strategy; Aldric has spent his life deciding not to be that.",
+      "goals": "End the war without becoming a monster.",
+      "flaw": "He mistakes hesitation for conscience.",
+      "speech_style": "Measured, plain-spoken, avoids grand oaths. Repeats a question back when he is buying time.",
+      "voice_note_tts": "Mid-range male, unhurried, tired. Never shouts except once, in Ep 11.",
+      "knows": [
+        "House Corvin declared war at harvest",
+        "Someone inside Greymoor has been writing to Lady Corvin for two years",
+        "Ser Bren's last advice: do not kill her out of anger",
+        "There are fires on the northern ridge"
+      ],
+      "does_not_know": [
+        "The identity of the informant (until Ep 12)",
+        "What the northern host is burning",
+        "That Corvin came to be captured on purpose (until Ep 5)"
+      ],
+      "arc": "From a man who cannot give an order, to a man who gives one and must live in the country it makes."
+    },
+    {
+      "character_id": 701,
+      "name": "Lady Corvin",
+      "role": "antagonist",
+      "status": "alive",
+      "description": "Head of the rival house. Started the war and is the only person who understands why.",
+      "personality": "Calculating, proud, secretly loyal to her people above her own honour.",
+      "backstory": "Lost her family to Greymoor decades ago. Has spent her life converting grief into administration.",
+      "goals": "Reclaim her house's honour by any means — and, later, survive what is coming from the north.",
+      "flaw": "She cannot accept a kindness without looking for the invoice.",
+      "speech_style": "Formal, clipped, fond of old proverbs. Answers questions with better questions.",
+      "voice_note_tts": "Low female, precise, unhurried. Warmest when she is most dangerous.",
+      "knows": [
+        "Someone in Greymoor has fed her intelligence for two years, unasked",
+        "She rode out with forty men deliberately, to be taken alive",
+        "What the northern host is (partially — from her own border losses)"
+      ],
+      "does_not_know": [
+        "Who the informant is",
+        "Whether Aldric spared her from strength or weakness"
+      ],
+      "arc": "From the war's author, to the only person who can help end a worse one."
+    },
+    {
+      "character_id": 702,
+      "name": "Sera",
+      "role": "side",
+      "status": "alive",
+      "description": "Aldric's scout and conscience. Not a soldier, not a servant, and nobody has ever clarified which.",
+      "personality": "Sharp, loyal, darkly funny. Physically fearless and entirely unimpressed by rank.",
+      "backstory": "A commoner who rose through the ranks by being useful in rooms where nobody wanted her.",
+      "goals": "Keep Aldric human.",
+      "flaw": "She will walk into anything rather than admit she is frightened.",
+      "speech_style": "Wry, fast, uses camp slang. Swears in three dialects. Deflects sincerity with a joke, then delivers the sincere line anyway.",
+      "voice_note_tts": "Bright female, quick, slightly rough. The warmest voice in the series.",
+      "knows": [
+        "Aldric had decided to spare Corvin before he admitted it",
+        "The northern fires are not camps — they have a shape",
+        "What the northern host is burning (Ep 10)"
+      ],
+      "does_not_know": ["That she is the reason Aldric has not broken"],
+      "spin_off_note": "PRIMARY SPIN-OFF TARGET. Highest audience investment, ~11% of runtime, never carries a scene of her own. Her ninety-mile walk (Ep 10) happens off-page and is the natural standalone.",
+      "arc": "From the person in the room who is not afraid of him, to the person who has seen what is coming and cannot say it out loud."
+    },
+    {
+      "character_id": 703,
+      "name": "Maester Ord",
+      "role": "side",
+      "status": "alive",
+      "description": "Greymoor's keeper of ledgers and law. Forty years in the same tower room.",
+      "personality": "Precise, tireless, utterly without urgency. Kind, in a way nobody has time for.",
+      "backstory": "Outlasted three kings by never once being interesting.",
+      "goals": "Keep the accounts balanced and the precedents observed.",
+      "flaw": "He believes a recorded decision and a made decision are the same thing.",
+      "speech_style": "Long qualifying clauses, cites precedent, never finishes early.",
+      "voice_note_tts": "Older male, dry, even. Deliberately the least dynamic voice in the cast.",
+      "knows": ["Every precedent", "The exact grain figures", "That the eastern count is provisional"],
+      "does_not_know": ["That anyone has stopped listening"],
+      "narrative_function": "DELIBERATE DRAG. Ord leads the scenes the audience skips. This is by design — he is the control variable that proves the engagement signal is real."
+    },
+    {
+      "character_id": 704,
+      "name": "Ser Bren",
+      "role": "mentor",
+      "status": "dead",
+      "dies_in_episode": 3,
+      "description": "Aldric's master-at-arms. The last man who spoke to him without calculating first.",
+      "personality": "Blunt, unsentimental, funny in the last five minutes of his life.",
+      "backstory": "Served Aldric's father, disapproved of him, stayed anyway.",
+      "goals": "Get the boy through the war.",
+      "speech_style": "Short declaratives. Never says 'my lord' unless he is angry.",
+      "voice_note_tts": "Gravel, older male, warm.",
+      "knows": ["That Aldric will have to choose about Corvin"],
+      "legacy_line": "When you have her — and you will have her — don't do it because you're angry. Anything else. Just not that."
+    },
+    {
+      "character_id": 705,
+      "name": "Lord Halloway",
+      "role": "side",
+      "status": "alive",
+      "description": "Senior lord of the river holdings. Wants the tariff at one part in twelve.",
+      "personality": "Loud, conventional, genuinely brave and genuinely useless.",
+      "goals": "Protect the river holdings' revenue.",
+      "speech_style": "Restates his own position at greater length.",
+      "voice_note_tts": "Booming male."
+    },
+    {
+      "character_id": 706,
+      "name": "Lord Merrick",
+      "role": "side",
+      "status": "alive",
+      "description": "Highland lord. Quiet, watchful, agrees too readily.",
+      "personality": "Patient. Says little in council and remembers everything.",
+      "goals": "Stated: the highlands' safety. Actual: revealed in Ep 12.",
+      "speech_style": "Short, agreeable, deferential. Never volunteers.",
+      "voice_note_tts": "Soft male, unremarkable — deliberately forgettable until Ep 12.",
+      "spoiler": "MERRICK IS THE INFORMANT. He has written to Lady Corvin for two years, believing a Corvin victory would spare the highlands a longer war. Plant him in Eps 2, 6, 9 saying almost nothing."
+    },
+    {
+      "character_id": 707,
+      "name": "The Rider",
+      "role": "functional",
+      "status": "alive",
+      "description": "A border scout who reaches Greymoor at dusk in Ep 10 with frost on him weeks after the frost broke.",
+      "speech_style": "Breathless, factual, stops counting.",
+      "voice_note_tts": "Young male, exhausted."
+    }
+  ],
+
+  "relationships": [
+    { "from": 700, "to": 701, "relation": "captor / captive", "sentiment": "wary respect", "evolves": "Ep 5 adversaries -> Ep 8 signatories -> Ep 11 reluctant allies" },
+    { "from": 700, "to": 702, "relation": "commander / scout", "sentiment": "deep trust", "note": "Aldric trusts Sera above all his advisors. Neither has ever said so." },
+    { "from": 700, "to": 703, "relation": "lord / maester", "sentiment": "dependent exasperation" },
+    { "from": 700, "to": 704, "relation": "student / mentor", "sentiment": "love, unspoken", "evolves": "severed Ep 3; Bren's advice governs Ep 7" },
+    { "from": 700, "to": 706, "relation": "lord / vassal", "sentiment": "unexamined trust", "evolves": "betrayal revealed Ep 12" },
+    { "from": 701, "to": 702, "relation": "enemies who recognise each other", "sentiment": "professional regard" },
+    { "from": 701, "to": 706, "relation": "correspondent / informant", "sentiment": "Corvin's contempt for a man who betrays cheaply", "note": "Corvin does not know his name until Ep 12." },
+    { "from": 702, "to": 703, "relation": "scout / maester", "sentiment": "mutual, affectionate contempt" },
+    { "from": 705, "to": 706, "relation": "rival lords", "sentiment": "tariff dispute, ongoing and tedious" }
+  ],
+
+  "objects": [
+    { "object_id": 900, "name": "The Declaration", "type": "document", "first_seen_episode": 1, "significance": "Corvin's war declaration. Aldric reads it four times — a detail the envoy repeats back to him in Ep 1, proving Greymoor leaks.", "status": "kept, folded along its crease" },
+    { "object_id": 901, "name": "Aldric's sword", "type": "weapon", "first_seen_episode": 3, "significance": "Lowered, not used, in Ep 7. The single most important object in the season.", "status": "sheathed" },
+    { "object_id": 902, "name": "The ledger", "type": "record", "first_seen_episode": 4, "significance": "Ord's tallies. Appears in every scene the audience skips. Deliberate.", "status": "in the chest, in the wagon" },
+    { "object_id": 903, "name": "The truce document", "type": "document", "first_seen_episode": 8, "significance": "Signed by Corvin first — grace or strategy, never resolved. The wax takes a long time to set.", "status": "sealed" },
+    { "object_id": 904, "name": "The northern fires", "type": "phenomenon", "first_seen_episode": 1, "significance": "One fire visible from Greymoor because of the shoulder of the hill. Ninety by Ep 10. Not camps — they have a shape.", "status": "burning" },
+    { "object_id": 905, "name": "The letters", "type": "correspondence", "first_seen_episode": 5, "significance": "Two years of intelligence written to Corvin by someone in Greymoor, unasked. The season's engine.", "status": "in Corvin's keeping, unnamed" },
+    { "object_id": 906, "name": "Two cups", "type": "domestic", "first_seen_episode": 6, "significance": "Sera brings Aldric something hot and sits on the floor. The most replayed moment in the series.", "status": "returned to the kitchen" },
+    { "object_id": 907, "name": "Bren's dropped spear", "type": "memory", "first_seen_episode": 3, "significance": "A man Aldric killed had already surrendered. Aldric remembers the spear, not the face. Recurs at the moment of mercy.", "status": "memory only" },
+    { "object_id": 908, "name": "The reeve's count", "type": "running joke", "first_seen_episode": 9, "significance": "Perpetually late. Ord defers every decision pending it. It never arrives.", "status": "provisional" }
+  ],
+
+  "locations": [
+    { "name": "Greymoor", "type": "fortress-city", "region": "Northern highlands", "description": "Aldric's ancestral seat. Rain, ramparts, a courtyard where ordinary life continues through every catastrophe." },
+    { "name": "The long table", "type": "council chamber", "description": "Where nothing is decided at length." },
+    { "name": "The border stone", "type": "battlefield", "description": "Moved twice in living memory, once by a farmer who wanted a wider gate. Men die for it in Ep 3." },
+    { "name": "The command tent", "type": "camp", "description": "Where Corvin is held and where the season turns." },
+    { "name": "The northern ridge", "type": "wilderness", "description": "Should be empty. Is not." }
+  ],
+
+  "world_rules": [
+    { "rule": "The Blood Oath", "description": "A pact sealed in blood cannot be broken without a death. Binding in law and in belief." },
+    { "rule": "Right of the captured head of house", "description": "A captured head of house may be lawfully executed or lawfully spared. Either way the terms must be recorded." },
+    { "rule": "No magic", "description": "Nothing supernatural is ever confirmed. The north is uncanny and stays unexplained. Do not resolve it." },
+    { "rule": "Winter logistics", "description": "Armies move on grain. Greymoor's granaries are the real constraint on every plan." },
+    { "rule": "Fire and the north", "description": "The northern host burns something that is not wood. Never state what. Sera refuses to say it aloud in Ep 10 and is not pressed." }
+  ],
+
+  "plot_threads": [
+    { "thread_id": 400, "summary": "The fate of the captured Lady Corvin.", "status": "open", "importance": "primary", "opened_episode": 4, "audience_investment": "high", "note": "The thread the audience is most invested in. Abandoning it is what breaks Ep 9." },
+    { "thread_id": 401, "summary": "A shadow threat stirring beyond the northern border.", "status": "open", "importance": "primary", "opened_episode": 1, "audience_investment": "low until Ep 10", "note": "Deliberately low-investment through the mid-season. It becomes the spine of Season 2." },
+    { "thread_id": 402, "summary": "The war between Greymoor and House Corvin.", "status": "open", "importance": "primary", "opened_episode": 1, "audience_investment": "high" },
+    { "thread_id": 403, "summary": "Someone inside Greymoor has been writing to Lady Corvin for two years.", "status": "open", "importance": "primary", "opened_episode": 1, "audience_investment": "high", "note": "Planted Ep 1 (the envoy's parting line), named Ep 5, resolved Ep 12 as Lord Merrick." },
+    { "thread_id": 404, "summary": "Greymoor's granaries cannot support a winter campaign.", "status": "open", "importance": "minor", "opened_episode": 9, "audience_investment": "very low", "note": "Structurally real, dramatically inert. This is the thread Ep 9 stalls on." }
+  ],
+
+  "planted_structure": {
+    "purpose": "Free ground truth. We know which episode is weak and why, so the detector can be proven right rather than merely plausible.",
+    "weak_episode": 9,
+    "weak_episode_title": "The Council of Grain",
+    "why_weak": [
+      "Abandons thread 400 (high investment) for thread 404 (very low)",
+      "Led by Maester Ord, the lowest-investment character",
+      "No Sera, no Corvin",
+      "Repetition is the point of the scene, which makes it genuinely tedious",
+      "Ends with no hook"
+    ],
+    "secondary_weak_episode": 4,
+    "secondary_weak_scene": "The Butcher's Ledger — the post-battle tally",
+    "recovery_beat": { "episode": 10, "reason": "Sera returns. Retention should visibly tick up here." },
+    "spin_off_target": { "character_id": 702, "name": "Sera", "pitch": "The ninety-mile walk. What Sera saw between Ep 9 and Ep 10, alone, on foot, after losing the horse." }
+  },
+
+  "episode_index": [
+    { "episode": 1,  "title": "Rain on the Ramparts",     "act": 1, "function": "hook" },
+    { "episode": 2,  "title": "The Long Table",           "act": 1, "function": "setup" },
+    { "episode": 3,  "title": "Blood on the Snow",        "act": 1, "function": "action" },
+    { "episode": 4,  "title": "She Rode Out Herself",     "act": 1, "function": "turn" },
+    { "episode": 5,  "title": "The Tent",                 "act": 2, "function": "conflict" },
+    { "episode": 6,  "title": "Two Cups",                 "act": 2, "function": "character" },
+    { "episode": 7,  "title": "The Spared Blade",         "act": 2, "function": "climax" },
+    { "episode": 8,  "title": "Ink and Wax",              "act": 2, "function": "aftermath" },
+    { "episode": 9,  "title": "The Council of Grain",     "act": 3, "function": "exposition", "planted": "WEAK" },
+    { "episode": 10, "title": "Ninety Fires",             "act": 3, "function": "recovery" },
+    { "episode": 11, "title": "What They Burn",           "act": 3, "function": "escalation" },
+    { "episode": 12, "title": "The Quiet Lord",           "act": 3, "function": "reveal" }
+  ]
+}
